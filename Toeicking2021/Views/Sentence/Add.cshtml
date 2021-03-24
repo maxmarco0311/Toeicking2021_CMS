@@ -8,6 +8,9 @@
     <link href="~/lib/plugins/custombox/dist/custombox.min.css" rel="stylesheet" />
     <link href="~/lib/plugins/switchery/switchery.min.css" rel="stylesheet" />
     <link href="~/lib/plugins/morris/morris.css" rel="stylesheet" />
+    @*multi-select的css檔案*@
+    <link href="~/lib/plugins/multiselect/css/multi-select.css" rel="stylesheet" />
+    <link href="~/lib/plugins/select2/select2.css" rel="stylesheet" />
 }
 @section bottomCSS{
     <style>
@@ -20,8 +23,10 @@
 
         .card-box i {
             margin-right: 15px;
+            margin-left: 15px;
         }
     </style>
+
 
 }
 
@@ -31,7 +36,6 @@
             <div class="form-inline" role="form">
                 <div class="form-group">
                     <a asp-action="" class="btn btn-primary waves-light w-md">查詢資料庫句數</a>
-                    @*<asp:Button ID="btnCheckSenNum" runat="server" Text="查詢資料庫句數" CssClass="btn btn-primary waves-light w-md" OnClick="btnCheckSenNum_Click" />*@
                 </div>
                 <label class="ml-3">資料庫句數：</label>
                 <label id="senNum"></label>
@@ -40,18 +44,107 @@
     </div>
 </div>
 <form asp-action="" method="post">
-    <div class="card-box">
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card-box">
                 <div class="form-group">
-                    <label for="englishSentence" class="h4"><b>必考金句：</b></label>
-                    <textarea id="englishSentence" class="form-control" rows="2" style="width: 100%; height:100%"></textarea>
+                    <label for="englishSentence" class="h4"><b>必考金句</b></label>
+                    <textarea id="englishSentence" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
                 </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="translation" class="h4"><b>中文翻譯：</b></label>
-                    <textarea id="translation" class="form-control" rows="2" style="width: 100%; height:100%"></textarea>
+                    <label for="translation" class="h4"><b>中文翻譯</b></label>
+                    <textarea id="translation" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="translation" class="h4"><b>情境</b></label>
+                    <select id="category1" name="form" class="word-form form-control">
+                        <option value="">請選擇</option>
+                        <option value="n">(n.)</option>
+                        <option value="v">(v.)</option>
+                        <option value="adj">(adj.)</option>
+                        <option value="adv">(adv.)</option>
+                        <option value="prep">(prep.)</option>
+                        <option value="conj">(conj.)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="translation" class="h4"><b>文法分類</b></label>
+                    <select class="select2 select2-multiple" multiple="multiple" id="test" data-placeholder="">
+                        <optgroup label="Alaskan/Hawaiian Time Zone">
+                            <option value="AK">Alaska</option>
+                            <option value="HI">Hawaii</option>
+                        </optgroup>
+                        <optgroup label="Pacific Time Zone">
+                            <option value="CA">California</option>
+                            <option value="NV">Nevada</option>
+                            <option value="OR">Oregon</option>
+                            <option value="WA">Washington</option>
+                        </optgroup>
+                        <optgroup label="Mountain Time Zone">
+                            <option value="AZ">Arizona</option>
+                            <option value="CO">Colorado</option>
+                            <option value="ID">Idaho</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="UT">Utah</option>
+                            <option value="WY">Wyoming</option>
+                        </optgroup>
+                        <optgroup label="Central Time Zone">
+                            <option value="AL">Alabama</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TX">Texas</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="WI">Wisconsin</option>
+                        </optgroup>
+                        <optgroup label="Eastern Time Zone">
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="IN">Indiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="OH">Ohio</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WV">West Virginia</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+            <div class="card-box">
+                <div id="grammar" class="form-group">
+                    <label for="usage" class="h4"><b>文法解析</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    <textarea id="usage1" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage2" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage3" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage4" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage5" name="usage" class="usage form-control" rows="2" style="width: 100%; height:100%"></textarea>
                 </div>
             </div>
         </div>
@@ -60,7 +153,7 @@
     <div class="row">
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
-                <label class="h4"><b>字彙片語：</b> <i id="add_voc" class="fa fa-plus-square"></i></label>
+                <label class="h4"><b>字彙片語</b> <i id="add_voc" class="fa fa-plus-square"></i></label>
                 <div id="vocabulary" class="">
                     <div class="voc_set form-group row ">
                         <div class="col-4">
@@ -176,72 +269,46 @@
                             <input id="def6" name="def" class="def form-control" />
                         </div>
                     </div>
-                    <div class="voc_set form-group row ">
-                        <div class="col-4">
-                            <input id="voc7" name="voc" class="voc form-control" />
-                        </div>
-                        <div class="col-3">
-                            <select id="category7" name="form" class="word-form form-control">
-                                <option value="">請選擇</option>
-                                <option value="n">(n.)</option>
-                                <option value="v">(v.)</option>
-                                <option value="adj">(adj.)</option>
-                                <option value="adv">(adv.)</option>
-                                <option value="prep">(prep.)</option>
-                                <option value="conj">(conj.)</option>
-                            </select>
-                        </div>
-                        <div class="col-5">
-                            <input id="def7" name="def" class="def form-control" />
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-12">
-            <div class="card-box">
-                <div id="grammar" class="form-group">
-                    <label for="usage" class="h4"><b>文法解析：</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
-                    <textarea id="usage1" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage2" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage3" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage4" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage5" name="usage" class="usage form-control" rows="2" style="width: 100%; height:100%"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
                 <div id="vocsupplement" class="form-group">
-                    <label for="usage" class="h4"><b>字彙解析：</b> <i id="add_vocsupplement" class="fa fa-plus-square"></i> <i id="voc-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    <label for="usage" class="h4"><b>字彙解析</b> <i id="add_vocsupplement" class="fa fa-plus-square"></i> <i id="voc-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
                     <textarea id="vocsupplement1" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
                     <textarea id="vocsupplement2" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
                     <textarea id="vocsupplement3" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="vocsupplement4" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-sm-12">
-            <div class="card-box">
-                <label for="" class="h4"><b></b></label>
-                <div class="col-12 mb-4">
-                    @*前端按鈕要加OnClientClick="return false"，modal按鈕要加屬性data-toggle="modal" data-target="#con-close-modal"，如果要用js控制就不用加*@
-                    <a id="" class="btn btn-block btn--lg btn-outline-warning waves-light">檢查字彙重複</a>
-                    @*<asp:Button ID="BtnCheck" runat="server" Text="檢查字彙重複" CssClass="btn btn-block btn--lg btn-secondary waves-light" OnClick="BtnCheck_Click" />*@
+                <div class="checkbox checkbox-primary form-check-inline">
+                    <input type="checkbox" id="inlineCheckbox1" value="option1">
+                    <label for="inlineCheckbox1"> 字首字根字尾 </label>
                 </div>
-                <div class="col-12 mb-4">
-                    <input type="submit" value="儲存資料" class="btn btn-block btn--lg btn-outline-success waves-light" />
-                    @*<asp:Button ID="BtnSave" runat="server" Text="儲存" CssClass="btn btn-block btn--lg btn-success waves-light" OnClientClick="return false" OnClick="BtnSave_Click" />*@
+                <div class="checkbox checkbox-primary form-check-inline">
+                    <input type="checkbox" id="inlineCheckbox2" value="option1">
+                    <label for="inlineCheckbox2"> 重要同義字 </label>
                 </div>
-                <div class="col-12 mb-4">
-                    <a id="reload" class="btn btn-block btn--lg btn-outline-danger waves-light">清空內容</a>
-                    @*<asp:Button ID="BtnClear" runat="server" Text="清空內容" CssClass="btn btn-block btn--lg btn-danger waves-light" OnClientClick="return false" OnClick="BtnClear_Click" />*@
-                </div>
-
             </div>
         </div>
     </div>
+    <div class="card-box">
+        <div class="row">
+            <div class="col-4 mb-4">
+                @*前端按鈕要加OnClientClick="return false"，modal按鈕要加屬性data-toggle="modal" data-target="#con-close-modal"，如果要用js控制就不用加*@
+                <button id="checkRepetition" class="btn btn-block btn--lg btn-outline-warning waves-light" OnClick="">檢查字彙重複</button>
+            </div>
+            <div class="col-4 mb-4">
+                @*表單送出的按鈕*@
+                <input type="submit" value="儲存資料" class="btn btn-block btn--lg btn-outline-success waves-light" OnClick="" />
+            </div>
+            <div class="col-4 mb-4">
+                <button id="reload" class="btn btn-block btn--lg btn-outline-danger waves-light" OnClick="">清空內容</button>
+            </div>
+        </div>
+    </div>
+    @*接收multiselect值的隱藏欄位*@
+    <input type="hidden" id="multiselect-data" name="" />
 </form>
 
 @*accordion-modal*@
@@ -311,8 +378,16 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+@section topScripts{
+    @*multi-select的js檔*@
+    <script src="~/lib/plugins/multiselect/js/jquery.multi-select.js"></script>
+    <script src="~/lib/plugins/select2/select2.js"></script>
+    <script src="~/lib/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+    <script src="~/lib/assets/pages/jquery.form-advanced.init.js"></script>
+}
 
 @section bottomScripts{
+    @*modal的js檔*@
     <script src="~/lib/plugins/custombox/dist/custombox.min.js"></script>
     <script src="~/lib/plugins/custombox/dist/legacy.min.js"></script>
     <script>
@@ -411,6 +486,22 @@
                 //    $(this).val("");
                 //});
 
+            });
+
+            // 接收multiselect的值放進隱藏欄位中(在submit的onclick的函式中)
+            $("#body_Button1").click(function () {
+                //先設全域變數接迴圈內的值
+                var SelectedText = "";
+                //將所有li標籤跑迴圈
+                $(".select2-search-choice").each(function () {
+                    //選取下一層div標籤的text值
+                    SelectedText = SelectedText + $(this).children("div").text() + ",";
+                });
+                //將所有選到的值給隱藏欄位
+                $("#multiselect-data").val(SelectedText);
+                //回server執行控制項的事件處理常式，val()裡要放的是要執行事件常式的控制項的name(不是id)
+                $("#__EVENTTARGET").val("ctl00$body$Button1");
+                $("#form1").submit();
             });
 
 

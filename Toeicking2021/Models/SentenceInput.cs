@@ -7,5 +7,6 @@ namespace Toeicking2021.Models
 {
     public class SentenceInput
     {
+
     }
 }
