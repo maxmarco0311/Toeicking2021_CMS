@@ -1,0 +1,13 @@
+﻿/*眼睛的相對定位*/
+.password-eye {
+    float: right;
+    cursor: pointer;
+    /*margin-left: -25px;*/
+    margin-top: -30px;
+    position: relative;
+    /*要大一點，不然文字框focus時會被蓋住*/
+    z-index: 9;
+    user-select: none;
+    /*改font-awesome的大小*/
+    font-size: 20px;
+}

@@ -1,0 +1,244 @@
+﻿@model Toeicking2021.Services.PaginatedList<TestData>
+@{
+    ViewData["Title"] = "檢視句子";
+}
+@section topCSS{
+    <link href="~/lib/plugins/footable/css/footable.core.css" rel="stylesheet" />
+}
+@section bottomCSS{
+    <style type="text/css">
+        /*關鍵字框寬度*/
+        .a.form-control.mr-4 {
+            width: 80px;
+        }
+        /*目前頁highlight*/
+        /*>是直接子元素，空白是所有後代元素*/
+        .footable-page.active > a {
+            background-color: #3bafda;
+            border-color: #3bafda;
+        }
+        /*不能點按*/
+        .footable-page-arrow.disabled > a {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        /*ul靠右*/
+        tfoot ul {
+            float: right;
+        }
+    </style>
+
+}
+
+<div class="card-box">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <label><b>查詢條件</b></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group row">
+                <div class="col-lg-1">
+                    <input type="text" class="form-control" id="" name="" placeholder="編號" />
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" id="" name="" placeholder="關鍵字" />
+                </div>
+                <div class="col-lg-2">
+                    <select id="" name="" class="form-control">
+                        <option>存入日期-請選擇</option>
+                        <option value="0">當天</option>
+                        <option value="-1">前一天</option>
+                        <option value="-7">一週內</option>
+                        <option value="-14">兩週內</option>
+                        <option value="-30">一個月內</option>
+                        <option value="-60">兩個月內</option>
+                        <option value="-365">一年內</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <select id="" name="" class="form-control">
+                        <option>最近幾筆-請選擇</option>
+                        <option value="10">最近10筆</option>
+                        <option value="20">最近20筆</option>
+                        <option value="30">最近30筆</option>
+                        <option value="40">最近40筆</option>
+                        <option value="50">最近50筆</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <select id="" name="" class="form-control">
+                        <option>檢查次數-請選擇</option>
+                        <option value="0">檢查0次</option>
+                        <option value="1">檢查1次</option>
+                        <option value="2">檢查2次</option>
+                        <option value="3">檢查3次</option>
+                        <option value="4">檢查4次</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <select id="" name="" class="form-control">
+                        <option>每頁幾筆-請選擇</option>
+                        <option value="5">每頁5筆</option>
+                        <option value="10">每頁10筆</option>
+                        <option value="15">每頁15筆</option>
+                        <option value="20">每頁20筆</option>
+                        <option value="25">每頁25筆</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <a class="btn btn--lg btn-block btn-primary waves-light mt-3" style="color:white; letter-spacing:1.5px;"
+               onclick="conditionsMaintain">
+                送出查詢
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <!--footable套用-->
+            <table id="demo-foo-filtering" class="table table-responsive table-bordered table-hover toggle-circle m-b-0">
+                <!--表頭-->
+                <thead>
+                    <tr>
+                        <!--泛型類別無法使用Html.DisplayNameFor()，因為點不出資料物件成員-->
+                        <th data-toggle="true">編號</th>
+                        <th>多益必考金句</th>
+                        <th>翻譯</th>
+                        <!--data-hide="phone, tablet"在手機、平板會隱藏，data-hide="all"在所有裝置都會隱藏-->
+                        <th></th>
+                    </tr>
+                </thead>
+                <!--search套用不能拿掉，隱藏style="display: none;"-->
+                <div class="form-inline m-b-20" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 text-xs-center">
+                            <div class="form-group">
+                                <label class="control-label m-r-5">
+                                    Status
+                                </label>
+                                <select id="demo-foo-filter-status" class="form-control input-sm">
+                                    <option value="">Show all</option>
+                                    <option value="active">Active</option>
+                                    <option value="disabled">Disabled</option>
+                                    <option value="suspended">Suspended</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center text-right">
+                            <div class="form-group">
+                                <input id="demo-foo-search" type="text" placeholder="Search" class="form-control" autocomplete="on">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--資料列-->
+                <tbody id="table">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <label id="@item.Number" name="" class="sentence_id">@item.Number</label>
+                            </td>
+                            <td>
+                                <textarea id="@item.Number" name="" class="form-control sentence" rows="4" style='width: 100%;'>@item.Name</textarea>
+                            </td>
+                            <td>
+                                <textarea id="@item.Number" name="" class="form-control chinese" rows="4" style='width: 100%;'>@item.Description</textarea>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <!--句子修改的按鈕，用.sentenceUpdate選取-->
+                                        <button type="button" class="btn btn-success btn-block waves-effect waves-light sentenceUpdate">句子修改</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <!--用法檢視的按鈕，用.usageReview選取-->
+                                        <button type="button" id="triggerUsage" class="btn btn-block btn-warning waves-effect waves-light usageReview" data-target="#usage">用法檢視</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <!--用法檢視的按鈕，用.vocReveiw選取-->
+                                        <button type="button" id="triggerVoc" class="btn btn-block btn-danger waves-effect waves-light vocReveiw" data-target="#voc">字彙檢視</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <!--移除整列的按鈕，用.remove選取-->
+                                        <button type="button" class="btn btn-secondary btn-block waves-effect waves-light remove">移除整列</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <!--表尾分頁-->
+                <tfoot>
+                    <tr class="active">
+                        <!--colspan的屬性值是表格的欄位數-->
+                        <td colspan="4">
+                            <div class="text-right">
+                                <!--會固定存在與生成的標籤就不要放在foreach內(如ul和所有表箭頭的li)-->
+                                <!--ul標籤中pagination拿掉才不會自動產生li，往右浮動style="float: right;-->
+                                <ul class="pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
+                                    @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按第一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1)? "": "disabled")">
+                                        <!--第一頁標籤-->
+                                        <a data-page="first" asp-action="Index" asp-route-page="1">第一頁</a>
+                                    </li>
+                                    @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按上一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1)? "": "disabled")">
+                                        <!--上一頁標籤-->
+                                        <a data-page="prev" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)">上一頁</a>
+                                    </li>
+                                    <!--這裡的for迴圈要生的是數字<li>(某一頁及前後5頁，注意迴圈數字(前5後5+1))，會跟Model繫結-->
+                                    @for (var i = (Model.PageIndex - 5); i < (Model.PageIndex + 6); i++)
+                                    {
+                                        if ((i > 0) && (i <= Model.TotalPages))
+                                        {
+                                            if (i == Model.PageIndex)
+                                            {
+                                                <li class="footable-page active">
+                                                    <!--目前頁標籤(有active)-->
+                                                    @*版型預設data-page屬性值比實際頁碼多1*@
+                                                    <a data-page="@(i + 1)" href="#">@i</a>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="footable-page">
+                                                    <!--不是目前頁的某一頁標籤-->
+                                                    <a data-page="@(i + 1)" asp-action="Index" asp-route-page="@i">@i</a>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                    @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按下一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages)? "": "disabled")">
+                                        <!--下一頁標籤-->
+                                        <a data-page="next" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)">下一頁</a>
+                                    </li>
+                                    @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按最末頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages)? "": "disabled")">
+                                        <!--最末頁標籤-->
+                                        <a data-page="last" asp-action="Index" asp-route-page="@Model.TotalPages">最末頁</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+@section topScripts{
+    <script src="~/lib/plugins/footable/js/footable.all.min.js"></script>
+    <script src="~/lib/assets/pages/jquery.footable.js"></script>
+}
+

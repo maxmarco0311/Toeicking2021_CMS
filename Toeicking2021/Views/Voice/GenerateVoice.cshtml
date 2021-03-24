@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "Google TTS Test";
+}
+
+<div class="card-box">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <label><b>Google TTS Test</b></label>
+        </div>
+    </div>
+    <form asp-action="GenerateVoice" method="post">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <select id="accent" name="accent" class="form-control">
+                            @*沒有寫value值，value值會等於text值*@
+                            <option value="">腔調-請選擇</option>
+                            <option value="en-US-Wavenet-J">美國腔(男)</option>
+                            <option value="en-US-Wavenet-E">美國腔(女)</option>
+                            <option value="en-GB-Wavenet-B">英國腔(男)</option>
+                            <option value="en-GB-Wavenet-C">英國腔(女)</option>
+                            <option value="en-AU-Wavenet-B">澳洲腔(男)</option>
+                            <option value="en-AU-Wavenet-C">澳洲腔(女)</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select id="rate" name="rate" class="form-control">
+                            <option value="">語速-請選擇</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1.0">1.0</option>
+                            <option value="1.25">1.25</option>
+                            <option value="1.5">1.5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-12">
+                        <textarea id="text" name="text" class="form-control sentence" rows="4" style='width: 100%;'></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="submit" value="取得音檔" class="btn btn--lg btn-block btn-primary waves-light mt-3" style="color:white; letter-spacing:1.5px;" />
+            </div>
+        </div>
+    </form>
+</div>
+

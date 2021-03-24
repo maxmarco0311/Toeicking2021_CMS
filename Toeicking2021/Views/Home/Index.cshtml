@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "多益金後台管理系統";
+}
+
+<div class="text-center">
+    <h1 class="display-4">歡迎進入多益金後台管理系統</h1>
+
+</div>
+<input type="hidden" id="AlertHint" value=@ViewBag.AlertHint />
+<input type="hidden" id="HintMessage" value=@ViewBag.HintMessage />
+
+@section bottomScripts{
+    <script>
+        $(function () {
+            var alertHint = document.getElementById("AlertHint").value;
+            if (alertHint === "registered" || alertHint === "reset") {
+                swal(
+                    {
+                        title: '成功',
+                        text: $("#HintMessage").val(),
+                        type: 'success'
+                    }
+
+                );
+
+            }
+
+        });
+        
+
+    </script>
+}

@@ -1,0 +1,298 @@
+﻿@using System.Security.Claims
+@{
+    string userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @*<title>@ViewData["Title"] - Toeicking2021</title>*@
+    <link rel="shortcut icon" href="~/favicon_1.ico" />
+    <title>多益金後台管理系統</title>
+
+    @*個別View要匯入的css檔案位置*@
+    @RenderSection("topCSS", false)
+
+    @*版型需要的檔案*@
+    <link href="~/lib/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <link href="~/lib/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/icons.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <script src="~/lib/assets/js/modernizr.min.js"></script>
+    <link href="~/lib/assets/css/sweetalert2.css" rel="stylesheet" />
+
+    @*個別View要匯入的css檔案位置*@
+    @RenderSection("bottomCSS", false)
+
+</head>
+<body class="fixed-left">
+
+    <!-- Begin page -->
+    <div id="wrapper">
+
+        <!-- Top Bar Start -->
+        <div class="topbar">
+
+            <!-- LOGO -->
+            <div class="topbar-left">
+                <div class="text-center">
+                    <!--左上標題-->
+                    <a href="" class="logo"><i class="mdi mdi-radar"></i> <span class="h3"><b>多益金後台管理</b></span></a>
+                </div>
+            </div>
+
+            <!-- Button mobile view to collapse sidebar menu -->
+            <nav class="navbar-custom">
+
+                <ul class="list-inline float-right mb-0">
+                    @*放大按鈕(sidebar縮起來)*@
+                    <li class="list-inline-item notification-list hide-phone">
+                        <a class="nav-link waves-light waves-effect" href="#" id="btn-fullscreen">
+                            <i class="mdi mdi-crop-free noti-icon"></i>
+                        </a>
+                    </li>
+
+                    <!--<li class="list-inline-item notification-list">
+                        <a class="nav-link right-bar-toggle waves-light waves-effect" href="#">
+                            <i class="mdi mdi-dots-horizontal noti-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="list-inline-item dropdown notification-list">
+                        <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="false" aria-expanded="false">
+                            <i class="mdi mdi-bell noti-icon"></i>
+                            <span class="badge badge-pink noti-icon-badge">4</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg" aria-labelledby="Preview">-->
+                    <!-- item-->
+                    <!--<div class="dropdown-item noti-title">
+                        <h5 class="font-16"><span class="badge badge-danger float-right">5</span>Notification</h5>
+                    </div>-->
+                    <!-- item-->
+                    <!--<a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <div class="notify-icon bg-success"><i class="mdi mdi-comment-account"></i></div>
+                        <p class="notify-details">Robert S. Taylor commented on Admin<small class="text-muted">1 min ago</small></p>
+                    </a>-->
+                    <!-- item-->
+                    <!--<a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <div class="notify-icon bg-info"><i class="mdi mdi-account"></i></div>
+                        <p class="notify-details">New user registered.<small class="text-muted">1 min ago</small></p>
+                    </a>-->
+                    <!-- item-->
+                    <!--<a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <div class="notify-icon bg-danger"><i class="mdi mdi-airplane"></i></div>
+                        <p class="notify-details">Carlos Crouch liked <b>Admin</b><small class="text-muted">1 min ago</small></p>
+                    </a>-->
+                    <!-- All-->
+                    <!--<a href="javascript:void(0);" class="dropdown-item notify-item notify-all">
+                                View All
+                            </a>
+
+                        </div>
+                    </li>-->
+                    @*圖片*@
+                    <li class="list-inline-item dropdown notification-list">
+                        <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="false" aria-expanded="false">
+                            <img src="~/images/myphoto.JPG" alt="user" class="rounded-circle">
+                        </a>
+                        <!--<div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">-->
+                        <!-- item-->
+                        <!--<div class="dropdown-item noti-title">
+                            <h5 class="text-overflow"><small>Welcome ! John</small> </h5>
+                        </div>-->
+                        <!-- item-->
+                        <!--<a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-account-star-variant"></i> <span>Profile</span>
+                        </a>-->
+                        <!-- item-->
+                        <!--<a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-settings"></i> <span>Settings</span>
+                        </a>-->
+                        <!-- item-->
+                        <!--<a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-lock-open"></i> <span>Lock Screen</span>
+                        </a>-->
+                        <!-- item-->
+                        <!--<a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <i class="mdi mdi-logout"></i> <span>Logout</span>
+                            </a>
+
+                        </div>-->
+                    </li>
+
+                </ul>
+
+                <ul class="list-inline menu-left mb-0">
+                    <li class="float-left">
+                        <button class="button-menu-mobile open-left waves-light waves-effect">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+                    </li>
+                    @*搜尋*@
+                    <li class="hide-phone app-search">
+                        <form role="search" class="">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <a href=""><i class="fa fa-search"></i></a>
+                        </form>
+                    </li>
+                </ul>
+
+            </nav>
+
+        </div>
+        <!-- Top Bar End -->
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="left side-menu">
+            <div class="sidebar-inner slimscrollleft">
+                <!--- Divider -->
+                <div id="sidebar-menu">
+                    <ul>
+                        @*<li>
+                                <a href="index.html" class="waves-effect waves-primary">
+                                    <i class="ti-home"></i><span> Dashboard </span>
+                                </a>
+                            </li>*@
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect waves-primary">
+                                <i class="ti-paint-bucket"></i><span><b>必考金句管理</b></span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a asp-controller="Sentence" asp-action="Add" target="_blank">新增句子</a></li>
+                                <li><a asp-controller="Sentence" asp-action="Retrieve" target="_blank">檢視句子</a></li>
+                                <li><a asp-controller="Sentence" asp-action="Page" target="_blank">資料庫測試</a></li>
+
+                            </ul>
+                        </li>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect waves-primary">
+                                <i class="ti-map"></i><span><b>相關網頁</b></span><span class="menu-arrow"></span>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a asp-controller="Home" asp-action="Update" target="_blank">形象首頁</a></li>
+                                <li><a asp-controller="Voice" asp-action="GenerateVoice" target="_blank">語音生成</a></li>
+                                <li><a asp-controller="Home" asp-action="Patch" target="_blank">登入頁面</a></li>
+                            </ul>
+                        </li>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect waves-primary">
+                                <i class="ti-light-bulb"></i><span><b>其它</b></span><span class="menu-arrow"></span>
+                            </a>
+                            <ul class="list-unstyled">
+                                <li><a asp-controller="Home" asp-action="ResetPassword" asp-route-e="@userEmail">重設密碼</a></li>
+                                <li><a asp-controller="Home" asp-action="Logout">登出</a></li>
+                            </ul>
+                        </li>
+                        @*<li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect waves-primary">
+                                    <i class="ti-spray"></i><span><b>答案分析</b></span><span class="menu-arrow"></span>
+                                </a>
+                                <ul class="list-unstyled">
+                                    <li><a href="icons-materialdesign.html">原文出處與題目關鍵字</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect waves-primary"><i class="ti-pencil-alt"></i><span><b>難易度分析</b></span><span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="form-elements.html">錯誤選項類型</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect waves-primary"><i class="ti-menu-alt"></i><span><b>語言分析</b></span><span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="tables-basic.html">搭配詞</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect waves-primary">
+                                    <i class="ti-stats-up"></i><span><b>大數據分析</b></span><span class="menu-arrow"></span>
+                                    <span class="badge badge-primary pull-right">8</span>
+                                </a>
+                                <ul class="list-unstyled">
+                                    <li><a href="chart-flot.html">字彙頻率分析</a></li>
+                                </ul>
+                            </li>*@
+                    </ul>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                @*每一個View給不同的@ViewData["title"]值，代表該頁標題*@
+                                <h3 class="page-title"><b>@ViewData["title"]</b></h3>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    @*每個View匯入的位置*@
+                    @RenderBody()
+
+                </div>
+                <!-- end container -->
+            </div>
+            <!-- end content -->
+            @*頁尾標題*@
+            <footer class="footer">
+                <span class="hide-phone"></span>
+            </footer>
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Right content here -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <script>
+        var resizefunc = [];
+    </script>
+    @*<footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - Toeicking2021 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
+    <script src="~/lib/assets/js/jquery.min.js"></script>
+    <script src="~/lib/assets/js/popper.min.js"></script>
+    <script src="~/lib/assets/js/bootstrap.min.js"></script>
+    <script src="~/lib/assets/js/detect.js"></script>
+    <script src="~/lib/assets/js/fastclick.js"></script>
+    <script src="~/lib/assets/js/jquery.slimscroll.js"></script>
+    <script src="~/lib/assets/js/jquery.blockUI.js"></script>
+    <script src="~/lib/assets/js/waves.js"></script>
+    <script src="~/lib/assets/js/wow.min.js"></script>
+    <script src="~/lib/assets/js/jquery.nicescroll.js"></script>
+    <script src="~/lib/assets/js/jquery.scrollTo.min.js"></script>
+    <link href="~/lib/plugins/switchery/switchery.min.css" rel="stylesheet" />
+
+    @*個別View要匯入的js檔案位置*@
+    @RenderSection("topScripts", required: false)
+
+    <script src="~/lib/assets/js/jquery.core.js"></script>
+    <script src="~/lib/assets/js/jquery.app.js"></script>
+    <script src="~/js/myCustom.js"></script>
+    @*使用jquery-ajax-unobtrusive*@
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    @*使用sweetalert*@
+    <script src="~/lib/assets/js/sweetalert2.js"></script>
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+
+    @*個別View要匯入的js檔案位置*@
+    @RenderSection("bottomScripts", required: false)
+</body>
+</html>

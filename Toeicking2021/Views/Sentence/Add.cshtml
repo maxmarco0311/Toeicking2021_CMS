@@ -1,0 +1,424 @@
+﻿
+@{
+    ViewData["Title"] = "新增句子";
+}
+
+@section topCSS{
+    @*modal的css檔案*@
+    <link href="~/lib/plugins/custombox/dist/custombox.min.css" rel="stylesheet" />
+    <link href="~/lib/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <link href="~/lib/plugins/morris/morris.css" rel="stylesheet" />
+}
+@section bottomCSS{
+    <style>
+        /*選擇器稍微選細一點，不然會影響到別的i元素*/
+        .card-box i:hover {
+            color: #3bafda;
+            transform: scale(1.7);
+            transition: 0.3s;
+        }
+
+        .card-box i {
+            margin-right: 15px;
+        }
+    </style>
+
+}
+
+<div class="card-box">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="form-inline" role="form">
+                <div class="form-group">
+                    <a asp-action="" class="btn btn-primary waves-light w-md">查詢資料庫句數</a>
+                    @*<asp:Button ID="btnCheckSenNum" runat="server" Text="查詢資料庫句數" CssClass="btn btn-primary waves-light w-md" OnClick="btnCheckSenNum_Click" />*@
+                </div>
+                <label class="ml-3">資料庫句數：</label>
+                <label id="senNum"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<form asp-action="" method="post">
+    <div class="card-box">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="englishSentence" class="h4"><b>必考金句：</b></label>
+                    <textarea id="englishSentence" class="form-control" rows="2" style="width: 100%; height:100%"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="translation" class="h4"><b>中文翻譯：</b></label>
+                    <textarea id="translation" class="form-control" rows="2" style="width: 100%; height:100%"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card-box">
+                <label class="h4"><b>字彙片語：</b> <i id="add_voc" class="fa fa-plus-square"></i></label>
+                <div id="vocabulary" class="">
+                    <div class="voc_set form-group row ">
+                        <div class="col-4">
+                            <input type="text" id="voc1" name="voc" class="voc form-control" />
+                        </div>
+                        <div class="col-3">
+                            <select id="category1" name="form" class="word-form form-control">
+                                <option value="">請選擇</option>
+                                <option value="n">(n.)</option>
+                                <option value="v">(v.)</option>
+                                <option value="adj">(adj.)</option>
+                                <option value="adv">(adv.)</option>
+                                <option value="prep">(prep.)</option>
+                                <option value="conj">(conj.)</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <input id="def1" name="def" class=" def form-control" />
+                        </div>
+                    </div>
+                    <div class="voc_set form-group row ">
+                        <div class="col-4">
+                            <input id="voc2" name="voc" class="voc form-control" />
+                        </div>
+                        <div class="col-3">
+                            <select id="category2" name="form" class="word-form form-control">
+                                <option value="">請選擇</option>
+                                <option value="n">(n.)</option>
+                                <option value="v">(v.)</option>
+                                <option value="adj">(adj.)</option>
+                                <option value="adv">(adv.)</option>
+                                <option value="prep">(prep.)</option>
+                                <option value="conj">(conj.)</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <input id="def2" name="def" class="def form-control" />
+                        </div>
+                    </div>
+                    <div class="voc_set form-group row ">
+                        <div class="col-4">
+                            <input id="voc3" name="voc" class="voc form-control" />
+                        </div>
+                        <div class="col-3">
+                            <select id="category3" name="form" class="word-form form-control">
+                                <option value="">請選擇</option>
+                                <option value="n">(n.)</option>
+                                <option value="v">(v.)</option>
+                                <option value="adj">(adj.)</option>
+                                <option value="adv">(adv.)</option>
+                                <option value="prep">(prep.)</option>
+                                <option value="conj">(conj.)</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <input id="def3" name="def" class="def form-control" />
+                        </div>
+                    </div>
+                    <div class="voc_set form-group row ">
+                        <div class="col-4">
+                            <input id="voc4" name="voc" class="voc form-control" />
+                        </div>
+                        <div class="col-3">
+                            <select id="category4" name="form" class="word-form form-control">
+                                <option value="">請選擇</option>
+                                <option value="n">(n.)</option>
+                                <option value="v">(v.)</option>
+                                <option value="adj">(adj.)</option>
+                                <option value="adv">(adv.)</option>
+                                <option value="prep">(prep.)</option>
+                                <option value="conj">(conj.)</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <input id="def4" name="def" class="def form-control" />
+                        </div>
+                    </div>
+                    <div class="voc_set form-group row ">
+                        <div class="col-4">
+                            <input id="voc5" name="voc" class="voc form-control" />
+                        </div>
+                        <div class="col-3">
+                            <select id="category5" name="form" class="word-form form-control">
+                                <option value="">請選擇</option>
+                                <option value="n">(n.)</option>
+                                <option value="v">(v.)</option>
+                                <option value="adj">(adj.)</option>
+                                <option value="adv">(adv.)</option>
+                                <option value="prep">(prep.)</option>
+                                <option value="conj">(conj.)</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <input id="def5" name="def" class="def form-control" />
+                        </div>
+                    </div>
+                    <div class="voc_set form-group row ">
+                        <div class="col-4">
+                            <input id="voc6" name="voc" class="voc form-control" />
+                        </div>
+                        <div class="col-3">
+                            <select id="category6" name="form" class="word-form form-control">
+                                <option value="">請選擇</option>
+                                <option value="n">(n.)</option>
+                                <option value="v">(v.)</option>
+                                <option value="adj">(adj.)</option>
+                                <option value="adv">(adv.)</option>
+                                <option value="prep">(prep.)</option>
+                                <option value="conj">(conj.)</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <input id="def6" name="def" class="def form-control" />
+                        </div>
+                    </div>
+                    <div class="voc_set form-group row ">
+                        <div class="col-4">
+                            <input id="voc7" name="voc" class="voc form-control" />
+                        </div>
+                        <div class="col-3">
+                            <select id="category7" name="form" class="word-form form-control">
+                                <option value="">請選擇</option>
+                                <option value="n">(n.)</option>
+                                <option value="v">(v.)</option>
+                                <option value="adj">(adj.)</option>
+                                <option value="adv">(adv.)</option>
+                                <option value="prep">(prep.)</option>
+                                <option value="conj">(conj.)</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <input id="def7" name="def" class="def form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card-box">
+                <div id="grammar" class="form-group">
+                    <label for="usage" class="h4"><b>文法解析：</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    <textarea id="usage1" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage2" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage3" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage4" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="usage5" name="usage" class="usage form-control" rows="2" style="width: 100%; height:100%"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card-box">
+                <div id="vocsupplement" class="form-group">
+                    <label for="usage" class="h4"><b>字彙解析：</b> <i id="add_vocsupplement" class="fa fa-plus-square"></i> <i id="voc-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    <textarea id="vocsupplement1" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="vocsupplement2" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <textarea id="vocsupplement3" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card-box">
+                <label for="" class="h4"><b></b></label>
+                <div class="col-12 mb-4">
+                    @*前端按鈕要加OnClientClick="return false"，modal按鈕要加屬性data-toggle="modal" data-target="#con-close-modal"，如果要用js控制就不用加*@
+                    <a id="" class="btn btn-block btn--lg btn-outline-warning waves-light">檢查字彙重複</a>
+                    @*<asp:Button ID="BtnCheck" runat="server" Text="檢查字彙重複" CssClass="btn btn-block btn--lg btn-secondary waves-light" OnClick="BtnCheck_Click" />*@
+                </div>
+                <div class="col-12 mb-4">
+                    <input type="submit" value="儲存資料" class="btn btn-block btn--lg btn-outline-success waves-light" />
+                    @*<asp:Button ID="BtnSave" runat="server" Text="儲存" CssClass="btn btn-block btn--lg btn-success waves-light" OnClientClick="return false" OnClick="BtnSave_Click" />*@
+                </div>
+                <div class="col-12 mb-4">
+                    <a id="reload" class="btn btn-block btn--lg btn-outline-danger waves-light">清空內容</a>
+                    @*<asp:Button ID="BtnClear" runat="server" Text="清空內容" CssClass="btn btn-block btn--lg btn-danger waves-light" OnClientClick="return false" OnClick="BtnClear_Click" />*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+@*accordion-modal*@
+<div id="accordion-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content p-0">
+            <div id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingOne">
+                        <h5 class="mb-0 mt-0">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                主詞相關
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="card-body">
+                            <div class="button-list">
+                                <button type="button" class="snippet">本句主詞為</button>
+                                <button type="button" class="snippet">是一個名詞子句</button>
+                                <button type="button" class="snippet">開頭連接詞為</button>
+                                <button type="button" class="snippet">動名詞</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0 mt-0">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    動詞相關
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="card-body">
+                                <div class="button-list">
+                                    <button type="button" class="snippet">本句主詞為</button>
+                                    <button type="button" class="snippet">是一個名詞子句</button>
+                                    <button type="button" class="snippet">開頭連接詞為</button>
+                                    <button type="button" class="snippet">動名詞</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingThree">
+                            <h5 class="mb-0 mt-0">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    修飾語相關
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="card-body">
+                                <div class="button-list">
+                                    <button type="button" class="snippet">本句主詞為</button>
+                                    <button type="button" class="snippet">是一個名詞子句</button>
+                                    <button type="button" class="snippet">開頭連接詞為</button>
+                                    <button type="button" class="snippet">動名詞</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section bottomScripts{
+    <script src="~/lib/plugins/custombox/dist/custombox.min.js"></script>
+    <script src="~/lib/plugins/custombox/dist/legacy.min.js"></script>
+    <script>
+        $(function () {
+            // 新增"用法解析"
+            $("#add_usage").on("click", function () {
+                var usageLength = $(".usage").length;
+                var lengthToAdd = usageLength + 1;
+                var usageToAdd = '<textarea id="usage' + lengthToAdd + '" name="usage" class="usage form-control mt-3" rows="2" style="width: 100%; height:100%"></textarea>';
+                $("#grammar").append(usageToAdd);
+
+            });
+            // 新增"字彙解析"
+            $("#add_vocsupplement").on("click", function () {
+                var vocsupplementLength = $(".vocsupplement").length;
+                var lengthToAdd = vocsupplementLength + 1;
+                var vocsupplementToAdd = '<textarea id="vocsupplement' + lengthToAdd + '" name="vocsupplement" class="vocsupplement form-control mt-3" rows="2" style="width: 100%; height:100%"></textarea>';
+                $("#vocsupplement").append(vocsupplementToAdd);
+
+            });
+            // 新增"字彙片語"
+            $("#add_voc").on("click", function () {
+                var voc_setLength = $(".voc_set").length;
+                var LengthToAdd = voc_setLength + 1;
+                var voc_setToAdd = '<div class="voc_set form-group row"> ' +
+                    '<div class="col-4" > ' +
+                    '<input id="voc' + LengthToAdd + '" name="voc" class="voc form-control" /> ' +
+                    '</div > ' +
+                    '<div class="col-3"> ' +
+                    '<select id="category' + LengthToAdd + '" name="form" class="word-form form-control"> ' +
+                    '<option value="">請選擇</option> ' +
+                    '<option value="n">(n.)</option> ' +
+                    '<option value="v">(v.)</option> ' +
+                    '<option value="adj">(adj.)</option> ' +
+                    '<option value="adv">(adv.)</option> ' +
+                    '<option value="prep">(prep.)</option> ' +
+                    '<option value="conj">(conj.)</option> ' +
+                    '</select> ' +
+                    '</div> ' +
+                    '<div class="col-5"> ' +
+                    '<input id="def' + LengthToAdd + '" name="voc" name="def" class="def form-control" /> ' +
+                    '</div> ' +
+                    '</div > ';
+                $("#vocabulary").append(voc_setToAdd);
+
+
+            });
+
+            // 自動輸入搭配modal實現
+            var focusedInput;
+            // 文字框focus事件中，取到該文字框的id(因為開啟modal會使focus消失)，存入一個全域變數中(一個頁面只會有一個focus)：
+            $(".vocsupplement,.usage").focus(function () {
+                focusedInputId = $(this).attr("id");
+            });
+            // modal內的按鈕設定click事件，將值填入該文字框中
+            $(".snippet").on("click", function () {
+                // id使用變數，選取時還是要跟"#"串字串
+                var currentObj = $("#" + focusedInputId);
+                var existingValue = currentObj.val();
+                if (existingValue === undefined) {
+                    existingValue = "";
+                }
+                // 取得按鈕文字
+                var addedValue = $(this).text();
+                currentObj.val(existingValue + addedValue);
+                // 手動關閉modal
+                $("#accordion-modal").modal('hide');
+                // focus要在關掉modal後才能生效
+                currentObj.focus();
+            });
+
+            // 重新載入按鈕
+            $("#reload").on("click", function () {
+                //location.reload;
+                //history.go(0);
+                //window.location.replace(location.href);
+                // 重新載入使用這個
+                window.location = window.location.href;
+                //window.location.assign(window.location.href);
+                //清空控制項
+                //$("#englishSentence").val("");
+                //$("#translation").val("");
+                //$(".voc").each(function () {
+                //    $(this).val("");
+                //});
+                //$(".word-form").each(function () {
+                //    $(this).val("");
+                //});
+                //$(".def").each(function () {
+                //    $(this).val("");
+                //});
+                //$(".usage").each(function () {
+                //    $(this).val("");
+                //});
+                //$(".vocsupplement").each(function () {
+                //    $(this).val("");
+                //});
+
+            });
+
+
+
+        });
+
+
+    </script>
+}
+
+

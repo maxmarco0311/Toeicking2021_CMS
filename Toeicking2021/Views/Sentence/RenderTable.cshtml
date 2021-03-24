@@ -1,0 +1,342 @@
+﻿
+@model Toeicking2021.Services.PaginatedList<TestData>
+@*要設一個跟ParentView匯出此PartialView位置<div>相同的id(change)在PartialView最上層容器中，才可replace with*@
+<style>
+    /*選擇器稍微選細一點，不然會影響到別的i元素*/
+    .col-4 i {
+        margin-left: 15px;
+    }
+
+    .col-4 i:hover {
+            color: #3ddcf7;
+            transform: scale(2);
+            transition: 0.3s;
+    }
+
+    /*.fa-database {
+        color: #3ddcf7;
+    }
+    .fa-file-text {
+        color: #d7b551;
+    }
+    .fa-language {
+        color: #ef5350;
+    }
+    .fa-edit {
+        color: #00b19d;
+    }
+    .fa-volume-up {
+        color: #f76397;
+    }
+    .fa-trash-o {
+        color: #f8f9fa;
+    }*/
+
+
+</style>
+<div id="change" class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <!--footable套用-->
+            <table id="demo-foo-filtering" class="table table-responsive table-bordered table-hover toggle-circle m-b-0">
+                <!--表頭-->
+                <thead>
+                    <tr>
+                        <!--泛型類別無法使用Html.DisplayNameFor()，因為點不出資料物件成員-->
+                        <th data-toggle="true">編號</th>
+                        <th>多益必考金句</th>
+                        <th>翻譯</th>
+                        <th></th>
+                        <!--data-hide="phone, tablet"在手機、平板會隱藏，data-hide="all"在所有裝置都會隱藏-->
+                    </tr>
+                </thead>
+                <!--search套用不能拿掉，隱藏style="display: none;"-->
+                <div class="form-inline m-b-20" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 text-xs-center">
+                            <div class="form-group">
+                                <label class="control-label m-r-5">
+                                    Status
+                                </label>
+                                <select id="demo-foo-filter-status" class="form-control input-sm">
+                                    <option value="">Show all</option>
+                                    <option value="active">Active</option>
+                                    <option value="disabled">Disabled</option>
+                                    <option value="suspended">Suspended</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center text-right">
+                            <div class="form-group">
+                                <input id="demo-foo-search" type="text" placeholder="Search" class="form-control" autocomplete="on">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--資料列-->
+                <tbody id="table">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <label id="@item.Number" name="" class="sentence_id">@item.Number</label>
+                            </td>
+                            <td>
+                                <textarea id="@item.Number" name="" class="form-control sentence" rows="4" style='width: 100%;'>@item.Name</textarea>
+                            </td>
+                            <td>
+                                <textarea id="@item.Number" name="" class="form-control chinese" rows="4" style='width: 100%;'>@item.Description</textarea>
+                            </td>
+                            <td>
+                                <div class="form-group row no-gutters">
+                                    <div class="col-4">
+                                        @*同時有tooltip及開啟modal的data-toggle寫法*@
+                                        <span data-toggle="modal" data-target="#sentence">
+                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="句子修改">
+                                                <i class="fa fa-database"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span data-toggle="modal" data-target="#sentence">
+                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="文法檢視">
+                                                <i class="fa fa-file-text"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span data-toggle="modal" data-target="#sentence">
+                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="字彙檢視">
+                                                <i class="fa fa-language"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row no-gutters">
+                                    <div class="col-4">
+                                        <span data-toggle="modal" data-target="#sentence">
+                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="字彙補充檢視">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span data-toggle="modal" data-target="#audios">
+                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="音檔檢視">
+                                                <i class="fa fa-volume-up"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span data-toggle="modal" data-target="#sentence">
+                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="刪除整列">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--<div class="form-group row">
+                        <div class="col-6">-->
+                        @*句子修改的按鈕，用.sentenceUpdate選取*@
+                        @*<button type="button" class="btn btn-success btn-block waves-effect waves-light sentenceUpdate" data-toggle="tooltip" data-placement="top" title="Tooltip on top">句子修改</button>*@
+                        <!--</div>
+                        <div class="col-6">-->
+                        @*用法檢視的按鈕，用.usageReview選取*@
+                        <!--<button type="button" id="triggerUsage" class="btn btn-block btn-warning waves-effect waves-light usageReview" data-target="#usage">用法檢視</button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-6">-->
+                        @*用法檢視的按鈕，用.vocReveiw選取*@
+                        <!--<button type="button" id="triggerVoc" class="btn btn-block btn-danger waves-effect waves-light vocReveiw" data-target="#voc">字彙檢視</button>
+                        </div>
+                        <div class="col-6">-->
+                        @*移除整列的按鈕，用.remove選取*@
+                        <!--<button type="button" class="btn btn-secondary btn-block waves-effect waves-light remove">移除整列</button>
+                            </div>
+                        </div>-->
+
+                    }
+                </tbody>
+                <!--表尾分頁-->
+                <tfoot>
+                    <tr class="active">
+                        <!--colspan的屬性值是表格的欄位數-->
+                        <td colspan="4">
+                            <div class="text-right">
+                                <!--會固定存在與生成的標籤就不要放在foreach內(如ul和所有非頁碼的li)-->
+                                <!--ul標籤中pagination拿掉才不會自動產生li，往右浮動style="float: right;-->
+                                <ul class="pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
+                                    @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按第一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1)? "": "disabled")">
+                                        <!--第一頁標籤-->
+                                        @*新版obtrusive語法要寫成data-ajax-mode="replace-with"*@
+                                        <a data-page="first" asp-action="RenderTable" asp-route-Page="1"
+                                           asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                            首頁
+                                        </a>
+                                    </li>
+                                    @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按上一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1)? "": "disabled")">
+                                        <!--上一頁標籤-->
+                                        <a data-page="prev" asp-action="RenderTable" asp-route-Page="@(Model.PageIndex - 1)"
+                                           asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                            上一頁
+                                        </a>
+                                    </li>
+                                    <!--這裡的for迴圈要生的是數字頁碼<li>(目前頁及其前後N頁，)，需跟Model繫結。
+                                        注意迴圈數字是目前頁前"減N"後"加N+1"-->
+                                    @for (var i = (Model.PageIndex - 5); i < (Model.PageIndex + 6); i++)
+                                    {
+                                        //在第一頁到最後一頁的範圍
+                                        if ((i > 0) && (i <= Model.TotalPages))
+                                        {
+                                            // 生目前頁
+                                            if (i == Model.PageIndex)
+                                            {
+                                                <li class="footable-page active">
+                                                    <!--目前頁標籤(有active)-->
+                                                    @*版型預設data-page屬性值比實際頁碼多1*@
+                                                    <a data-page="@(i + 1)" href="#">@i</a>
+                                                </li>
+                                            }
+                                            // 生非目前頁
+                                            else
+                                            {
+                                                <li class="footable-page">
+                                                    <!--不是目前頁的某一頁標籤-->
+                                                    <a data-page="@(i + 1)" asp-action="RenderTable" asp-route-Page="@i"
+                                                       asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
+                                                       asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
+                                                       asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
+                                                       data-ajax-mode="replace-with" data-ajax-update="#change">
+                                                        @i
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                    @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按下一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages)? "": "disabled")">
+                                        <!--下一頁標籤-->
+                                        <a data-page="next" asp-action="RenderTable" asp-route-Page="@(Model.PageIndex + 1)"
+                                           asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                            下一頁
+                                        </a>
+                                    </li>
+                                    @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按最末頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages)? "": "disabled")">
+                                        <!--最末頁標籤-->
+                                        <a data-page="last" asp-action="RenderTable" asp-route-Page="@Model.TotalPages"
+                                           asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                            末頁
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+@*句子修改的modal*@
+<div id="sentence" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">句子修改</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group no-margin">
+                            @*class為sentence_id，用來放sentence_id*@
+                            <label for="english" class="control-label">必考金句<span class="sentence_id">155</span></label>
+                            @*class為english，用來放句子*@
+                            <textarea class="form-control english" rows="3" id="english"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group no-margin">
+                            @*class為sentence_id，用來放sentence_id*@
+                            <label for="translation" class="control-label">中文翻譯<span class="sentence_id">155</span></label>
+                            @*class為translation，用來放中文翻譯*@
+                            <textarea class="form-control translation" rows="3" id="translation"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">關閉</button>
+                @*class為save-sentence，儲存句子*@
+                <button type="button" class="btn btn-info waves-effect waves-light save-sentence">存入資料庫</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*句子修改的modal*@
+@*音檔檢視的modal*@
+<div id="audios" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="width:55%;">
+        @*埋一個modal-status的id，若無音檔時，利用這個id選取，顯示無音檔*@
+        <div id="modal-status" class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="custom-width-modalLabel">音檔檢視</h4>
+            </div>
+            <div class="modal-body">
+                <h4>美國腔(男)</h4>
+                <audio controls src="~/voice_test/en-US-Wavenet-J.mp3"></audio>
+                <hr>
+                <h4>美國腔(女)</h4>
+                <audio controls src="~/voice_test/en-US-Wavenet-E.mp3"></audio>
+                <hr>
+                <h4>英國腔(男)</h4>
+                <audio controls src="~/voice_test/en-GB-Wavenet-B.mp3"></audio>
+                <hr>
+                <h4>英國腔(女)</h4>
+                <audio controls src="~/voice_test/en-GB-Wavenet-C.mp3"></audio>
+                <hr>
+                <h4>澳洲腔(男)</h4>
+                <audio controls src="~/voice_test/en-AU-Wavenet-B.mp3"></audio>
+                <hr>
+                <h4>澳洲腔(女)</h4>
+                <audio controls src="~/voice_test/en-AU-Wavenet-C.mp3"></audio>
+                <hr>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">關閉</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@*音檔檢視的modal*@
+<script>
+    // 要在分頁表格出現tooltip，必須寫在PartialView的<script>區塊中
+    $('[data-toggle="tooltip"]').tooltip();
+    // 若是PartialView裡的unobtrusive ajax需要呼叫的函式，就要寫在PartialView裡，寫在ParentView裡呼叫不到
+    function onComplete() {
+        // 換頁後移到畫面最上方
+        $('html,body').animate({ scrollTop: 0 }, 100);
+    }
+</script>
+

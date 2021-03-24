@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "switchery@0.8.2",
+      "destination": "wwwroot/lib/switchery/"
+    },
+    {
+      "library": "limonte-sweetalert2@10.12.0",
+      "destination": "wwwroot/lib/limonte-sweetalert2/"
+    },
+    {
+      "library": "modernizr@2.8.3",
+      "destination": "wwwroot/lib/modernizr/"
+    },
+    {
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "jquery-ajax-unobtrusive@3.2.6",
+      "destination": "wwwroot/jquery-ajax-unobtrusive/"
+    },
+    {
+      "library": "jquery-footable@2.0.3",
+      "destination": "wwwroot/lib/jquery-footable/"
+    }
+  ]
+}
