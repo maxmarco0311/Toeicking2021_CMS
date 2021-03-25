@@ -57,20 +57,20 @@
             <div class="card-box">
                 <div class="form-group">
                     <label for="englishSentence" class="h4"><b>必考金句：</b></label>
-                    <textarea id="englishSentence" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
+                    <textarea asp-for="@Model.Sentence.Sen" id="englishSentence" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="translation" class="h4"><b>中文翻譯：</b></label>
-                    <textarea id="translation" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
+                    <textarea asp-for="@Model.Sentence.Chinesese" id="translation" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="translation" class="h4"><b>情境：</b></label>
-                    <select asp-items="Model.ContextCategories" id="category1" name="form" class="word-form form-control">
+                    <label for="context" class="h4"><b>情境：</b></label>
+                    <select asp-for="@Model.Sentence.Context" asp-items="ViewBag.ContextCategories" id="context" class="word-form form-control">
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="translation" class="h4"><b>文法分類：</b></label>
-                    <select class="select2 select2-multiple" multiple="multiple" id="test" data-placeholder="">
+                    <label for="multi-select" class="h4"><b>文法分類：</b></label>
+                    <select class="select2 select2-multiple" multiple="multiple" id="multi-select" data-placeholder="">
                         <optgroup label="各種現在式">
                             <option value="1">現在簡單式</option>
                             <option value="2">現在進行式</option>
@@ -137,7 +137,8 @@
                         // 組id用的字串
                         string id = "usasge" + i.ToString();
                         // HTML
-                        <textarea id="@id" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                        // asp-for除了繫結屬性外，也會生html的name或id值，伺服器端要看到name屬性值是集合屬性名稱[i]，才會繫結值到集合的元素內
+                        <textarea id="@id" asp-for="@Model.GAs[i-1].Analysis" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
                     }
                 </div>
             </div>
@@ -159,14 +160,14 @@
                         // HTML
                         <div class="voc_set form-group row ">
                             <div class="col-4">
-                                <input type="text" id="@vocId" name="voc" class="voc form-control" placeholder="字彙片語" />
+                                <input type="text" id="@vocId" asp-for="@Model.Vocs[i-1].Voc" class="voc form-control" placeholder="字彙片語" />
                             </div>
                             <div class="col-3">
-                                <select asp-items="Model.Categories" id="@categoryId" name="form" class="word-form form-control">
+                                <select asp-for="@Model.Vocs[i-1].Category" asp-items="ViewBag.Categories" id="@categoryId" class="word-form form-control">
                                 </select>
                             </div>
                             <div class="col-5">
-                                <input id="@defId" name="def" class=" def form-control" placeholder="中文釋義" />
+                                <input type="text" asp-for="@Model.Vocs[i-1].Chinese" id="@defId" class=" def form-control" placeholder="中文釋義" />
                             </div>
                         </div>
                     }
@@ -180,15 +181,15 @@
                     @for (int i = 1; i < 5; i++)
                     {
                         string id = "vocsupplement" + i.ToString();
-                        <textarea id="@id" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                        <textarea id="@id" asp-for="@Model.VAs[i-1].Analysis" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
                     }
                 </div>
                 <div class="checkbox checkbox-primary form-check-inline">
-                    <input type="checkbox" id="inlineCheckbox1" value="option1">
+                    <input type="checkbox" id="inlineCheckbox1" asp-for="@Model.Sentence.WordOrigin" >
                     <label for="inlineCheckbox1"> 字首字根字尾 </label>
                 </div>
                 <div class="checkbox checkbox-primary form-check-inline">
-                    <input type="checkbox" id="inlineCheckbox2" value="option1">
+                    <input type="checkbox" id="inlineCheckbox2" asp-for="@Model.Sentence.Synonym" >
                     <label for="inlineCheckbox2"> 重要同義字 </label>
                 </div>
             </div>

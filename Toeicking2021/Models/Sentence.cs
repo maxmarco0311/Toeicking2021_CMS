@@ -24,8 +24,10 @@ namespace Toeicking2021.Models
         [Column(TypeName = "varchar(2)")]
         [Required(ErrorMessage = "請選擇情境")]
         public string Context  { get; set; }
-        public bool? WordOrigin { get; set; }
-        public bool? Synonym { get; set; }
+
+        // bool屬性搭配checkbox用在asp-for當中不可為null，解決辦法是設預設值false
+        public bool WordOrigin { get; set; } = false;
+        public bool Synonym { get; set; } = false;
 
         [Column(TypeName = "nvarchar(100)")]
         [Required(ErrorMessage = "請選擇文法類型")]
