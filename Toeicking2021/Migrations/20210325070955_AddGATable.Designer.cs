@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toeicking2021.Data;
 
 namespace Toeicking2021.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210325070955_AddGATable")]
+    partial class AddGATable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,24 +109,6 @@ namespace Toeicking2021.Migrations
                     b.ToTable("Sentences");
                 });
 
-            modelBuilder.Entity("Toeicking2021.Models.VA", b =>
-                {
-                    b.Property<int>("AnalysisId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Analysis")
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<int>("SentenceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AnalysisId");
-
-                    b.HasIndex("SentenceId");
-
-                    b.ToTable("VAs");
-                });
-
             modelBuilder.Entity("Toeicking2021.Models.Vocabulary", b =>
                 {
                     b.Property<int>("VocabularyId")
@@ -152,18 +136,7 @@ namespace Toeicking2021.Migrations
             modelBuilder.Entity("Toeicking2021.Models.GA", b =>
                 {
                     b.HasOne("Toeicking2021.Models.Sentence", "Sentence")
-                        .WithMany("GAs")
-                        .HasForeignKey("SentenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Sentence");
-                });
-
-            modelBuilder.Entity("Toeicking2021.Models.VA", b =>
-                {
-                    b.HasOne("Toeicking2021.Models.Sentence", "Sentence")
-                        .WithMany("Vas")
+                        .WithMany()
                         .HasForeignKey("SentenceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -184,10 +157,6 @@ namespace Toeicking2021.Migrations
 
             modelBuilder.Entity("Toeicking2021.Models.Sentence", b =>
                 {
-                    b.Navigation("GAs");
-
-                    b.Navigation("Vas");
-
                     b.Navigation("Vocabularies");
                 });
 #pragma warning restore 612, 618

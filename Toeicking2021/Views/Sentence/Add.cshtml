@@ -131,9 +131,12 @@
             <div class="card-box">
                 <div id="grammar" class="form-group">
                     <label for="usage" class="h4"><b>文法解析：</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    @*迴圈生重複的控制項*@
                     @for (int i = 1; i < 6; i++)
                     {
+                        // 組id用的字串
                         string id = "usasge" + i.ToString();
+                        // HTML
                         <textarea id="@id" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
                     }
                 </div>
@@ -146,21 +149,24 @@
             <div class="card-box">
                 <label class="h4"><b>字彙片語：</b> <i id="add_voc" class="fa fa-plus-square"></i></label>
                 <div id="vocabulary" class="">
+                    @*迴圈生重複的控制項*@
                     @for (int i = 1; i < 7; i++)
                     {
+                        //組id用的字串
                         string vocId = "voc" + i.ToString();
                         string categoryId = "category" + i.ToString();
                         string defId = "def" + i.ToString();
+                        // HTML
                         <div class="voc_set form-group row ">
                             <div class="col-4">
-                                <input type="text" id="@vocId" name="voc" class="voc form-control" />
+                                <input type="text" id="@vocId" name="voc" class="voc form-control" placeholder="字彙片語" />
                             </div>
                             <div class="col-3">
                                 <select asp-items="Model.Categories" id="@categoryId" name="form" class="word-form form-control">
                                 </select>
                             </div>
                             <div class="col-5">
-                                <input id="@defId" name="def" class=" def form-control" />
+                                <input id="@defId" name="def" class=" def form-control" placeholder="中文釋義" />
                             </div>
                         </div>
                     }
@@ -224,6 +230,7 @@
                     <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                         <div class="card-body">
                             <div class="button-list">
+                                @*用字串集合snippets生每個button*@
                                 @foreach (var item in snippets)
                                 {
                                     //使用button，用.snippet來選取按鈕事件

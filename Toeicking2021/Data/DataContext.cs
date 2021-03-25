@@ -12,6 +12,10 @@ namespace Toeicking2021.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         // 資料表類別檔屬性
         public DbSet<Administrator> Administrators { get; set; }
+        public DbSet<Sentence> Sentences { get; set; }
+        public DbSet<Vocabulary> Vocabularies { get; set; }
+        public DbSet<GA> GAs { get; set; }
+        public DbSet<VA> VAs { get; set; }
 
     }
 }
