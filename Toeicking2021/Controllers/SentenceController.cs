@@ -12,6 +12,7 @@ using Toeicking2021.Data;
 using Toeicking2021.Models;
 using Toeicking2021.Services;
 using Toeicking2021.Utilities;
+using Toeicking2021.ViewModels;
 
 namespace Toeicking2021.Controllers
 {
@@ -33,7 +34,13 @@ namespace Toeicking2021.Controllers
 
         public IActionResult Add()
         {
-            
+            var model = new SentenceInput();
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Add(SentenceInput input)
+        {
+
             return View();
         }
 

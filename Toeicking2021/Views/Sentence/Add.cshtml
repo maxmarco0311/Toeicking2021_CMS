@@ -1,6 +1,14 @@
-﻿
+﻿@*綁定繫結的型別，為一個ViewModel，裡面包了數個資料表類別*@
+@model Toeicking2021.ViewModels.SentenceInput
+
 @{
     ViewData["Title"] = "新增句子";
+    List<string> snippets = new List<string>
+    {
+       "本句主詞為", "是一個名詞子句", "開頭連接詞為", "動名詞"
+    };
+
+
 }
 
 @section topCSS{
@@ -48,87 +56,70 @@
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
                 <div class="form-group">
-                    <label for="englishSentence" class="h4"><b>必考金句</b></label>
+                    <label for="englishSentence" class="h4"><b>必考金句：</b></label>
                     <textarea id="englishSentence" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="translation" class="h4"><b>中文翻譯</b></label>
+                    <label for="translation" class="h4"><b>中文翻譯：</b></label>
                     <textarea id="translation" class="form-control" rows="3" style="width: 100%; height:100%"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="translation" class="h4"><b>情境</b></label>
-                    <select id="category1" name="form" class="word-form form-control">
-                        <option value="">請選擇</option>
-                        <option value="n">(n.)</option>
-                        <option value="v">(v.)</option>
-                        <option value="adj">(adj.)</option>
-                        <option value="adv">(adv.)</option>
-                        <option value="prep">(prep.)</option>
-                        <option value="conj">(conj.)</option>
+                    <label for="translation" class="h4"><b>情境：</b></label>
+                    <select asp-items="Model.ContextCategories" id="category1" name="form" class="word-form form-control">
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="translation" class="h4"><b>文法分類</b></label>
+                    <label for="translation" class="h4"><b>文法分類：</b></label>
                     <select class="select2 select2-multiple" multiple="multiple" id="test" data-placeholder="">
-                        <optgroup label="Alaskan/Hawaiian Time Zone">
-                            <option value="AK">Alaska</option>
-                            <option value="HI">Hawaii</option>
+                        <optgroup label="各種現在式">
+                            <option value="1">現在簡單式</option>
+                            <option value="2">現在進行式</option>
+                            <option value="3">現在完成式</option>
+                            <option value="4">現在完成進行式</option>
                         </optgroup>
-                        <optgroup label="Pacific Time Zone">
-                            <option value="CA">California</option>
-                            <option value="NV">Nevada</option>
-                            <option value="OR">Oregon</option>
-                            <option value="WA">Washington</option>
+                        <optgroup label="各種過去式">
+                            <option value="5">過去簡單式</option>
+                            <option value="6">過去進行式</option>
+                            <option value="7">過去完成式</option>
+                            <option value="8">過去完成進行式</option>
                         </optgroup>
-                        <optgroup label="Mountain Time Zone">
-                            <option value="AZ">Arizona</option>
-                            <option value="CO">Colorado</option>
-                            <option value="ID">Idaho</option>
-                            <option value="MT">Montana</option>
-                            <option value="NE">Nebraska</option>
-                            <option value="NM">New Mexico</option>
-                            <option value="ND">North Dakota</option>
-                            <option value="UT">Utah</option>
-                            <option value="WY">Wyoming</option>
+                        <optgroup label="各種未來式">
+                            <option value="9">未來簡單式</option>
+                            <option value="10">未來進行式</option>
+                            <option value="11">未來完成式</option>
+                            <option value="12">未來完成進行式</option>
                         </optgroup>
-                        <optgroup label="Central Time Zone">
-                            <option value="AL">Alabama</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="IL">Illinois</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                            <option value="LA">Louisiana</option>
-                            <option value="MN">Minnesota</option>
-                            <option value="MS">Mississippi</option>
-                            <option value="MO">Missouri</option>
-                            <option value="OK">Oklahoma</option>
-                            <option value="SD">South Dakota</option>
-                            <option value="TX">Texas</option>
-                            <option value="TN">Tennessee</option>
-                            <option value="WI">Wisconsin</option>
+                        <optgroup label="名詞子句">
+                            <option value="">that開頭</option>
+                            <option value="">if/whether開頭</option>
+                            <option value="">wh-疑問詞開頭</option>
                         </optgroup>
-                        <optgroup label="Eastern Time Zone">
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="FL">Florida</option>
-                            <option value="GA">Georgia</option>
-                            <option value="IN">Indiana</option>
-                            <option value="ME">Maine</option>
-                            <option value="MD">Maryland</option>
-                            <option value="MA">Massachusetts</option>
-                            <option value="MI">Michigan</option>
-                            <option value="NH">New Hampshire</option>
-                            <option value="NJ">New Jersey</option>
-                            <option value="NY">New York</option>
-                            <option value="NC">North Carolina</option>
-                            <option value="OH">Ohio</option>
-                            <option value="PA">Pennsylvania</option>
-                            <option value="RI">Rhode Island</option>
-                            <option value="SC">South Carolina</option>
-                            <option value="VT">Vermont</option>
-                            <option value="VA">Virginia</option>
-                            <option value="WV">West Virginia</option>
+                        <optgroup label="形容詞子句">
+                            <option value="">修飾"人"</option>
+                            <option value="">修飾"事物"</option>
+                            <option value="">修飾"時間"</option>
+                            <option value="">修飾"地點"</option>
+                            <option value="">whose</option>
+                        </optgroup>
+                        <optgroup label="副詞子句">
+                            <option value="">描述"時間"</option>
+                            <option value="">描述"原因"</option>
+                            <option value="">描述"對比"</option>
+                            <option value="">描述"條件"</option>
+                            <option value="">描述"目的"</option>
+                            <option value="">假設語氣</option>
+                            <option value="">其它</option>
+                        </optgroup>
+                        <optgroup label="子句減化">
+                            <option value="">名詞子句減化</option>
+                            <option value="">形容詞子句減化</option>
+                            <option value="">副詞子句減化</option>
+                            <option value="">接續發展</option>
+                            <option value="">背景說明</option>
+                        </optgroup>
+                        <optgroup label="介詞片語">
+                            <option value="">單個介片</option>
+                            <option value="">多個介片</option>
                         </optgroup>
                     </select>
                 </div>
@@ -139,12 +130,12 @@
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
                 <div id="grammar" class="form-group">
-                    <label for="usage" class="h4"><b>文法解析</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
-                    <textarea id="usage1" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage2" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage3" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage4" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="usage5" name="usage" class="usage form-control" rows="2" style="width: 100%; height:100%"></textarea>
+                    <label for="usage" class="h4"><b>文法解析：</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    @for (int i = 1; i < 6; i++)
+                    {
+                        string id = "usasge" + i.ToString();
+                        <textarea id="@id" name="usage" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    }
                 </div>
             </div>
         </div>
@@ -153,133 +144,38 @@
     <div class="row">
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
-                <label class="h4"><b>字彙片語</b> <i id="add_voc" class="fa fa-plus-square"></i></label>
+                <label class="h4"><b>字彙片語：</b> <i id="add_voc" class="fa fa-plus-square"></i></label>
                 <div id="vocabulary" class="">
-                    <div class="voc_set form-group row ">
-                        <div class="col-4">
-                            <input type="text" id="voc1" name="voc" class="voc form-control" />
+                    @for (int i = 1; i < 7; i++)
+                    {
+                        string vocId = "voc" + i.ToString();
+                        string categoryId = "category" + i.ToString();
+                        string defId = "def" + i.ToString();
+                        <div class="voc_set form-group row ">
+                            <div class="col-4">
+                                <input type="text" id="@vocId" name="voc" class="voc form-control" />
+                            </div>
+                            <div class="col-3">
+                                <select asp-items="Model.Categories" id="@categoryId" name="form" class="word-form form-control">
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                <input id="@defId" name="def" class=" def form-control" />
+                            </div>
                         </div>
-                        <div class="col-3">
-                            <select id="category1" name="form" class="word-form form-control">
-                                <option value="">請選擇</option>
-                                <option value="n">(n.)</option>
-                                <option value="v">(v.)</option>
-                                <option value="adj">(adj.)</option>
-                                <option value="adv">(adv.)</option>
-                                <option value="prep">(prep.)</option>
-                                <option value="conj">(conj.)</option>
-                            </select>
-                        </div>
-                        <div class="col-5">
-                            <input id="def1" name="def" class=" def form-control" />
-                        </div>
-                    </div>
-                    <div class="voc_set form-group row ">
-                        <div class="col-4">
-                            <input id="voc2" name="voc" class="voc form-control" />
-                        </div>
-                        <div class="col-3">
-                            <select id="category2" name="form" class="word-form form-control">
-                                <option value="">請選擇</option>
-                                <option value="n">(n.)</option>
-                                <option value="v">(v.)</option>
-                                <option value="adj">(adj.)</option>
-                                <option value="adv">(adv.)</option>
-                                <option value="prep">(prep.)</option>
-                                <option value="conj">(conj.)</option>
-                            </select>
-                        </div>
-                        <div class="col-5">
-                            <input id="def2" name="def" class="def form-control" />
-                        </div>
-                    </div>
-                    <div class="voc_set form-group row ">
-                        <div class="col-4">
-                            <input id="voc3" name="voc" class="voc form-control" />
-                        </div>
-                        <div class="col-3">
-                            <select id="category3" name="form" class="word-form form-control">
-                                <option value="">請選擇</option>
-                                <option value="n">(n.)</option>
-                                <option value="v">(v.)</option>
-                                <option value="adj">(adj.)</option>
-                                <option value="adv">(adv.)</option>
-                                <option value="prep">(prep.)</option>
-                                <option value="conj">(conj.)</option>
-                            </select>
-                        </div>
-                        <div class="col-5">
-                            <input id="def3" name="def" class="def form-control" />
-                        </div>
-                    </div>
-                    <div class="voc_set form-group row ">
-                        <div class="col-4">
-                            <input id="voc4" name="voc" class="voc form-control" />
-                        </div>
-                        <div class="col-3">
-                            <select id="category4" name="form" class="word-form form-control">
-                                <option value="">請選擇</option>
-                                <option value="n">(n.)</option>
-                                <option value="v">(v.)</option>
-                                <option value="adj">(adj.)</option>
-                                <option value="adv">(adv.)</option>
-                                <option value="prep">(prep.)</option>
-                                <option value="conj">(conj.)</option>
-                            </select>
-                        </div>
-                        <div class="col-5">
-                            <input id="def4" name="def" class="def form-control" />
-                        </div>
-                    </div>
-                    <div class="voc_set form-group row ">
-                        <div class="col-4">
-                            <input id="voc5" name="voc" class="voc form-control" />
-                        </div>
-                        <div class="col-3">
-                            <select id="category5" name="form" class="word-form form-control">
-                                <option value="">請選擇</option>
-                                <option value="n">(n.)</option>
-                                <option value="v">(v.)</option>
-                                <option value="adj">(adj.)</option>
-                                <option value="adv">(adv.)</option>
-                                <option value="prep">(prep.)</option>
-                                <option value="conj">(conj.)</option>
-                            </select>
-                        </div>
-                        <div class="col-5">
-                            <input id="def5" name="def" class="def form-control" />
-                        </div>
-                    </div>
-                    <div class="voc_set form-group row ">
-                        <div class="col-4">
-                            <input id="voc6" name="voc" class="voc form-control" />
-                        </div>
-                        <div class="col-3">
-                            <select id="category6" name="form" class="word-form form-control">
-                                <option value="">請選擇</option>
-                                <option value="n">(n.)</option>
-                                <option value="v">(v.)</option>
-                                <option value="adj">(adj.)</option>
-                                <option value="adv">(adv.)</option>
-                                <option value="prep">(prep.)</option>
-                                <option value="conj">(conj.)</option>
-                            </select>
-                        </div>
-                        <div class="col-5">
-                            <input id="def6" name="def" class="def form-control" />
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
                 <div id="vocsupplement" class="form-group">
-                    <label for="usage" class="h4"><b>字彙解析</b> <i id="add_vocsupplement" class="fa fa-plus-square"></i> <i id="voc-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
-                    <textarea id="vocsupplement1" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="vocsupplement2" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="vocsupplement3" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
-                    <textarea id="vocsupplement4" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    <label for="usage" class="h4"><b>字彙解析：</b> <i id="add_vocsupplement" class="fa fa-plus-square"></i> <i id="voc-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    @for (int i = 1; i < 5; i++)
+                    {
+                        string id = "vocsupplement" + i.ToString();
+                        <textarea id="@id" name="vocsupplement" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+                    }
                 </div>
                 <div class="checkbox checkbox-primary form-check-inline">
                     <input type="checkbox" id="inlineCheckbox1" value="option1">
@@ -311,7 +207,7 @@
     <input type="hidden" id="multiselect-data" name="" />
 </form>
 
-@*accordion-modal*@
+@*accordion-modal，用在快速輸入*@
 <div id="accordion-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content p-0">
@@ -328,10 +224,11 @@
                     <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                         <div class="card-body">
                             <div class="button-list">
-                                <button type="button" class="snippet">本句主詞為</button>
-                                <button type="button" class="snippet">是一個名詞子句</button>
-                                <button type="button" class="snippet">開頭連接詞為</button>
-                                <button type="button" class="snippet">動名詞</button>
+                                @foreach (var item in snippets)
+                                {
+                                    //使用button，用.snippet來選取按鈕事件
+                                    <button type="button" class="snippet">@item</button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -346,10 +243,10 @@
                         <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                             <div class="card-body">
                                 <div class="button-list">
-                                    <button type="button" class="snippet">本句主詞為</button>
-                                    <button type="button" class="snippet">是一個名詞子句</button>
-                                    <button type="button" class="snippet">開頭連接詞為</button>
-                                    <button type="button" class="snippet">動名詞</button>
+                                    @foreach (var item in snippets)
+                                    {
+                                        <button type="button" class="snippet">@item</button>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -365,10 +262,10 @@
                         <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
                             <div class="card-body">
                                 <div class="button-list">
-                                    <button type="button" class="snippet">本句主詞為</button>
-                                    <button type="button" class="snippet">是一個名詞子句</button>
-                                    <button type="button" class="snippet">開頭連接詞為</button>
-                                    <button type="button" class="snippet">動名詞</button>
+                                    @foreach (var item in snippets)
+                                    {
+                                        <button type="button" class="snippet">@item</button>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -378,6 +275,8 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
 @section topScripts{
     @*multi-select的js檔*@
     <script src="~/lib/plugins/multiselect/js/jquery.multi-select.js"></script>
@@ -455,7 +354,7 @@
                 currentObj.val(existingValue + addedValue);
                 // 手動關閉modal
                 $("#accordion-modal").modal('hide');
-                // focus要在關掉modal後才能生效
+                // 重新focus要在關掉modal後才能生效
                 currentObj.focus();
             });
 
@@ -497,7 +396,7 @@
                     //選取下一層div標籤的text值
                     SelectedText = SelectedText + $(this).children("div").text() + ",";
                 });
-                //將所有選到的值給隱藏欄位
+                //將所有選到的值給隱藏欄位，選到的是text，無法選value，到動作方法要處理對應到value
                 $("#multiselect-data").val(SelectedText);
                 //回server執行控制項的事件處理常式，val()裡要放的是要執行事件常式的控制項的name(不是id)
                 $("#__EVENTTARGET").val("ctl00$body$Button1");
