@@ -1,0 +1,39 @@
+﻿@model Toeicking2021.ViewModels.SentenceInputVM
+
+@{ 
+   string temp = ViewBag.number;
+   int i = Convert.ToInt16(temp);
+}
+
+@if (ViewBag.category == "voc")
+{
+    //組id用的字串
+    string vocId = "voc" + ViewBag.number;
+    string categoryId = "category" + ViewBag.number;
+    string defId = "def" + ViewBag.number;
+    
+    // HTML
+    <div class="voc_set form-group row ">
+        <div class="col-4">
+            <input type="text" id="@vocId" asp-for="@Model.Vocs[i-1].Voc" class="voc form-control" placeholder="字彙片語" />
+        </div>
+        <div class="col-3">
+            <select asp-for="@Model.Vocs[i-1].Category" asp-items="ViewBag.Categories" id="@categoryId" class="word-form form-control">
+            </select>
+        </div>
+        <div class="col-5">
+            <input type="text" asp-for="@Model.Vocs[i-1].Chinese" id="@defId" class=" def form-control" placeholder="中文釋義" />
+        </div>
+    </div>
+}
+else if (ViewBag.category == "va")
+{
+    string id = "vocsupplement" + ViewBag.number;
+    <textarea id="@id" asp-for="@Model.VAs[i-1].Analysis" class="vocsupplement form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+}
+else if (ViewBag.category == "ga")
+{
+    string id = "usasge" + ViewBag.number;
+    <textarea id="@id" asp-for="@Model.GAs[i-1].Analysis" class="usage form-control mb-3" rows="2" style="width: 100%; height:100%"></textarea>
+}
+

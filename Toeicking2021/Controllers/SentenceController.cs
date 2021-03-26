@@ -68,10 +68,28 @@ namespace Toeicking2021.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(SentenceInput input)
+        public IActionResult Add(SentenceInputVM data)
         {
+            string grammarCatgories = MultiSelectHelper.TransferToValueFromDic(data.Sentence.GrammarCategory);
+            return Content(grammarCatgories);
+        }
 
-            return View();
+        public IActionResult AddControl(string number, string category) 
+        {
+            ViewBag.number = number;
+            ViewBag.category = category;
+            ViewBag.Categories = new List<SelectListItem>
+            {
+                new SelectListItem{ Text="請選擇",Value=""},
+                new SelectListItem{ Text="(n.)",Value="n"},
+                new SelectListItem{ Text="(v.)",Value="v"},
+                new SelectListItem{ Text="(adj.)",Value="adj"},
+                new SelectListItem{ Text="(adv.)",Value="adv"},
+                new SelectListItem{ Text="(prep.)",Value="prep"},
+                new SelectListItem{ Text="(conj.)",Value="conj"},
+
+            };
+            return PartialView();
         }
 
         public IActionResult Retrieve(TableFormData FormData)

@@ -1,10 +1,11 @@
 ﻿@*綁定繫結的型別，為一個ViewModel，裡面包了數個資料表類別*@
-@model Toeicking2021.ViewModels.SentenceInput
+@model Toeicking2021.ViewModels.SentenceInputVM
 
 @{
     ViewData["Title"] = "新增句子";
+    // 快速輸入的字串集合
     List<string> snippets = new List<string>
-    {
+{
        "本句主詞為", "是一個名詞子句", "開頭連接詞為", "動名詞"
     };
 
@@ -90,36 +91,36 @@
                             <option value="12">未來完成進行式</option>
                         </optgroup>
                         <optgroup label="名詞子句">
-                            <option value="">that開頭</option>
-                            <option value="">if/whether開頭</option>
-                            <option value="">wh-疑問詞開頭</option>
+                            <option value="13">that開頭</option>
+                            <option value="14">if/whether開頭</option>
+                            <option value="15">wh-疑問詞開頭</option>
                         </optgroup>
                         <optgroup label="形容詞子句">
-                            <option value="">修飾"人"</option>
-                            <option value="">修飾"事物"</option>
-                            <option value="">修飾"時間"</option>
-                            <option value="">修飾"地點"</option>
-                            <option value="">whose</option>
+                            <option value="16">修飾"人"</option>
+                            <option value="17">修飾"事物"</option>
+                            <option value="18">修飾"時間"</option>
+                            <option value="19">修飾"地點"</option>
+                            <option value="20">whose</option>
                         </optgroup>
                         <optgroup label="副詞子句">
-                            <option value="">描述"時間"</option>
-                            <option value="">描述"原因"</option>
-                            <option value="">描述"對比"</option>
-                            <option value="">描述"條件"</option>
-                            <option value="">描述"目的"</option>
-                            <option value="">假設語氣</option>
-                            <option value="">其它</option>
+                            <option value="21">描述"時間"</option>
+                            <option value="22">描述"原因"</option>
+                            <option value="23">描述"對比"</option>
+                            <option value="24">描述"條件"</option>
+                            <option value="25">描述"目的"</option>
+                            <option value="26">假設語氣</option>
+                            <option value="27">其它副詞子句</option>
                         </optgroup>
                         <optgroup label="子句減化">
-                            <option value="">名詞子句減化</option>
-                            <option value="">形容詞子句減化</option>
-                            <option value="">副詞子句減化</option>
-                            <option value="">接續發展</option>
-                            <option value="">背景說明</option>
+                            <option value="28">名詞子句減化</option>
+                            <option value="29">形容詞子句減化</option>
+                            <option value="30">副詞子句減化</option>
+                            <option value="31">接續發展</option>
+                            <option value="32">背景說明</option>
                         </optgroup>
                         <optgroup label="介詞片語">
-                            <option value="">單個介片</option>
-                            <option value="">多個介片</option>
+                            <option value="33">單個介片</option>
+                            <option value="34">多個介片</option>
                         </optgroup>
                     </select>
                 </div>
@@ -185,11 +186,13 @@
                     }
                 </div>
                 <div class="checkbox checkbox-primary form-check-inline">
-                    <input type="checkbox" id="inlineCheckbox1" asp-for="@Model.Sentence.WordOrigin" >
+                    @*render時value屬性都是true，但表單送出時還是會根據checked屬性(不會顯示)去給後端true或false*@
+                    @*也會自動生驗證標籤*@
+                    <input type="checkbox" id="inlineCheckbox1" asp-for="@Model.Sentence.WordOrigin">
                     <label for="inlineCheckbox1"> 字首字根字尾 </label>
                 </div>
                 <div class="checkbox checkbox-primary form-check-inline">
-                    <input type="checkbox" id="inlineCheckbox2" asp-for="@Model.Sentence.Synonym" >
+                    <input type="checkbox" id="inlineCheckbox2" asp-for="@Model.Sentence.Synonym">
                     <label for="inlineCheckbox2"> 重要同義字 </label>
                 </div>
             </div>
@@ -199,19 +202,19 @@
         <div class="row">
             <div class="col-4 mb-4">
                 @*前端按鈕要加OnClientClick="return false"，modal按鈕要加屬性data-toggle="modal" data-target="#con-close-modal"，如果要用js控制就不用加*@
-                <button id="checkRepetition" class="btn btn-block btn--lg btn-outline-warning waves-light" OnClick="">檢查字彙重複</button>
+                <button id="checkRepetition" class="btn btn-block btn--lg btn-outline-warning waves-light">檢查字彙重複</button>
             </div>
             <div class="col-4 mb-4">
-                @*表單送出的按鈕*@
-                <input type="submit" value="儲存資料" class="btn btn-block btn--lg btn-outline-success waves-light" OnClick="" />
+                @*表單送出的按鈕，要先將multi-select值從前端抓給隱藏欄位繫結回後端*@
+                <input type="submit" id="receiveMultiSelect" asp-action="Add" value="儲存資料" class="btn btn-block btn--lg btn-outline-success waves-light" />
             </div>
             <div class="col-4 mb-4">
-                <button id="reload" class="btn btn-block btn--lg btn-outline-danger waves-light" OnClick="">清空內容</button>
+                <button id="reload" class="btn btn-block btn--lg btn-outline-danger waves-light">清空內容</button>
             </div>
         </div>
     </div>
     @*接收multiselect值的隱藏欄位*@
-    <input type="hidden" id="multiselect-data" name="" />
+    <input type="hidden" id="multiselect-data" asp-for="@Model.Sentence.GrammarCategory" />
 </form>
 
 @*accordion-modal，用在快速輸入*@
@@ -297,48 +300,42 @@
     @*modal的js檔*@
     <script src="~/lib/plugins/custombox/dist/custombox.min.js"></script>
     <script src="~/lib/plugins/custombox/dist/legacy.min.js"></script>
+    @*想要在前端驗證需匯入下列兩個內建檔案*@
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script>
         $(function () {
             // 新增"用法解析"
             $("#add_usage").on("click", function () {
                 var usageLength = $(".usage").length;
                 var lengthToAdd = usageLength + 1;
-                var usageToAdd = '<textarea id="usage' + lengthToAdd + '" name="usage" class="usage form-control mt-3" rows="2" style="width: 100%; height:100%"></textarea>';
-                $("#grammar").append(usageToAdd);
+                // 因為要使用asp-for繫結資料，所以得利用partial view來動態生控制項
+                var formData = { number: lengthToAdd, category:"ga" }
+                $.get("@Url.Content("~/Sentence/AddControl")", formData, function (response) {
+                    $("#grammar").append(response);
+                });
+
 
             });
             // 新增"字彙解析"
             $("#add_vocsupplement").on("click", function () {
                 var vocsupplementLength = $(".vocsupplement").length;
                 var lengthToAdd = vocsupplementLength + 1;
-                var vocsupplementToAdd = '<textarea id="vocsupplement' + lengthToAdd + '" name="vocsupplement" class="vocsupplement form-control mt-3" rows="2" style="width: 100%; height:100%"></textarea>';
-                $("#vocsupplement").append(vocsupplementToAdd);
+                var formData = { number: lengthToAdd, category:"va" }
+                $.get("@Url.Content("~/Sentence/AddControl")", formData, function (response) {
+                    $("#vocsupplement").append(response);
+                });
+
 
             });
             // 新增"字彙片語"
             $("#add_voc").on("click", function () {
                 var voc_setLength = $(".voc_set").length;
-                var LengthToAdd = voc_setLength + 1;
-                var voc_setToAdd = '<div class="voc_set form-group row"> ' +
-                    '<div class="col-4" > ' +
-                    '<input id="voc' + LengthToAdd + '" name="voc" class="voc form-control" /> ' +
-                    '</div > ' +
-                    '<div class="col-3"> ' +
-                    '<select id="category' + LengthToAdd + '" name="form" class="word-form form-control"> ' +
-                    '<option value="">請選擇</option> ' +
-                    '<option value="n">(n.)</option> ' +
-                    '<option value="v">(v.)</option> ' +
-                    '<option value="adj">(adj.)</option> ' +
-                    '<option value="adv">(adv.)</option> ' +
-                    '<option value="prep">(prep.)</option> ' +
-                    '<option value="conj">(conj.)</option> ' +
-                    '</select> ' +
-                    '</div> ' +
-                    '<div class="col-5"> ' +
-                    '<input id="def' + LengthToAdd + '" name="voc" name="def" class="def form-control" /> ' +
-                    '</div> ' +
-                    '</div > ';
-                $("#vocabulary").append(voc_setToAdd);
+                var lengthToAdd = voc_setLength + 1;
+                var formData = { number: lengthToAdd, category:"voc" }
+                $.get("@Url.Content("~/Sentence/AddControl")", formData, function (response) {
+                    $("#vocabulary").append(response);
+                });
 
 
             });
@@ -396,7 +393,8 @@
             });
 
             // 接收multiselect的值放進隱藏欄位中(在submit的onclick的函式中)
-            $("#body_Button1").click(function () {
+            $("#receiveMultiSelect").on("click", function () {
+                alert("進來了");
                 //先設全域變數接迴圈內的值
                 var SelectedText = "";
                 //將所有li標籤跑迴圈
@@ -406,10 +404,12 @@
                 });
                 //將所有選到的值給隱藏欄位，選到的是text，無法選value，到動作方法要處理對應到value
                 $("#multiselect-data").val(SelectedText);
-                //回server執行控制項的事件處理常式，val()裡要放的是要執行事件常式的控制項的name(不是id)
-                $("#__EVENTTARGET").val("ctl00$body$Button1");
-                $("#form1").submit();
+                var result = $("#multiselect-data").val();
+                alert("result:" + result);
+
             });
+
+
 
 
 
