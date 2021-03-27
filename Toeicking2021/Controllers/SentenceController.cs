@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Toeicking2021.Data;
 using Toeicking2021.Models;
 using Toeicking2021.Services;
+using Toeicking2021.Services.MembersDBService;
+using Toeicking2021.Services.SentenceDBService;
 using Toeicking2021.Utilities;
 using Toeicking2021.ViewModels;
 
@@ -21,77 +23,66 @@ namespace Toeicking2021.Controllers
     public class SentenceController : Controller
     {
         private readonly HttpClientHelper _client;
+        private readonly ISentenceDBService _sentenceDBService;
 
-        public SentenceController(HttpClientHelper client)
+        public SentenceController(HttpClientHelper client, ISentenceDBService sentenceDBService)
         {
             _client = client;
+            _sentenceDBService = sentenceDBService;
+           
         }
-        // 第一次get時可能會沒有參數，所以要int?
-        // 第二次開始get就從<a>傳page參數進來
+
+        #region Index
         public IActionResult Index(int? page)
         {
             return View();
         }
+        #endregion
 
+        #region 生表單頁面
         public IActionResult Add()
         {
-            ViewBag.ContextCategories = new List<SelectListItem>
-            {
-                new SelectListItem{ Text="請選擇",Value=""},
-                new SelectListItem{ Text="住宿交通",Value="1"},
-                new SelectListItem{ Text="餐飲觀光",Value="2"},
-                new SelectListItem{ Text="行銷與銷售",Value="3"},
-                new SelectListItem{ Text="生產與製造",Value="4"},
-                new SelectListItem{ Text="商務會議",Value="5"},
-                new SelectListItem{ Text="辦公室溝通",Value="6"},
-                new SelectListItem{ Text="人事招募",Value="7"},
-                new SelectListItem{ Text="購物訂單",Value="8"},
-                new SelectListItem{ Text="經營管理",Value="9"},
-                new SelectListItem{ Text="設備與修繕",Value="10"},
-                new SelectListItem{ Text="客戶溝通",Value="11"},
-                new SelectListItem{ Text="典禮與活動",Value="12"}
-
-            };
-            ViewBag.Categories = new List<SelectListItem>
-            {
-                new SelectListItem{ Text="請選擇",Value=""},
-                new SelectListItem{ Text="(n.)",Value="n"},
-                new SelectListItem{ Text="(v.)",Value="v"},
-                new SelectListItem{ Text="(adj.)",Value="adj"},
-                new SelectListItem{ Text="(adv.)",Value="adv"},
-                new SelectListItem{ Text="(prep.)",Value="prep"},
-                new SelectListItem{ Text="(conj.)",Value="conj"},
-
-            };
-
+            ViewBag.ContextCategories = ControlListHelper.ContextCategories;
+            ViewBag.Categories = ControlListHelper.Categories;
+            ViewBag.Snippets = ControlListHelper.Snippets;
             return View();
         }
+        #endregion
 
+        #region 存表單資料
         [HttpPost]
-        public IActionResult Add(SentenceInputVM data)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(SentenceInputVM data)
         {
-            string grammarCatgories = MultiSelectHelper.TransferToValueFromDic(data.Sentence.GrammarCategory);
-            return Content(grammarCatgories);
-        }
+            if (ModelState.IsValid)
+            {
+                // 將空值和空字串踢出集合
+                data = Filter.FilterNullOut(data);
+                // 取GrammarCategory所需的value值
+                data.Sentence.GrammarCategory = MultiSelectHelper.TransferToValueFromDic(data.Sentence.GrammarCategory);
+                // 存DB，並將結果(字串)傳回前端
+                ViewBag.result = await _sentenceDBService.AddSentenceGroup(data);
+            }
+            else
+            {
+                ViewBag.result = "模型繫結出錯";   
+            }
+            return View();
 
+        }
+        #endregion
+
+        #region 動態生控制項(PartialView)
         public IActionResult AddControl(string number, string category) 
         {
             ViewBag.number = number;
             ViewBag.category = category;
-            ViewBag.Categories = new List<SelectListItem>
-            {
-                new SelectListItem{ Text="請選擇",Value=""},
-                new SelectListItem{ Text="(n.)",Value="n"},
-                new SelectListItem{ Text="(v.)",Value="v"},
-                new SelectListItem{ Text="(adj.)",Value="adj"},
-                new SelectListItem{ Text="(adv.)",Value="adv"},
-                new SelectListItem{ Text="(prep.)",Value="prep"},
-                new SelectListItem{ Text="(conj.)",Value="conj"},
-
-            };
+            ViewBag.Categories = ControlListHelper.Categories;
             return PartialView();
         }
+        #endregion
 
+        #region 顯示資料搜尋頁
         public IActionResult Retrieve(TableFormData FormData)
         {
             // 判斷是否為ajax get
@@ -106,6 +97,9 @@ namespace Toeicking2021.Controllers
             return RedirectToAction(nameof(RenderTable), new { 
                 FormData.SenNum, FormData.Keyword, FormData.AddedDate, FormData.CountDesc, FormData.CheckTimes, FormData.PageSize });
         }
+        #endregion
+
+        #region 顯示資料表(PartialView)
         public IActionResult RenderTable(TableFormData FormData)
         {
             // 建立predicate變數，也就是where()的Lambda參數，New<T>的泛型是要查出的資料物件型別
@@ -144,9 +138,10 @@ namespace Toeicking2021.Controllers
             List<TestData> data = PaginatedList<TestData>.Create(source, FormData.Page ?? 1, FormData.PageSize ?? 3);
             return PartialView(data);
         }
+        #endregion
 
 
-        
+
 
     }
 

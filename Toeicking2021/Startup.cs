@@ -16,6 +16,7 @@ using Toeicking2021.Data;
 using Toeicking2021.Models;
 using Toeicking2021.Services.MailService;
 using Toeicking2021.Services.MembersDBService;
+using Toeicking2021.Services.SentenceDBService;
 using Toeicking2021.Utilities;
 
 namespace Toeicking2021
@@ -55,6 +56,7 @@ namespace Toeicking2021
             services.Configure<Encryption>(Configuration.GetSection("Encryption"));
             // 註冊Repository Pattern
             services.AddScoped<IMembersDBService, MembersDBService>();
+            services.AddScoped<ISentenceDBService, SentenceDBService>();
             services.AddTransient<IMailService, MailService>();
             // 註冊有使用靜態欄位並DI的Utilities類別(沒有介面)，不然無法呼叫
             // "沒有"使用靜態欄位並DI的Utilities類別不用在這註冊，可直接呼叫

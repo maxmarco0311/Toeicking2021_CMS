@@ -3,12 +3,6 @@
 
 @{
     ViewData["Title"] = "新增句子";
-    // 快速輸入的字串集合
-    List<string> snippets = new List<string>
-{
-       "本句主詞為", "是一個名詞子句", "開頭連接詞為", "動名詞"
-    };
-
 
 }
 
@@ -215,6 +209,8 @@
     </div>
     @*接收multiselect值的隱藏欄位*@
     <input type="hidden" id="multiselect-data" asp-for="@Model.Sentence.GrammarCategory" />
+    @*存DB的結果*@
+    <input type="hidden" id="result" value="@ViewBag.result" />
 </form>
 
 @*accordion-modal，用在快速輸入*@
@@ -235,7 +231,7 @@
                         <div class="card-body">
                             <div class="button-list">
                                 @*用字串集合snippets生每個button*@
-                                @foreach (var item in snippets)
+                                @foreach (var item in ViewBag.Snippets)
                                 {
                                     //使用button，用.snippet來選取按鈕事件
                                     <button type="button" class="snippet">@item</button>
@@ -254,7 +250,7 @@
                         <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                             <div class="card-body">
                                 <div class="button-list">
-                                    @foreach (var item in snippets)
+                                    @foreach (var item in ViewBag.Snippets)
                                     {
                                         <button type="button" class="snippet">@item</button>
                                     }
@@ -273,7 +269,7 @@
                         <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
                             <div class="card-body">
                                 <div class="button-list">
-                                    @foreach (var item in snippets)
+                                    @foreach (var item in ViewBag.Snippets)
                                     {
                                         <button type="button" class="snippet">@item</button>
                                     }
@@ -363,6 +359,28 @@
                 currentObj.focus();
             });
 
+            // 清空內容(還要查看id是否有改過)
+            function clearControls() {
+                $("#englishSentence").val("");
+                $("#translation").val("");
+                $(".voc").each(function () {
+                    $(this).val("");
+                });
+                $(".word-form").each(function () {
+                    $(this).val("");
+                });
+                $(".def").each(function () {
+                    $(this).val("");
+                });
+                $(".usage").each(function () {
+                    $(this).val("");
+                });
+                $(".vocsupplement").each(function () {
+                    $(this).val("");
+                });
+
+            }
+
             // 重新載入按鈕
             $("#reload").on("click", function () {
                 //location.reload;
@@ -371,24 +389,7 @@
                 // 重新載入使用這個
                 window.location = window.location.href;
                 //window.location.assign(window.location.href);
-                //清空控制項
-                //$("#englishSentence").val("");
-                //$("#translation").val("");
-                //$(".voc").each(function () {
-                //    $(this).val("");
-                //});
-                //$(".word-form").each(function () {
-                //    $(this).val("");
-                //});
-                //$(".def").each(function () {
-                //    $(this).val("");
-                //});
-                //$(".usage").each(function () {
-                //    $(this).val("");
-                //});
-                //$(".vocsupplement").each(function () {
-                //    $(this).val("");
-                //});
+                
 
             });
 
@@ -409,6 +410,27 @@
 
             });
 
+            if ($("#result").val() == "成功") {
+                swal(
+                    {
+                        title: '成功',
+                        text: "資料庫新增成功",
+                        type: 'success'
+                    }
+                );
+                // 清空內容
+                clearControls();
+
+            } else {
+                swal(
+                    {
+                        title: '錯誤',
+                        text: $("#result").val(),
+                        type: 'error'
+                    }
+
+                );   
+            }
 
 
 
