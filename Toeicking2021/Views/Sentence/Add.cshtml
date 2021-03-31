@@ -63,9 +63,9 @@
                     <select asp-for="@Model.Sentence.Context" asp-items="ViewBag.ContextCategories" id="context" class="word-form form-control">
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="grammar-category">
                     <label for="multi-select" class="h4"><b>文法分類：</b></label>
-                    <select class="select2 select2-multiple" multiple="multiple" id="multi-select" data-placeholder="">
+                    <select class="select2 select2-multiple" multiple="multiple" id="multi-select-grammar-category" data-placeholder="">
                         <optgroup label="各種現在式">
                             <option value="1">現在簡單式</option>
                             <option value="2">現在進行式</option>
@@ -118,14 +118,27 @@
                         </optgroup>
                     </select>
                 </div>
-
+                <div class="form-group" id="part-category">
+                    <label for="multi-select" class="h4"><b>出現大題：</b></label>
+                    <select class="select2 select2-multiple" multiple="multiple" id="multi-select-part-category" data-placeholder="">
+                        <optgroup label="大題">
+                            <option value="1">Part 1</option>
+                            <option value="2">Part 2</option>
+                            <option value="3">Part 3</option>
+                            <option value="4">Part 4</option>
+                            <option value="5">Part 5</option>
+                            <option value="6">Part 6</option>
+                            <option value="7">Part 7</option>
+                        </optgroup>
+                    </select>
+                </div>
             </div>
         </div>
 
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
                 <div id="grammar" class="form-group">
-                    <label for="usage" class="h4"><b>文法解析：</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    <label for="usage" class="h4"><b>文法解析：</b> <i id="add_usage" class="fa fa-plus-square"></i> <i id="grammar-snippet" class="fa fa-pencil" data-target="#accordion-modal"></i></label>
                     @*迴圈生重複的控制項*@
                     @for (int i = 1; i < 6; i++)
                     {
@@ -172,7 +185,7 @@
         <div class="col-md-6 col-sm-12">
             <div class="card-box">
                 <div id="vocsupplement" class="form-group">
-                    <label for="usage" class="h4"><b>字彙解析：</b> <i id="add_vocsupplement" class="fa fa-plus-square"></i> <i id="voc-snippet" class="fa fa-pencil" data-toggle="modal" data-target="#accordion-modal"></i></label>
+                    <label for="usage" class="h4"><b>字彙解析：</b> <i id="add_vocsupplement" class="fa fa-plus-square"></i> <i id="voc-snippet" class="fa fa-pencil" data-target="#accordion-modal"></i></label>
                     @for (int i = 1; i < 5; i++)
                     {
                         string id = "vocsupplement" + i.ToString();
@@ -194,21 +207,19 @@
     </div>
     <div class="card-box">
         <div class="row">
-            <div class="col-4 mb-4">
+            <div class="col-6">
                 @*前端按鈕要加OnClientClick="return false"，modal按鈕要加屬性data-toggle="modal" data-target="#con-close-modal"，如果要用js控制就不用加*@
                 <button id="checkRepetition" class="btn btn-block btn--lg btn-outline-warning waves-light">檢查字彙重複</button>
             </div>
-            <div class="col-4 mb-4">
+            <div class="col-6">
                 @*表單送出的按鈕，要先將multi-select值從前端抓給隱藏欄位繫結回後端*@
                 <input type="submit" id="receiveMultiSelect" asp-action="Add" value="儲存資料" class="btn btn-block btn--lg btn-outline-success waves-light" />
-            </div>
-            <div class="col-4 mb-4">
-                <button id="reload" class="btn btn-block btn--lg btn-outline-danger waves-light">清空內容</button>
             </div>
         </div>
     </div>
     @*接收multiselect值的隱藏欄位*@
-    <input type="hidden" id="multiselect-data" asp-for="@Model.Sentence.GrammarCategory" />
+    <input type="hidden" id="multiselect-data-grammar" asp-for="@Model.Sentence.GrammarCategory" />
+    <input type="hidden" id="multiselect-data-part" asp-for="@Model.Sentence.Part" />
     @*存DB的結果*@
     <input type="hidden" id="result" value="@ViewBag.result" />
 </form>
@@ -234,7 +245,7 @@
                                 @foreach (var item in ViewBag.Snippets)
                                 {
                                     //使用button，用.snippet來選取按鈕事件
-                                    <button type="button" class="snippet">@item</button>
+                                    <button type="button" class="snippet btn btn-secondary">@item</button>
                                 }
                             </div>
                         </div>
@@ -252,7 +263,7 @@
                                 <div class="button-list">
                                     @foreach (var item in ViewBag.Snippets)
                                     {
-                                        <button type="button" class="snippet">@item</button>
+                                        <button type="button" class="snippet btn btn-outline-secondary">@item</button>
                                     }
                                 </div>
                             </div>
@@ -271,7 +282,7 @@
                                 <div class="button-list">
                                     @foreach (var item in ViewBag.Snippets)
                                     {
-                                        <button type="button" class="snippet">@item</button>
+                                        <button type="button" class="snippet btn btn-success">@item</button>
                                     }
                                 </div>
                             </div>
@@ -336,14 +347,36 @@
 
             });
 
-            // 自動輸入搭配modal實現
-            var focusedInput;
-            // 文字框focus事件中，取到該文字框的id(因為開啟modal會使focus消失)，存入一個全域變數中(一個頁面只會有一個focus)：
-            $(".vocsupplement,.usage").focus(function () {
+            // 自動輸入搭配modal實現步驟：
+            // 1.全域變數記住focus的控制項id
+            var focusedInputId;
+            // 2.文字框focus事件中，取到該文字框的id(因為開啟modal會使focus消失)，存在focusedInputId(一個頁面只會有一個focus)
+            // 事件有要給ajax產生的元素用，一定要按照下面方式寫，寫.focus()只對原本就有的元素有效
+            $("body").on("focus",".vocsupplement,.usage", function () {
                 focusedInputId = $(this).attr("id");
             });
-            // modal內的按鈕設定click事件，將值填入該文字框中
+
+            // 3.開modal前先檢查是否有focus
+            $("#voc-snippet, #grammar-snippet").on("click", function () {
+                // 先檢查是否有文字框focus
+                if (focusedInputId === undefined) {
+                    swal(
+                        {
+                            title: '錯誤',
+                            text: '請先Focus文字框',
+                            type: 'error'
+                        }
+
+                    );
+                } else {
+                    // 開modal
+                    $(this).attr("data-toggle", "modal");
+                }
+
+            });
+            // 4.modal內的按鈕設定click事件，將值填入該文字框中
             $(".snippet").on("click", function () {
+
                 // id使用變數，選取時還是要跟"#"串字串
                 var currentObj = $("#" + focusedInputId);
                 var existingValue = currentObj.val();
@@ -357,6 +390,8 @@
                 $("#accordion-modal").modal('hide');
                 // 重新focus要在關掉modal後才能生效
                 currentObj.focus();
+
+
             });
 
             // 清空內容(還要查看id是否有改過)
@@ -381,56 +416,56 @@
 
             }
 
-            // 重新載入按鈕
-            $("#reload").on("click", function () {
-                //location.reload;
-                //history.go(0);
-                //window.location.replace(location.href);
-                // 重新載入使用這個
-                window.location = window.location.href;
-                //window.location.assign(window.location.href);
-                
-
-            });
-
             // 接收multiselect的值放進隱藏欄位中(在submit的onclick的函式中)
             $("#receiveMultiSelect").on("click", function () {
-                alert("進來了");
                 //先設全域變數接迴圈內的值
-                var SelectedText = "";
+                var selectedGrammarCategories = "";
                 //將所有li標籤跑迴圈
-                $(".select2-search-choice").each(function () {
+                $("#grammar-category .select2-search-choice").each(function () {
                     //選取下一層div標籤的text值
-                    SelectedText = SelectedText + $(this).children("div").text() + ",";
+                    selectedGrammarCategories = selectedGrammarCategories + $(this).children("div").text() + ",";
                 });
-                //將所有選到的值給隱藏欄位，選到的是text，無法選value，到動作方法要處理對應到value
-                $("#multiselect-data").val(SelectedText);
-                var result = $("#multiselect-data").val();
-                alert("result:" + result);
+                //將所有選到的值給隱藏欄位，選到的是text，無法選value，到動作方法要透過Service處理對應到value
+                $("#multiselect-data-grammar").val(selectedGrammarCategories);
+                // 第二個multi-select
+                var selectedPartCategories = "";
+                $("#part-category .select2-search-choice").each(function () {
+                    selectedPartCategories = selectedPartCategories + $(this).children("div").text() + ",";
+                });
+                $("#multiselect-data-part").val(selectedPartCategories);
 
             });
 
-            if ($("#result").val() == "成功") {
-                swal(
-                    {
-                        title: '成功',
-                        text: "資料庫新增成功",
-                        type: 'success'
-                    }
-                );
-                // 清空內容
-                clearControls();
+            // result不為空(post存DB)的時候才判斷，否則GET時候就會跳出
+            if ($("#result").val() != "") {
 
-            } else {
-                swal(
-                    {
-                        title: '錯誤',
-                        text: $("#result").val(),
-                        type: 'error'
-                    }
+                // (從post導回Get後)頁面重新整理的時候
+                if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+                    // 不顯示sweetalert
+                    $("#result").val() = "";
+                }
+                // 顯示sweetalert
+                if ($("#result").val() == "成功") {
+                    swal(
+                        {
+                            title: '成功',
+                            text: "資料庫新增成功",
+                            type: 'success'
+                        }
+                    );
 
-                );   
+                } else {
+                    swal(
+                        {
+                            title: '錯誤',
+                            text: $("#result").val(),
+                            type: 'error'
+                        }
+
+                    );
+                }
             }
+
 
 
 

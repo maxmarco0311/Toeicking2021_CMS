@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "刪除句子";
+}
+
+@section bottomScripts{
+    <script>
+        $(function () {
+            if (@ViewBag.result==="刪除成功") {
+                swal(
+                    {
+                        title: '成功',
+                        text: '刪除成功',
+                        type: 'success'
+                    }
+
+                );
+
+            } else if (@ViewBag.result=== "刪除錯誤") {
+                swal(
+                    {
+                        title: '錯誤',
+                        text: '刪除錯誤',
+                        type: 'error'
+                    }
+
+                );
+
+            }
+
+        });
+
+
+    </script>
+}
+

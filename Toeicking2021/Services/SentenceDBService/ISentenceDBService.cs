@@ -9,6 +9,7 @@ namespace Toeicking2021.Services.SentenceDBService
     public interface ISentenceDBService
     {
         Task<string> AddSentenceGroup(SentenceInputVM data);
+        Task<string> DeleteSenetnce(int id);
 
     }
 }

@@ -33,8 +33,22 @@ namespace Toeicking2021.Models
         [Required(ErrorMessage = "請選擇文法類型")]
         public string GrammarCategory { get; set; }
 
+        [Column(TypeName = "nvarchar(30)")]
+        [Required(ErrorMessage = "請選擇大題")]
+        public string Part { get; set; }
+
         [Column(TypeName = "date")]
         public DateTime AddedDate { get; set; }
+
+        public bool HasAudio { get; set; }
+
+        [Required]
+        [Column(TypeName = "tinyint")]
+        public int CheckedTimes { get; set; } = 0;
+
+        // 用在View當中，跟DB無關
+        [NotMapped]
+        public string AudioFileName { get; set; }
 
         // 導覽屬性
         public ICollection<Vocabulary> Vocabularies { get; set; }

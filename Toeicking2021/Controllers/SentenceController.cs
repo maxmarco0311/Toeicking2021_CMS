@@ -9,6 +9,7 @@ using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Toeicking2021.Data;
 using Toeicking2021.Models;
 using Toeicking2021.Services;
@@ -24,12 +25,17 @@ namespace Toeicking2021.Controllers
     {
         private readonly HttpClientHelper _client;
         private readonly ISentenceDBService _sentenceDBService;
-
-        public SentenceController(HttpClientHelper client, ISentenceDBService sentenceDBService)
+        private readonly IOptions<Encryption> _encryption;
+        // 宣告Controller全域變數：加解密用的key
+        string key;
+        public SentenceController(HttpClientHelper client, ISentenceDBService sentenceDBService, IOptions<Encryption> encryption)
         {
             _client = client;
             _sentenceDBService = sentenceDBService;
-           
+            // 讀取appsettings中Encryption區段的值
+            _encryption = encryption;
+            // 從appsettings.Development.json中獲得key的值
+            key = _encryption.Value.key;
         }
 
         #region Index
@@ -40,8 +46,15 @@ namespace Toeicking2021.Controllers
         #endregion
 
         #region 生表單頁面
-        public IActionResult Add()
+        public IActionResult Add(string result)
         {
+            // 檢查是否從post導回來
+            if (!string.IsNullOrEmpty(result))
+            {
+                result = EncryptionHelper.DecryptThenUrlDecode(key, result);
+                // 把存DB的結果給ViewBag
+                ViewBag.result = result;
+            }
             ViewBag.ContextCategories = ControlListHelper.ContextCategories;
             ViewBag.Categories = ControlListHelper.Categories;
             ViewBag.Snippets = ControlListHelper.Snippets;
@@ -54,21 +67,38 @@ namespace Toeicking2021.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(SentenceInputVM data)
         {
+            string result = "";
             if (ModelState.IsValid)
-            {
+            {                
                 // 將空值和空字串踢出集合
                 data = Filter.FilterNullOut(data);
                 // 取GrammarCategory所需的value值
-                data.Sentence.GrammarCategory = MultiSelectHelper.TransferToValueFromDic(data.Sentence.GrammarCategory);
+                data.Sentence.GrammarCategory = MultiSelectHelper.TransferGrammarCategories(data.Sentence.GrammarCategory);
+                data.Sentence.Part = MultiSelectHelper.TransferPartCategories(data.Sentence.Part);
+                // Trim全部字串
+                data = TrimHelper.TrimAll(data);
                 // 存DB，並將結果(字串)傳回前端
-                ViewBag.result = await _sentenceDBService.AddSentenceGroup(data);
+                result = await _sentenceDBService.AddSentenceGroup(data);
             }
             else
             {
-                ViewBag.result = "模型繫結出錯";   
+                result = "模型繫結出錯";
             }
-            return View();
+            // UI清單資料還要再存取一次(ViewBag的效力僅限當次request)
+            ViewBag.ContextCategories = ControlListHelper.ContextCategories;
+            ViewBag.Categories = ControlListHelper.Categories;
+            ViewBag.Snippets = ControlListHelper.Snippets;
+            // 導回GET動作方法避免重複SUBMIT(將result字串用路由參數傳回)
+            return RedirectToAction(nameof(Add), new { result = EncryptionHelper.UrlEncodeThenEncrypt(key, result) });
 
+        }
+        #endregion
+
+        #region 刪除句子
+        public async Task<IActionResult> Delete(int id) 
+        {
+            ViewBag.result = await _sentenceDBService.DeleteSenetnce(id);
+            return View();
         }
         #endregion
 
@@ -83,7 +113,7 @@ namespace Toeicking2021.Controllers
         #endregion
 
         #region 顯示資料搜尋頁
-        public IActionResult Retrieve(TableFormData FormData)
+        public IActionResult Retrieve(TableQueryFormData FormData)
         {
             // 判斷是否為ajax get
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
@@ -100,7 +130,7 @@ namespace Toeicking2021.Controllers
         #endregion
 
         #region 顯示資料表(PartialView)
-        public IActionResult RenderTable(TableFormData FormData)
+        public IActionResult RenderTable(TableQueryFormData FormData)
         {
             // 建立predicate變數，也就是where()的Lambda參數，New<T>的泛型是要查出的資料物件型別
             var predicate = PredicateBuilder.New<TestData>(true);
@@ -140,6 +170,29 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
+        #region 顯示正式資料表(參數為查詢條件表單資料物件)
+        public IActionResult Render(TableQueryFormData FormData) 
+        {
+            // 建立predicate變數，也就是where()的Lambda參數，New<T>的泛型是要查出的資料物件型別
+            var predicate = PredicateBuilder.New<Sentence>(true);
+            ViewBag.SenNum = FormData.SenNum;
+            // 表單資料的編號不為null，代表有加入這個篩選條件
+            if (FormData.SenNum != null)
+            {
+                // 將篩選條件加入predicate(t就是要查詢的資料物件型別)
+                predicate = predicate.And(t => t.SentenceId == Convert.ToInt32(FormData.SenNum));
+            }
+
+
+
+            return PartialView();
+
+
+
+
+
+        }
+        #endregion
 
 
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toeicking2021.Data;
 
 namespace Toeicking2021.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210331055909_AddNotNullColumnHasAudio")]
+    partial class AddNotNullColumnHasAudio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +81,6 @@ namespace Toeicking2021.Migrations
 
                     b.Property<DateTime>("AddedDate")
                         .HasColumnType("date");
-
-                    b.Property<byte>("CheckedTimes")
-                        .HasColumnType("tinyint");
 
                     b.Property<string>("Chinesese")
                         .IsRequired()

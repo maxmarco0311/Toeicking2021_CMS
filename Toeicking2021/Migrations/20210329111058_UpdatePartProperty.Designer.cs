@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toeicking2021.Data;
 
 namespace Toeicking2021.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210329111058_UpdatePartProperty")]
+    partial class UpdatePartProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,9 +82,6 @@ namespace Toeicking2021.Migrations
                     b.Property<DateTime>("AddedDate")
                         .HasColumnType("date");
 
-                    b.Property<byte>("CheckedTimes")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("Chinesese")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)");
@@ -94,9 +93,6 @@ namespace Toeicking2021.Migrations
                     b.Property<string>("GrammarCategory")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("HasAudio")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Part")
                         .IsRequired()

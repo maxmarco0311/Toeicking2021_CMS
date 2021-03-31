@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Toeicking2021.Models
 {
-    public class TableFormData
+    public class TableQueryFormData
     {
         public string SenNum { get; set; }
         public string Keyword { get; set; }
