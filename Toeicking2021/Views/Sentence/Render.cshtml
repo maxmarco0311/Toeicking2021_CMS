@@ -1,5 +1,5 @@
 ﻿
-@model Toeicking2021.Utilities.PaginatedList<TestData>
+@model Toeicking2021.Utilities.PaginatedList<Sentence>
 @*要設一個跟ParentView匯出此PartialView位置<div>相同的id(change)在PartialView最上層容器中，才可replace with*@
 <style>
     /*選擇器稍微選細一點，不然會影響到別的i元素*/
@@ -7,11 +7,11 @@
         margin-left: 15px;
     }
 
-    .col-4 i:hover {
+        .col-4 i:hover {
             color: #3ddcf7;
             transform: scale(2);
             transition: 0.3s;
-    }
+        }
 
     /*.fa-database {
         color: #3ddcf7;
@@ -34,6 +34,9 @@
 
 
 </style>
+@*footable的css檔*@
+<link href="~/lib/plugins/footable/css/footable.core.css" rel="stylesheet" />
+
 <div id="change" class="row">
     <div class="col-md-12">
         <div class="card-box">
@@ -45,8 +48,8 @@
                         <!--泛型類別無法使用Html.DisplayNameFor()，因為點不出資料物件成員-->
                         <th data-toggle="true">編號</th>
                         <th>多益必考金句</th>
-                        <th>翻譯</th>
-                        <th></th>
+                        <th>中文翻譯</th>
+                        <th>功能</th>
                         <!--data-hide="phone, tablet"在手機、平板會隱藏，data-hide="all"在所有裝置都會隱藏-->
                     </tr>
                 </thead>
@@ -73,19 +76,20 @@
                         </div>
                     </div>
                 </div>
+
                 <!--資料列-->
                 <tbody id="table">
                     @foreach (var item in Model)
                     {
                         <tr>
                             <td>
-                                <label id="@item.Number" name="" class="sentence_id">@item.Number</label>
+                                <label id="@item.SentenceId" name="" class="sentence_id">@item.SentenceId</label>
                             </td>
                             <td>
-                                <textarea id="@item.Number" name="" class="form-control sentence" rows="4" style='width: 100%;'>@item.Name</textarea>
+                                <textarea id="@item.SentenceId" name="" class="form-control sentence" rows="4" style='width: 100%;'>@item.Sen</textarea>
                             </td>
                             <td>
-                                <textarea id="@item.Number" name="" class="form-control chinese" rows="4" style='width: 100%;'>@item.Description</textarea>
+                                <textarea id="@item.SentenceId" name="" class="form-control chinese" rows="4" style='width: 100%;'>@item.Chinesese</textarea>
                             </td>
                             <td>
                                 <div class="form-group row no-gutters">
@@ -137,6 +141,7 @@
                                 </div>
                             </td>
                         </tr>
+
                         <!--<div class="form-group row">
                         <div class="col-6">-->
                         @*句子修改的按鈕，用.sentenceUpdate選取*@
@@ -170,25 +175,27 @@
                                 <!--ul標籤中pagination拿掉才不會自動產生li，往右浮動style="float: right;-->
                                 <ul class="pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
                                     @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按第一頁*@
-                                    <li class="footable-page-arrow @((Model.PageIndex > 1)? "": "disabled")">
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1) ? "" : "disabled")">
                                         <!--第一頁標籤-->
                                         @*新版obtrusive語法要寫成data-ajax-mode="replace-with"*@
-                                        <a data-page="first" asp-action="RenderTable" asp-route-Page="1"
+                                        <a data-page="first" asp-action="Render" asp-route-Page="1"
                                            asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
-                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
-                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
-                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
+                                           asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
+                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
                                             首頁
                                         </a>
                                     </li>
                                     @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按上一頁*@
-                                    <li class="footable-page-arrow @((Model.PageIndex > 1)? "": "disabled")">
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1) ? "" : "disabled")">
                                         <!--上一頁標籤-->
-                                        <a data-page="prev" asp-action="RenderTable" asp-route-Page="@(Model.PageIndex - 1)"
+                                        <a data-page="prev" asp-action="Render" asp-route-Page="@(Model.PageIndex - 1)"
                                            asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
-                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
-                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
-                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
+                                           asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
+                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
                                             上一頁
                                         </a>
                                     </li>
@@ -213,11 +220,12 @@
                                             {
                                                 <li class="footable-page">
                                                     <!--不是目前頁的某一頁標籤-->
-                                                    <a data-page="@(i + 1)" asp-action="RenderTable" asp-route-Page="@i"
+                                                    <a data-page="@(i + 1)" asp-action="Render" asp-route-Page="@i"
                                                        asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
-                                                       asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
-                                                       asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
-                                                       data-ajax-mode="replace-with" data-ajax-update="#change">
+                                                       asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
+                                                       asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
+                                                       asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
+                                                       data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
                                                         @i
                                                     </a>
                                                 </li>
@@ -225,24 +233,26 @@
                                         }
                                     }
                                     @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按下一頁*@
-                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages)? "": "disabled")">
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages) ? "" : "disabled")">
                                         <!--下一頁標籤-->
-                                        <a data-page="next" asp-action="RenderTable" asp-route-Page="@(Model.PageIndex + 1)"
+                                        <a data-page="next" asp-action="Render" asp-route-Page="@(Model.PageIndex + 1)"
                                            asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
-                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
-                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
-                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
+                                           asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
+                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
                                             下一頁
                                         </a>
                                     </li>
                                     @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按最末頁*@
-                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages)? "": "disabled")">
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages) ? "" : "disabled")">
                                         <!--最末頁標籤-->
-                                        <a data-page="last" asp-action="RenderTable" asp-route-Page="@Model.TotalPages"
+                                        <a data-page="last" asp-action="Render" asp-route-Page="@Model.TotalPages"
                                            asp-route-Keyword="@ViewBag.Keyword" asp-route-AddedDate="@ViewBag.AddedDate"
-                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckTimes="@ViewBag.CheckTimes"
-                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
-                                           data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
+                                           asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
+                                           asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
+                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
                                             末頁
                                         </a>
                                     </li>
@@ -255,6 +265,10 @@
         </div>
     </div>
 </div>
+
+@*顯示查詢結果*@
+<input type="hidden" id="result" name="result" value="@ViewBag.result">
+
 @*句子修改的modal*@
 <div id="sentence" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
@@ -294,6 +308,7 @@
     </div>
 </div>
 @*句子修改的modal*@
+
 @*音檔檢視的modal*@
 <div id="audios" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" style="width:55%;">
@@ -330,6 +345,12 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 @*音檔檢視的modal*@
+
+@*footable的js檔*@
+<script src="~/lib/plugins/footable/js/footable.all.min.js"></script>
+<script src="~/lib/assets/pages/jquery.footable.js"></script>
+
+@*自訂js*@
 <script>
     // 要在分頁表格出現tooltip，必須寫在PartialView的<script>區塊中
     $('[data-toggle="tooltip"]').tooltip();
@@ -337,6 +358,16 @@
     function onComplete() {
         // 換頁後移到畫面最上方
         $('html,body').animate({ scrollTop: 0 }, 100);
+    }
+    // 若查無資料
+    if ($("#result").val() === "查無資料") {
+        swal(
+            {
+                title: '糟糕',
+                text: $("#result").val(),
+                type: 'error'
+            }
+        );
     }
 </script>
 

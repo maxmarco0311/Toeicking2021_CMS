@@ -1,0 +1,305 @@
+﻿
+@{
+    ViewData["Title"] = "資料查詢";
+}
+
+@section topCSS{
+    <link href="~/lib/plugins/footable/css/footable.core.css" rel="stylesheet" />
+    @*multi-select的css檔案*@
+    <link href="~/lib/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css" rel="stylesheet" />
+    <link href="~/lib/plugins/multiselect/css/multi-select.css" rel="stylesheet" />
+    <link href="~/lib/plugins/select2/select2.css" rel="stylesheet" />
+}
+
+@section bottomCSS{
+    <style type="text/css">
+        /*關鍵字框寬度*/
+        .a.form-control.mr-4 {
+            width: 80px;
+        }
+        /*目前頁highlight*/
+        /*">"是選直接子元素，"(空一格)"是選所有後代元素*/
+        .footable-page.active > a {
+            background-color: #3bafda;
+            border-color: #3bafda;
+        }
+        /*不能點按的按鈕*/
+        .footable-page-arrow.disabled > a {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        /*ul靠右*/
+        tfoot ul {
+            float: right;
+        }
+    </style>
+
+}
+
+<div class="card-box">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <label><b>查詢條件</b></label>
+        </div>
+    </div>
+    @*第一列*@
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group row">
+                <div class="col-lg-1">
+                    <input type="text" class="form-control" id="SenNum" name="SenNum" placeholder="編號" />
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" id="Keyword" name="Keyword" placeholder="關鍵字" />
+                </div>
+                <div class="col-lg-2">
+                    <select id="AddedDate" name="AddedDate" class="form-control">
+                        @*沒有寫value值，value值會等於text值*@
+                        <option value="">存入日期-請選擇</option>
+                        <option value="0">當天存入</option>
+                        <option value="-3">3天前存入</option>
+                        <option value="-7">7天內存入</option>
+                        <option value="-14">14天內存入</option>
+                        <option value="-30">30天內存入</option>
+                        <option value="-60">60天內存入</option>
+                        <option value="-365">1年內存入</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <select id="CountDesc" name="CountDesc" class="form-control">
+                        <option value="">最近幾筆-請選擇</option>
+                        <option value="10">最近10筆</option>
+                        <option value="20">最近20筆</option>
+                        <option value="30">最近30筆</option>
+                        <option value="40">最近40筆</option>
+                        <option value="50">最近50筆</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <select id="CheckedTimes" name="CheckedTimes" class="form-control">
+                        <option value="">檢查次數-請選擇</option>
+                        <option value="0">檢查0次</option>
+                        <option value="1">檢查1次</option>
+                        <option value="2">檢查2次</option>
+                        <option value="3">檢查3次</option>
+                        <option value="4">檢查4次</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <select id="PageSize" name="PageSize" class="form-control">
+                        @*<option value="">每頁幾筆-請選擇</option>*@
+                        <option value="5">每頁5筆</option>
+                        <option value="10">每頁10筆</option>
+                        <option value="15">每頁15筆</option>
+                        <option value="20">每頁20筆</option>
+                        <option value="25">每頁25筆</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*第一列結束*@
+    @*第二列*@
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="" id="grammar-category">
+                @*<label for="multi-select" class="h4"><b>文法分類：</b></label>*@
+                <select class="select2 select2-multiple" multiple="multiple" id="multi-select-grammar-category" data-placeholder="文法分類">
+                    <optgroup label="各種現在式">
+                        <option value="1">現在簡單式</option>
+                        <option value="2">現在進行式</option>
+                        <option value="3">現在完成式</option>
+                        <option value="4">現在完成進行式</option>
+                    </optgroup>
+                    <optgroup label="各種過去式">
+                        <option value="5">過去簡單式</option>
+                        <option value="6">過去進行式</option>
+                        <option value="7">過去完成式</option>
+                        <option value="8">過去完成進行式</option>
+                    </optgroup>
+                    <optgroup label="各種未來式">
+                        <option value="9">未來簡單式</option>
+                        <option value="10">未來進行式</option>
+                        <option value="11">未來完成式</option>
+                        <option value="12">未來完成進行式</option>
+                    </optgroup>
+                    <optgroup label="名詞子句">
+                        <option value="13">that開頭</option>
+                        <option value="14">if/whether開頭</option>
+                        <option value="15">wh-疑問詞開頭</option>
+                    </optgroup>
+                    <optgroup label="形容詞子句">
+                        <option value="16">修飾"人"</option>
+                        <option value="17">修飾"事物"</option>
+                        <option value="18">修飾"時間"</option>
+                        <option value="19">修飾"地點"</option>
+                        <option value="20">whose</option>
+                    </optgroup>
+                    <optgroup label="副詞子句">
+                        <option value="21">描述"時間"</option>
+                        <option value="22">描述"原因"</option>
+                        <option value="23">描述"對比"</option>
+                        <option value="24">描述"條件"</option>
+                        <option value="25">描述"目的"</option>
+                        <option value="26">假設語氣</option>
+                        <option value="27">其它副詞子句</option>
+                    </optgroup>
+                    <optgroup label="子句減化">
+                        <option value="28">名詞子句減化</option>
+                        <option value="29">形容詞子句減化</option>
+                        <option value="30">副詞子句減化</option>
+                        <option value="31">接續發展</option>
+                        <option value="32">背景說明</option>
+                    </optgroup>
+                    <optgroup label="介詞片語">
+                        <option value="33">單個介片</option>
+                        <option value="34">多個介片</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group" id="part-category">
+                @*<label for="multi-select" class="h4"><b>出現大題：</b></label>*@
+                <select class="select2 select2-multiple" multiple="multiple" id="multi-select-part-category" data-placeholder="出現大題">
+                    <optgroup label="大題">
+                        <option value="1">Part 1</option>
+                        <option value="2">Part 2</option>
+                        <option value="3">Part 3</option>
+                        <option value="4">Part 4</option>
+                        <option value="5">Part 5</option>
+                        <option value="6">Part 6</option>
+                        <option value="7">Part 7</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <select name="Context" asp-items="ViewBag.ContextCategories" id="Context" class="word-form form-control">
+            </select>
+        </div>
+        @*讓CHECKBOX垂直置中要調PADDING*@
+        <div class="col-lg-4" style="padding-top:10px; padding-bottom:10px;">
+            <div class="checkbox checkbox-primary form-check-inline">
+                @*render時value屬性都是true，但表單送出時還是會根據checked屬性(不會顯示)去給後端true或false*@
+                @*這裡是前端取值*@
+                <input type="checkbox" id="inlineCheckbox1" name="HasWordOrigin">
+                <label for="inlineCheckbox1"> 字首字根字尾 </label>
+            </div>
+            <div class="checkbox checkbox-primary form-check-inline">
+                <input type="checkbox" id="inlineCheckbox2" name="HasSynonym">
+                <label for="inlineCheckbox2"> 重要同義字 </label>
+            </div>
+            <div class="checkbox checkbox-primary form-check-inline">
+                <input type="checkbox" id="inlineCheckbox3" name="HasAudio">
+                <label for="inlineCheckbox3"> 音檔 </label>
+            </div>
+        </div>
+    </div>
+    @*第二列結束*@
+    @*查詢按鈕*@
+    <div class="row">
+        <div class="col-lg-12">
+            <a id="sendFormData" class="btn btn--lg btn-block btn-primary waves-light mt-3" style="color:white; letter-spacing:1.5px;">
+                送出查詢
+            </a>
+        </div>
+    </div>
+</div>
+
+@*資料表呈現處，被表格replace with的div(id要一樣)*@
+<div id="change"></div>
+
+@*footable檔案需在topScripts位置*@
+@section topScripts{
+    @*multi-select的js檔*@
+    <script src="~/lib/plugins/multiselect/js/jquery.multi-select.js"></script>
+    <script src="~/lib/plugins/select2/select2.js"></script>
+    <script src="~/lib/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js"></script>
+    <script src="~/lib/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+
+    @*footable的js檔*@
+    @*<script src="~/lib/plugins/footable/js/footable.all.min.js"></script>
+        <script src="~/lib/assets/pages/jquery.footable.js"></script>*@
+    <script src="~/lib/assets/pages/jquery.form-advanced.init.js"></script>
+}
+
+@section bottomScripts{
+    <script>
+        $(function () {
+            $("#sendFormData").on("click", function () {
+                // 處理multi-select的值
+                // 先設全域變數接迴圈內的值
+                var selectedGrammarCategories = "";
+                var selectedPartCategories = "";
+                // 將所有li標籤跑迴圈
+                $("#grammar-category .select2-search-choice").each(function () {
+                    //選取下一層div標籤的text值
+                    selectedGrammarCategories = selectedGrammarCategories + $(this).children("div").text() + ",";
+                });
+                $("#part-category .select2-search-choice").each(function () {
+                    selectedPartCategories = selectedPartCategories + $(this).children("div").text() + ",";
+                });
+                // 取CHECKBOX的值
+                var hasWordOrigin = false;
+                if ($("#inlineCheckbox1").is(':checked')) {
+                    hasWordOrigin = true;
+                }
+                var hasSynonym = false;
+                if ($("#inlineCheckbox2").is(':checked')) {
+                    hasSynonym = true;
+                } var hasAudio = false;
+                if ($("#inlineCheckbox3").is(':checked')) {
+                    hasAudio = true;
+                }
+                // 抓表單值要寫在click事件內，否則是網頁初載入時的空值
+                var formData = {
+                    SenNum: $("#SenNum").val(),
+                    Keyword: $("#Keyword").val(),
+                    AddedDate: $("#AddedDate").val(),
+                    CountDesc: $("#CountDesc").val(),
+                    CheckedTimes: $("#CheckedTimes").val(),
+                    PageSize: $("#PageSize").val(),
+                    Context: $("#Context").val(),
+                    GrammarCategories: selectedGrammarCategories,
+                    Part: selectedPartCategories,
+                    HasWordOrigin: hasWordOrigin,
+                    HasSynonym: hasSynonym,
+                    HasAudio: hasAudio
+                };
+                // 一定要選每頁幾筆
+                if (formData.PageSize === "") {
+                    swal(
+                        {
+                            title: '錯誤',
+                            text: '請選擇每頁顯示幾筆資料！',
+                            type: 'error'
+                        }
+                    );
+                }
+                else
+                {
+                    // 用此完整的寫法，使用async屬性和done()強調非同步請求，若是查無資料後，再繼續查可以正常顯示
+                    $.ajax({
+                        url: "@Url.Content("~/Sentence/RetrieveData")",
+                        data: formData,
+                        async: true,
+                        conentType: "application/x-www-form-urlencoded",
+                    }).done(function (response) {
+                        // response是動作方法回傳的PartialView，要用replaceWith()去置換空的<div id="change">置換才會顯示
+                        $("#change").replaceWith(response);
+                    });
+
+
+                }
+
+
+            });
+
+
+
+        });
+
+    </script>
+}
+

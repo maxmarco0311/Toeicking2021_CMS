@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Toeicking2021.Models;
 using Toeicking2021.ViewModels;
 
 namespace Toeicking2021.Services.SentenceDBService
@@ -10,6 +11,6 @@ namespace Toeicking2021.Services.SentenceDBService
     {
         Task<string> AddSentenceGroup(SentenceInputVM data);
         Task<string> DeleteSenetnce(int id);
-
+        IQueryable<Sentence> TableAsQueryable();
     }
 }

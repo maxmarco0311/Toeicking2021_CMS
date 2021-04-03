@@ -129,8 +129,12 @@ namespace Toeicking2021.Services.SentenceDBService
         }
         #endregion
 
-
-
+        #region 回傳Sentence資料表的IQueryable<>物件
+        public IQueryable<Sentence> TableAsQueryable() 
+        {
+            return _context.Sentences.AsQueryable();
+        }
+        #endregion
 
 
 

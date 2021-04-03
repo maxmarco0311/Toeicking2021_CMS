@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Toeicking2021.Models;
 
-namespace Toeicking2021.Services
+namespace Toeicking2021.Utilities
 {
     // 繼承List<T>：1. 可使用AddRange()方法 2. 類別裡不用宣告List<T>，本身類別(物件)就會是個List<T>(也可有其他屬性，因為是繼承)
     // T型別就是查回的資料物件型別
@@ -47,18 +49,21 @@ namespace Toeicking2021.Services
         // source(IQueryable<T>)--> EF Core查詢物件，在方法裡執行資料庫查詢(可以是where條件式篩選過的IQueryable<T>，T型別不會變)
         // pageIndex--> 目前頁數
         // pageSize--> 每頁顯示幾筆
-        public static PaginatedList<T> Create(IQueryable<T> source, int pageIndex, int pageSize)
+        public static async Task<PaginatedList<T>> Create(IQueryable<T> source, int pageIndex, int pageSize)
         {
             // 計算資料總筆數
             //var count = await source.CountAsync();
             var count = source.Count();
             // 查出目前頁數的資料物件集合
-            //var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            //var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
             // 實體化此類別物件並回傳(給View)
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
         #endregion
+
+       
+
 
 
     }

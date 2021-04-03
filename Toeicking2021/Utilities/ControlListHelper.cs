@@ -10,7 +10,7 @@ namespace Toeicking2021.Utilities
     {
         public static List<SelectListItem> Categories { get; } = new List<SelectListItem>
         {
-            new SelectListItem{ Text="請選擇",Value=""},
+            new SelectListItem{ Text="詞性-請選擇",Value=""},
             new SelectListItem{ Text="(n.)",Value="n"},
             new SelectListItem{ Text="(v.)",Value="v"},
             new SelectListItem{ Text="(adj.)",Value="adj"},
@@ -21,7 +21,7 @@ namespace Toeicking2021.Utilities
 
         public static List<SelectListItem> ContextCategories { get; } = new List<SelectListItem>
         {
-            new SelectListItem{ Text="請選擇",Value=""},
+            new SelectListItem{ Text="情境-請選擇",Value=""},
             new SelectListItem{ Text="住宿交通",Value="1"},
             new SelectListItem{ Text="餐飲觀光",Value="2"},
             new SelectListItem{ Text="行銷與銷售",Value="3"},
