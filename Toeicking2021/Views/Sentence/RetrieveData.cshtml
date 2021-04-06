@@ -68,8 +68,8 @@
                 <div class="col-lg-2">
                     <select id="CountDesc" name="CountDesc" class="form-control">
                         <option value="">最近幾筆-請選擇</option>
+                        <option value="5">最近5筆</option>
                         <option value="10">最近10筆</option>
-                        <option value="20">最近20筆</option>
                         <option value="30">最近30筆</option>
                         <option value="40">最近40筆</option>
                         <option value="50">最近50筆</option>
@@ -178,8 +178,15 @@
             <select name="Context" asp-items="ViewBag.ContextCategories" id="Context" class="word-form form-control">
             </select>
         </div>
+        <div class="col-lg-1">
+            <select id="BoolConditions" name="BoolConditions" class="form-control">
+                <option value="disabled">停用</option>
+                <option value="union">聯集</option>
+                <option value="intersection">交集</option>
+            </select>
+        </div>
         @*讓CHECKBOX垂直置中要調PADDING*@
-        <div class="col-lg-4" style="padding-top:10px; padding-bottom:10px;">
+        <div class="col-lg-3" style="padding-top:10px; padding-bottom:10px;">
             <div class="checkbox checkbox-primary form-check-inline">
                 @*render時value屬性都是true，但表單送出時還是會根據checked屬性(不會顯示)去給後端true或false*@
                 @*這裡是前端取值*@
@@ -227,6 +234,25 @@
 @section bottomScripts{
     <script>
         $(function () {
+            // 初載入時設定checkbox不能按
+            if ($("#BoolConditions").val() === "disabled") {
+                $("input[type='checkbox']").prop("disabled",true);
+            }
+            // 下拉選單改變事件
+            $("#BoolConditions").on("change", function () {
+                // 選到停用就讓checkbox不能按
+                if ($(this).val()==="disabled") {
+                    $("input[type='checkbox']").prop("disabled", true);
+                    // 原本勾選的取消
+                    $("input[type='checkbox']").prop("checked", false);
+                }
+                // 選到其它的checkbox就可以按
+                else
+                {
+                    $("input[type='checkbox']").prop("disabled", false);
+                }
+            })
+            // 表單按鈕點擊事件
             $("#sendFormData").on("click", function () {
                 // 處理multi-select的值
                 // 先設全域變數接迴圈內的值
@@ -260,6 +286,7 @@
                     CountDesc: $("#CountDesc").val(),
                     CheckedTimes: $("#CheckedTimes").val(),
                     PageSize: $("#PageSize").val(),
+                    BoolConditions: $("#BoolConditions").val(),
                     Context: $("#Context").val(),
                     GrammarCategories: selectedGrammarCategories,
                     Part: selectedPartCategories,
@@ -288,8 +315,15 @@
                     }).done(function (response) {
                         // response是動作方法回傳的PartialView，要用replaceWith()去置換空的<div id="change">置換才會顯示
                         $("#change").replaceWith(response);
+                        // 移到表格處
+                        $('html,body').animate({ scrollTop: 300 }, 100);
                     });
+                    @*$.get("@Url.Content("~/Sentence/RetrieveData")", formData, function (response) {
+                        // response是動作方法回傳的PartialView，要用replaceWith()去置換空的<div id="change">置換才會顯示
+                        $("#change").replaceWith(response);
+                        $('html,body').animate({ scrollTop: 300 }, 100);
 
+                    });*@
 
                 }
 

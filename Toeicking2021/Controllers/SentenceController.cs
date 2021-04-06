@@ -209,7 +209,9 @@ namespace Toeicking2021.Controllers
                 FormData.AddedDate,
                 FormData.CountDesc,
                 FormData.CheckedTimes,
-                FormData.PageSize
+                FormData.PageSize,
+                // 繫結類別有加新屬性，要記得來route value加進去，不然表格處理的傳入參數新屬性永遠是null
+                FormData.BoolConditions
             });
 
         }
@@ -231,11 +233,12 @@ namespace Toeicking2021.Controllers
             ViewBag.HasWordOrigin = FormData.HasWordOrigin;
             ViewBag.HasSynonym = FormData.HasSynonym;
             ViewBag.HasAudio = FormData.HasAudio;
+            ViewBag.BoolConditions = FormData.BoolConditions;
             // 將要查詢資料表物件AsQueryable()
             var source = _sentenceDBService.TableAsQueryable();
             // 將表單資料處理成動態where條件式
             var predicate = DynamicPredicateHelper.SentenceDynamicPredicate(FormData);
-            // predicate不為null代表有進行where條件篩選
+            // predicate不為null代表有進行where條件篩選，反之沒有做任何篩選
             if (predicate != null)
             {
                 // 使用Where(predicate)篩選IQueryable<T>物件，送到分頁的方法裡查出那一頁的資料

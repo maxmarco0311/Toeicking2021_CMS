@@ -18,6 +18,8 @@ namespace Toeicking2021.Models
         public bool? HasSynonym { get; set; }
         // 是否有音檔
         public bool? HasAudio { get; set; }
+        // 控制布林值是否加入條件式或加入後是聯集還是交集查詢
+        public string BoolConditions { get; set; }
         // 出現情境
         public string Context { get; set; }
         // 文法分類

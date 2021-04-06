@@ -183,7 +183,8 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
                                             首頁
                                         </a>
                                     </li>
@@ -195,7 +196,8 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
                                             上一頁
                                         </a>
                                     </li>
@@ -225,7 +227,8 @@
                                                        asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                                        asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                                        asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                                       data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
+                                                       asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                                       data-ajax-mode="replace-with" data-ajax-update="#change">
                                                         @i
                                                     </a>
                                                 </li>
@@ -240,7 +243,8 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
                                             下一頁
                                         </a>
                                     </li>
@@ -252,7 +256,8 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with" data-ajax-update="#change">
+                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           data-ajax-mode="replace-with" data-ajax-update="#change">
                                             末頁
                                         </a>
                                     </li>
@@ -357,7 +362,7 @@
     // 若是PartialView裡的unobtrusive ajax需要呼叫的函式，就要寫在PartialView裡，寫在ParentView裡呼叫不到
     function onComplete() {
         // 換頁後移到畫面最上方
-        $('html,body').animate({ scrollTop: 0 }, 100);
+        $('html,body').animate({ scrollTop: 0 }, 500);
     }
     // 若查無資料
     if ($("#result").val() === "查無資料") {

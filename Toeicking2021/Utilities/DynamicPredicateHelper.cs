@@ -18,14 +18,18 @@ namespace Toeicking2021.Utilities
         public static ExpressionStarter<Sentence> SentenceDynamicPredicate(TableQueryFormData FormData)
         {
             // 建立predicate變數，也就是where()的Lambda參數，New<T>的泛型是要查出的資料物件型別
+            // 有可能只會回傳其中一個predicate，所以全部predicate變數都是宣告全域
+            // 最外層的predicate，可能會合併其他predicate
             var OuterPredicate = PredicateBuilder.New<Sentence>();
-            // 巢狀的predicate，通常內部條件是Or，然後再用And的方式併入OuterPredicate
-            var InnerPredicateGrammar = PredicateBuilder.New<Sentence>();
-            var InnerPredicatePart = PredicateBuilder.New<Sentence>();
-            // 篩選編號
+            // 巢狀的predicate，通常內部條件是Or，然後再用And的方式併入OuterPredicate，也有可能不會合併(OuterPredicate沒有加入條件)
+            var InnerPredicate_Grammar = PredicateBuilder.New<Sentence>();
+            var InnerPredicate_Part = PredicateBuilder.New<Sentence>();
+            // 處理布林值的predicate
+            var InnerPredicate_Booleans = PredicateBuilder.New<Sentence>();
+            // 1. 篩選編號
             if (FormData.SenNum != null)
             {
-                // 如果OuterPredicate還沒開始
+                // 檢查OuterPredicate是否還沒加入條件
                 if (OuterPredicate.IsStarted == false)
                 {
                     // 用Start()將第一個條件加入OuterPredicate，才可合併其它InnerPredicate(t就是要查詢的資料物件型別)
@@ -38,7 +42,7 @@ namespace Toeicking2021.Utilities
                 }
                 
             }
-            // 篩選關鍵字
+            // 2. 篩選關鍵字
             if (FormData.Keyword != null)
             {
                 if (OuterPredicate.IsStarted==false)
@@ -53,7 +57,7 @@ namespace Toeicking2021.Utilities
                 }  
                 
             }
-            // 篩選日期
+            // 3. 篩選日期
             if (FormData.AddedDate != null)
             {
                 int dateSpan = Convert.ToInt16(FormData.AddedDate);
@@ -62,6 +66,8 @@ namespace Toeicking2021.Utilities
                 {
                     if (OuterPredicate.IsStarted == false)
                     {
+                        // 查詢時間一定要有"區間"，"當天"是"DateTime.Now.AddDays(-1)"到"DateTime.Now"
+                        // 時間區間的開頭(就是DateTime.Now.AddDays()的參數)應為N天前的值-1，也就是N-1(通常是負數)
                         OuterPredicate = OuterPredicate.Start(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan - 1)
                                                && t.AddedDate <= DateTime.Now);
                     }
@@ -104,7 +110,7 @@ namespace Toeicking2021.Utilities
                 }
                 
             }
-            // 篩選檢查次數(int?)
+            // 4. 篩選檢查次數(int?)
             if (FormData.CheckedTimes != null)
             {
                 if (OuterPredicate.IsStarted == false)
@@ -117,7 +123,7 @@ namespace Toeicking2021.Utilities
                 }
                 
             }
-            // 篩選情境
+            // 5. 篩選情境
             if (FormData.Context != null)
             {
                 if (OuterPredicate.IsStarted == false)
@@ -130,101 +136,170 @@ namespace Toeicking2021.Utilities
                 }
                 
             }
-            //// 篩選字首字根(布林值不可為null)
-            //predicate = predicate.And(t => t.WordOrigin == FormData.HasWordOrigin);
-            //// 篩選同義字(布林值不可為null)
-            //predicate = predicate.And(t => t.Synonym == FormData.HasSynonym);
-            //// 篩選音檔(布林值不可為null)
-            //predicate = predicate.And(t => t.HasAudio == FormData.HasAudio);
-            // 篩選文法分類
+            // 6. 篩選文法分類(巢狀predicate)
             if (FormData.GrammarCategories != null)
             {
                 // 轉成value值陣列
                 string[] GrammarCategories = MultiSelectHelper.TransferGrammarCategories(FormData.GrammarCategories).Split(",");
-                
-                //// for迴圈將條件加入InnerPredicateGrammar
-                //for (int i = 0; i < GrammarCategories.Length; i++)
-                //{
-                //    if (i == 0)
-                //    {
-                //        // 用Start()將第一個條件加入InnerPredicateGrammar
-                //        InnerPredicateGrammar = InnerPredicateGrammar.Start(t => t.GrammarCategory.Contains(GrammarCategories[i]));
-                //    }
-                //    else
-                //    {
-                //        // 是Or條件(符合其中一項就列出)
-                //        InnerPredicateGrammar = InnerPredicateGrammar.Or(t => t.GrammarCategory.Contains(GrammarCategories[i]));
-                //    }
-                //}
+                // predicate中的lambda條件若使用陣列或集合索引取值GrammarCategories[i]，最終會報錯，使用foreach迴圈不會！
                 foreach (var item in GrammarCategories)
                 {
-                    if (InnerPredicateGrammar.IsStarted==false)
+                    // 檢查InnerPredicateGrammar是否還沒加入條件
+                    if (InnerPredicate_Grammar.IsStarted==false)
                     {
-                        // 要眾多條件符合其中一個就撈出，要用Or()，用And()是全符合才撈出
-                        InnerPredicateGrammar = InnerPredicateGrammar.Start(t => t.GrammarCategory.Contains(item));
+                        
+                        InnerPredicate_Grammar = InnerPredicate_Grammar.Start(t => t.GrammarCategory.Contains(item));
                     }
                     else
                     {
-                        InnerPredicateGrammar = InnerPredicateGrammar.Or(t => t.GrammarCategory.Contains(item));
+                        // 要眾多條件符合其中一個就撈出，要用Or()，用And()是全符合才撈出
+                        InnerPredicate_Grammar = InnerPredicate_Grammar.Or(t => t.GrammarCategory.Contains(item));
                     }
                     
                 }
-                if (OuterPredicate.IsStarted==true)
-                {
-                    // 最後要用And()的參數與OuterPredicate合併
-                    OuterPredicate = OuterPredicate.And(InnerPredicateGrammar);
-                }
-                
+
             }
-            // 篩選大題
+            // 7. 篩選大題(巢狀predicate)
             if (FormData.Part != null)
             {
                 // 轉成value值陣列
                 string[] PartCategories = MultiSelectHelper.TransferPartCategories(FormData.Part).Split(",");
-                
-                //for (int i = 0; i < PartCategories.Length; i++)
-                //{
-                //    if (i == 0)
-                //    {
-                //        // 用Start()將第一個條件加入InnerPredicatePart
-                //        InnerPredicatePart = InnerPredicatePart.Start(t => t.GrammarCategory.Contains(PartCategories[i]));
-                //    }
-                //    else
-                //    {
-                //        // 是Or條件(符合其中一項就列出)
-                //        InnerPredicatePart = InnerPredicatePart.Or(t => t.GrammarCategory.Contains(PartCategories[i]));
-                //    }
-                //}
                 foreach (var item in PartCategories)
                 {
-                    if (InnerPredicatePart.IsStarted==false)
+                    // 檢查InnerPredicateGrammar是否還沒加入條件
+                    if (InnerPredicate_Part.IsStarted==false)
                     {
-                        InnerPredicatePart = InnerPredicatePart.Start(t => t.Part.Contains(item));
+                        InnerPredicate_Part = InnerPredicate_Part.Start(t => t.Part.Contains(item));
                     }
                     else
                     {
-                        InnerPredicatePart = InnerPredicatePart.Or(t => t.Part.Contains(item));
+                        InnerPredicate_Part = InnerPredicate_Part.Or(t => t.Part.Contains(item));
                     }
                     
                 }
-                if (OuterPredicate.IsStarted==true)
-                {
-                    // 最後要用And()的參數與OuterPredicate合併
-                    OuterPredicate = OuterPredicate.And(InnerPredicatePart);
-                }
-                
+             
             }
+            // 8. 篩選布林值(表單值不等於disabled才代表要加入布林值條件篩選)
+            if (FormData.BoolConditions != "disabled")
+            {
+                // 聯集篩選
+                if (FormData.BoolConditions == "union")
+                {
+                    // 加在自己的predicate後(用Or加條件式)
+                    InnerPredicate_Booleans = InnerPredicate_Booleans.Start(t => t.WordOrigin == FormData.HasWordOrigin);
+                    InnerPredicate_Booleans = InnerPredicate_Booleans.Or(t => t.Synonym == FormData.HasSynonym);
+                    InnerPredicate_Booleans = InnerPredicate_Booleans.Or(t => t.HasAudio == FormData.HasAudio);
+
+                }
+                // 交集篩選(用And加條件式)
+                else if (FormData.BoolConditions == "intersection")
+                {
+                    // 直接加在OuterPredicate，檢查是否已有條件式
+                    if (OuterPredicate.IsStarted==false)
+                    {
+                        OuterPredicate = OuterPredicate.Start(t => t.WordOrigin == FormData.HasWordOrigin);
+                    }
+                    else
+                    {
+                        OuterPredicate = OuterPredicate.And(t => t.WordOrigin == FormData.HasWordOrigin);
+
+                    }
+                    OuterPredicate = OuterPredicate.And(t => t.Synonym == FormData.HasSynonym);
+                    OuterPredicate = OuterPredicate.And(t => t.HasAudio == FormData.HasAudio);
+
+                }
+
+            }
+            // 所有predicate合併判斷(放在最後面，不然會有預期外的錯誤)
+            // 判斷原則：要往OuterPredicate(最上層的predicate)合併，若OuterPredicate沒有條件式，再往下一層(InnerPredicate_Grammar)合併，以此類推
+            // 若OuterPredicate已有條件式
+            if (OuterPredicate.IsStarted==true)
+            {
+                // 且InnerPredicate_Grammar已有條件式
+                if (InnerPredicate_Grammar.IsStarted==true)
+                {
+                    // 將InnerPredicate_Grammar合併進OuterPredicate
+                    OuterPredicate = OuterPredicate.And(InnerPredicate_Grammar);
+                }
+                // 且InnerPredicate_Part已有條件式
+                if (InnerPredicate_Part.IsStarted==true)
+                {
+                    // 將InnerPredicate_Part合併進OuterPredicate
+                    OuterPredicate = OuterPredicate.And(InnerPredicate_Part);
+
+                }
+                // 且InnerPredicate_Booleans已有條件式
+                if (InnerPredicate_Booleans.IsStarted==true)
+                {
+                    // 將InnerPredicate_Booleans合併進OuterPredicate
+                    OuterPredicate = OuterPredicate.And(InnerPredicate_Booleans);
+
+                }
+
+            }
+            // 若OuterPredicate沒有條件式
+            else
+            {
+                // 並且InnerPredicate_Grammar已有條件式
+                if (InnerPredicate_Grammar.IsStarted==true)
+                {
+                    // 並且InnerPredicate_Part已有條件式
+                    if (InnerPredicate_Part.IsStarted==true)
+                    {
+                        // 將InnerPredicate_Part合併進InnerPredicate_Grammar
+                        InnerPredicate_Grammar = InnerPredicate_Grammar.And(InnerPredicate_Part);
+                    }
+                    // 並且InnerPredicate_Booleans已有條件式
+                    if (InnerPredicate_Booleans.IsStarted==true)
+                    {
+                        // 將InnerPredicate_Booleans合併進InnerPredicate_Grammar
+                        InnerPredicate_Grammar = InnerPredicate_Grammar.And(InnerPredicate_Booleans);
+                    }
+                }
+                // 並且InnerPredicate_Grammar也沒有條件式
+                else
+                {
+                    // 並且InnerPredicate_Part已有條件式
+                    if (InnerPredicate_Part.IsStarted==true)
+                    {
+                        // 並且InnerPredicate_Booleans已有條件式
+                        if (InnerPredicate_Booleans.IsStarted==true)
+                        {
+                            // 將InnerPredicate_Booleans合併進InnerPredicate_Part
+                            InnerPredicate_Part = InnerPredicate_Part.And(InnerPredicate_Booleans);
+                        }
+                    }
+                }
+            }
+            // 最後回傳判斷
+            // 若OuterPredicate還沒加入條件
             if (OuterPredicate.IsStarted == false)
             {
-                if (InnerPredicateGrammar.IsStarted==true)
+                // 且InnerPredicateGrammar也還沒加入條件
+                if (InnerPredicate_Grammar.IsStarted == false)
                 {
-                    return InnerPredicateGrammar;
+                    // InnerPredicatePart也沒加入條件
+                    if (InnerPredicate_Part.IsStarted==false)
+                    {
+                        if (InnerPredicate_Booleans.IsStarted==false)
+                        {
+                            // 沒有進行任何篩選回傳null
+                            return null;
+                        }
+                        return InnerPredicate_Booleans;
+                        
+                    }
+                    // InnerPredicatePart已加入條件則回傳InnerPredicatePart
+                    return InnerPredicate_Part;
                 }
-                else if (InnerPredicatePart.IsStarted==true)
+                // 若OuterPredicate還沒加入條件，但InnerPredicateGrammar已加入條件
+                else
                 {
-                    return InnerPredicatePart;
+                    // 則回傳InnerPredicateGrammar
+                    return InnerPredicate_Grammar;
                 }
             }
+            // 若OuterPredicate已加入條件則回傳OuterPredicate
             return OuterPredicate;
 
 
