@@ -1,0 +1,38 @@
+﻿@*繫結物件集合要用IEnumerable<T>*@
+@model IEnumerable<Toeicking2021.Models.GA>
+
+@{
+    int k = 1;
+}
+
+@*要使用List<T>*@
+@*@for (int i = 0; i < Model.Count(); i++)
+{
+    string grammarContentId = "grammar" + (i + 1).ToString();
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                <label for="@grammarContentId" class="control-label">文法解析<span class="modal_grammar_id">@Model[i].AnalysisId</span></label>
+                <textarea class="form-control modal_grammar" rows="3" id="@grammarContentId">@Model[i].Analysis</textarea>
+            </div>
+        </div>
+    </div>
+    <hr />
+}*@
+
+@*用IEnumerable<T>*@
+@foreach (var item in Model)
+{
+    string grammarContentId = "grammar" + k.ToString();
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                <label for="@grammarContentId" class="control-label">文法解析<span class="modal_grammar_id">@item.AnalysisId</span></label>
+                <textarea class="form-control modal_grammar" rows="3" id="@grammarContentId">@item.Analysis</textarea>
+            </div>
+        </div>
+    </div>
+    <hr />
+    k++;
+
+}

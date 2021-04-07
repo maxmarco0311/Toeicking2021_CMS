@@ -52,8 +52,8 @@ namespace Toeicking2021.Utilities
         public static async Task<PaginatedList<T>> Create(IQueryable<T> source, int pageIndex, int pageSize)
         {
             // 計算資料總筆數
-            //var count = await source.CountAsync();
-            var count = source.Count();
+            var count = await source.CountAsync();
+            //var count = source.Count();
             // 查出目前頁數的資料物件集合
             var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             //var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();

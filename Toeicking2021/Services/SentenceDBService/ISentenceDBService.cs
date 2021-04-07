@@ -12,5 +12,9 @@ namespace Toeicking2021.Services.SentenceDBService
         Task<string> AddSentenceGroup(SentenceInputVM data);
         Task<string> DeleteSenetnce(int id);
         IQueryable<Sentence> TableAsQueryable();
+        Task<List<GA>> GetGrammarsBySentenceId(int sentenceId);
+        Task<List<VA>> GetVocAnalysesBySentenceId(int sentenceId);
+        Task<List<Vocabulary>> GetVocabularyBySentenceId(int sentenceId);
+
     }
 }

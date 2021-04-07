@@ -244,18 +244,17 @@ namespace Toeicking2021.Controllers
                 // 使用Where(predicate)篩選IQueryable<T>物件，送到分頁的方法裡查出那一頁的資料
                 source = source.Where(predicate);
             }
-            // 篩選最近幾筆
-            // 一定要放最後，因為要等其它Where條件式都完成(Where(predicate))再OrderByDescending().Take()
+            // 篩選最近幾筆：一定要放最後，因為要等其它Where條件式都完成(Where(predicate))再OrderByDescending().Take()
             if (FormData.CountDesc != null)
             {
                 // 此處source還是IQueryable<T>的型別，仍然可以當作分頁方法的參數
                 // 呼叫GetValueOrDefault()可將int?轉型成int
-                source = source.OrderByDescending(s=>s.SentenceId).Take(FormData.CountDesc.GetValueOrDefault());
+                source = source.OrderByDescending(s => s.SentenceId).Take(FormData.CountDesc.GetValueOrDefault());
             }
             // 呼叫分頁方法，接收回傳值的型別必須是PaginatedList<T>，不可以是List<T>，否則取不到物件的另外四個屬性
             // FormData.Page?? 是因為撈第一頁的話，FormData.Page可以不用有值
-            PaginatedList<Sentence> data = await PaginatedList<Sentence>.Create(source, FormData.Page?? 1, FormData.PageSize);
-            if (data.Count==0)
+            PaginatedList<Sentence> data = await PaginatedList<Sentence>.Create(source, FormData.Page ?? 1, FormData.PageSize);
+            if (data.Count == 0)
             {
                 ViewBag.result = "查無資料";
             }
@@ -263,6 +262,42 @@ namespace Toeicking2021.Controllers
 
         }
         #endregion
+
+        #region 儲存句子修改
+        // 若只是要回傳字串，回傳值型別也可用string
+        [HttpPost]
+        public IActionResult UpdateSentence(int sentenceId, string sentence, string chinese)
+        {
+            int test = sentenceId;
+            return Content("1");
+        }
+        #endregion
+
+        #region 依句子編號查出文法解析
+        public async Task<IActionResult> ReviewGrammar(int sentenceId)
+        {
+            List<GA> result = await _sentenceDBService.GetGrammarsBySentenceId(sentenceId);
+            return PartialView(result);
+        }
+        #endregion
+
+        #region 依句子編號查出字彙解析
+        public async Task<IActionResult> ReviewVocAnalysis(int sentenceId)
+        {
+            List<VA> result = await _sentenceDBService.GetVocAnalysesBySentenceId(sentenceId);
+            return PartialView(result);
+        }
+        #endregion
+
+        #region 依句子編號查出字彙
+        public async Task<IActionResult> ReviewVocabulary(int sentenceId)
+        {
+            List<Vocabulary> result = await _sentenceDBService.GetVocabularyBySentenceId(sentenceId);
+            return PartialView(result);
+        }
+        #endregion
+
+
 
 
 

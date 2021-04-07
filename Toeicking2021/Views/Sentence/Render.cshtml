@@ -95,22 +95,22 @@
                                 <div class="form-group row no-gutters">
                                     <div class="col-4">
                                         @*同時有tooltip及開啟modal的data-toggle寫法*@
-                                        <span data-toggle="modal" data-target="#sentence">
+                                        <span @*data-toggle="modal" data-target="#sentence"*@>
                                             <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="句子修改">
                                                 <i class="fa fa-database"></i>
                                             </a>
                                         </span>
                                     </div>
                                     <div class="col-4">
-                                        <span data-toggle="modal" data-target="#sentence">
-                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="文法解析檢視">
+                                        <span data-toggle="modal" data-target="#grammar">
+                                            <a class="grammarUpdate" data-toggle="tooltip" data-placement="top" title="文法解析檢視">
                                                 <i class="fa fa-file-text"></i>
                                             </a>
                                         </span>
                                     </div>
                                     <div class="col-4">
-                                        <span data-toggle="modal" data-target="#sentence">
-                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="字彙檢視">
+                                        <span data-toggle="modal" data-target="#voc">
+                                            <a class="vocUpdate" data-toggle="tooltip" data-placement="top" title="字彙檢視">
                                                 <i class="fa fa-language"></i>
                                             </a>
                                         </span>
@@ -118,22 +118,22 @@
                                 </div>
                                 <div class="form-group row no-gutters">
                                     <div class="col-4">
-                                        <span data-toggle="modal" data-target="#sentence">
-                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="字彙解析檢視">
+                                        <span data-toggle="modal" data-target="#vocAnalysis">
+                                            <a class="vocAnalysisUpdate" data-toggle="tooltip" data-placement="top" title="字彙解析檢視">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                         </span>
                                     </div>
                                     <div class="col-4">
                                         <span data-toggle="modal" data-target="#audios">
-                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="音檔檢視">
+                                            <a class="audioReview" data-toggle="tooltip" data-placement="top" title="音檔檢視">
                                                 <i class="fa fa-volume-up"></i>
                                             </a>
                                         </span>
                                     </div>
                                     <div class="col-4">
                                         <span data-toggle="modal" data-target="#sentence">
-                                            <a class="sentenceUpdate" data-toggle="tooltip" data-placement="top" title="刪除整列">
+                                            <a class="delete_check" data-toggle="tooltip" data-placement="top" title="刪除整列">
                                                 <i class="fa fa-trash-o"></i>
                                             </a>
                                         </span>
@@ -183,7 +183,7 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           asp-route-BoolConditions="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete"
                                            data-ajax-mode="replace-with" data-ajax-update="#change">
                                             首頁
                                         </a>
@@ -196,7 +196,7 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           asp-route-BoolConditions="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete"
                                            data-ajax-mode="replace-with" data-ajax-update="#change">
                                             上一頁
                                         </a>
@@ -227,7 +227,7 @@
                                                        asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                                        asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                                        asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                                       asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                                       asp-route-BoolConditions="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete"
                                                        data-ajax-mode="replace-with" data-ajax-update="#change">
                                                         @i
                                                     </a>
@@ -243,7 +243,7 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           asp-route-BoolConditions="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete"
                                            data-ajax-mode="replace-with" data-ajax-update="#change">
                                             下一頁
                                         </a>
@@ -256,7 +256,7 @@
                                            asp-route-CountDesc="@ViewBag.CountDesc" asp-route-CheckedTimes="@ViewBag.CheckedTimes"
                                            asp-route-PageSize="@ViewBag.PageSize" asp-route-Part="@ViewBag.Part" asp-route-GrammarCategories="@ViewBag.GrammarCategories"
                                            asp-route-HasWordOrigin="@ViewBag.HasWordOrigin" asp-route-HasSynonym="@ViewBag.HasSynonym" asp-route-HasAudio="@ViewBag.HasAudio"
-                                           asp-route-BoolConditions ="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete" 
+                                           asp-route-BoolConditions="@ViewBag.BoolConditions" data-ajax="true" data-ajax-complete="onComplete"
                                            data-ajax-mode="replace-with" data-ajax-update="#change">
                                             末頁
                                         </a>
@@ -313,6 +313,78 @@
     </div>
 </div>
 @*句子修改的modal*@
+
+@*文法解析的modal*@
+<div id="grammar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">文法解析檢視與修改</h4>
+            </div>
+            @*埋usage-append這個class*@
+            <div class="modal-body grammar-append">
+                @*從這裡開始用jQuery生*@
+
+                @*生到這*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">關閉</button>
+                @*class為save-usage，儲存用法*@
+                <button type="button" class="btn btn-info waves-effect waves-light save-grammar">存入資料庫</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*文法解析的modal*@
+
+@*字彙的modal*@
+<div id="voc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">字彙檢視與修改</h4>
+            </div>
+            @*埋voc-append這個class*@
+            <div class="modal-body voc-append">
+                @*從這裡開始用jQuery生*@
+
+                @*生到這*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">關閉</button>
+                @*class為save-voc，儲存字彙*@
+                <button type="button" class="btn btn-info waves-effect waves-light save-voc">存入資料庫</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*字彙的modal*@
+
+@*字彙解析的modal*@
+<div id="vocAnalysis" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">字彙解析檢視與修改</h4>
+            </div>
+            @*埋usage-append這個class*@
+            <div class="modal-body vocAnalysis-append">
+                @*從這裡開始用jQuery生*@
+
+                @*生到這*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">關閉</button>
+                @*class為save-usage，儲存用法*@
+                <button type="button" class="btn btn-info waves-effect waves-light save-vocAnalysis">存入資料庫</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*字彙解析的modal*@
 
 @*音檔檢視的modal*@
 <div id="audios" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;">
@@ -374,5 +446,192 @@
             }
         );
     }
+
+    // 觸發modal開啟的元素是<a>
+
+    // 1. 顯示文法解析
+    $(".grammarUpdate").on("click", function () {
+        $(".grammar-append").empty();
+        // 取得句子編號
+        var sentenceId = $(this).parent().parent().parent().parent().siblings().find(".sentence_id").text();
+        // formData(沒有特別建一個型別)
+        var formData = { sentenceId: sentenceId};
+        $.ajax({
+            type: "POST",
+            url: "@Url.Content("~/Sentence/ReviewGrammar")",
+            data: formData,
+            success: function (response) {
+                $(".grammar-append").append(response);
+            },
+            error: function (error) {
+                swal(
+                    {
+                        title: '糟糕',
+                        text: 'Ajax傳送出現錯誤！',
+                        type: 'error'
+                    }
+                );
+            }
+
+        });
+
+    });
+
+    // 2. 顯示字彙解析
+    $(".vocAnalysisUpdate").on("click", function () {
+        $(".vocAnalysis-append").empty();
+        // 取得句子編號
+        var sentenceId = $(this).parent().parent().parent().parent().siblings().find(".sentence_id").text();
+        // formData(沒有特別建一個型別)
+        var formData = { sentenceId: sentenceId};
+        $.ajax({
+            type: "POST",
+            url: "@Url.Content("~/Sentence/ReviewVocAnalysis")",
+            data: formData,
+            success: function (response) {
+                $(".vocAnalysis-append").append(response);
+            },
+            error: function (error) {
+                swal(
+                    {
+                        title: '糟糕',
+                        text: 'Ajax傳送出現錯誤！',
+                        type: 'error'
+                    }
+                );
+            }
+
+        });
+
+    });
+
+    // 3. 顯示字彙
+    $(".vocUpdate").on("click", function () {
+        $(".voc-append").empty();
+        // 取得句子編號
+        var sentenceId = $(this).parent().parent().parent().parent().siblings().find(".sentence_id").text();
+        // formData(沒有特別建一個型別)
+        var formData = { sentenceId: sentenceId};
+        $.ajax({
+            type: "POST",
+            url: "@Url.Content("~/Sentence/ReviewVocabulary")",
+            data: formData,
+            success: function (response) {
+                $(".voc-append").append(response);
+            },
+            error: function (error) {
+                swal(
+                    {
+                        title: '糟糕',
+                        text: 'Ajax傳送出現錯誤！',
+                        type: 'error'
+                    }
+                );
+            }
+
+        });
+
+
+    });
+
+    // 4. 更新句子
+    $(".sentenceUpdate").on("click", function () {
+
+        swal({
+            title: '注意',
+            text: "確定要修改句子嗎？",
+            type: 'warning',
+            showCancelButton: true,
+            //***swal按ok後ajax存入資料庫***
+        }).then((result) => {
+            if (result) {
+                // 取得句子編號
+                var sentenceId = $(this).parent().parent().parent().parent().siblings().find(".sentence_id").text();
+                var sentence = $(this).parent().parent().parent().parent().siblings().find(".sentence").text();
+                var chinese = $(this).parent().parent().parent().parent().siblings().find(".chinese").text();
+                // formData(沒有特別建一個型別)
+                var formData = { sentenceId: sentenceId, sentence: sentence, chinese: chinese };
+                //ajax回傳資料
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Content("~/Sentence/UpdateSentence")",
+                    data: formData,
+                    // 如果只是POST一個物件，不要加下一行，會傳不過去
+                    //contentType: "application/x-www-form-urlencoded",
+                    success: function (response) {
+                        alert("近來success了");
+                        //取回傳的值用response，不要再用response.d
+                        var swal_judge = response;
+                        alert(swal_judge.toString());
+                        if (swal_judge == "1") {
+
+                            swal(
+                                {
+                                    title: '完成',
+                                    text: '更新資料成功！',
+                                    type: 'success'
+                                }
+
+                            ).then((result) => {
+                                if (result) {
+                                    //將更新後的資料填進元素中
+                                    $(this).parent().parent().parent().parent().siblings().find(".sentence_id").text(sentenceId);
+                                    $(this).parent().parent().parent().parent().siblings().find(".sentence").val(sentence);
+                                    $(this).parent().parent().parent().parent().siblings().find(".chinese").val(chinese);
+                                }
+
+                            });
+
+                        } else if (swal_judge == "0") {
+                            swal(
+                                {
+                                    title: '糟糕',
+                                    text: '更新資料失敗！',
+                                    type: 'error'
+                                }
+                            );
+
+                        }
+
+
+                    },
+                    error: function (error) {
+
+                        swal(
+                            {
+                                title: '糟糕',
+                                text: 'Ajax傳送出現錯誤！',
+                                type: 'error'
+                            }
+                        );
+                    }
+
+
+                });
+
+
+            }
+
+        });
+
+    })
+
+    // 5. 更新文法解析
+    $(".save-grammar").on("click", function () {
+
+    });
+
+    // 6. 更新字彙解析
+    $(".save-vocAnalysis").on("click", function () {
+
+    });
+
+    // 7. 更新字彙
+    $(".save-voc").on("click", function () {
+
+    });
+
+
+
 </script>
 

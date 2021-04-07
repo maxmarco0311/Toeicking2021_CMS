@@ -1,0 +1,46 @@
+﻿@*繫結物件集合要用IEnumerable<T>*@
+@model IEnumerable<Toeicking2021.Models.Vocabulary>
+
+@{
+    int i = 1;
+}
+
+@foreach (var item in Model)
+{
+    string vocContentId = "voc" + i.ToString();
+    string categoryId = "category" + i.ToString();
+    string chineseId = "chinese" + i.ToString();
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="@vocContentId" class="control-label">字彙<span class="modal_voc_id">@item.VocabularyId</span></label>
+                <input type="text" class="form-control modal_voc" id="@vocContentId" value="@item.Voc">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="@categoryId" class="control-label">詞性</label>
+                <select asp-for="@item.Category" id="@categoryId" class="form-control modal_category">
+                    <option value="">請選擇</option>
+                    <option value="n">(n.)</option>
+                    <option value="v">(v.)</option>
+                    <option value="adj">(adj.)</option>
+                    <option value="adv">(adv.)</option>
+                    <option value="prep">(prep.)</option>
+                    <option value="conj">(conj.)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="@chineseId" class="control-label">中文</label>
+                <input type="text" class="form-control modal_chinese" id="@chineseId" value="@item.Chinese">
+            </div>
+        </div>
+    </div>
+    <hr />
+    i++;
+}
+

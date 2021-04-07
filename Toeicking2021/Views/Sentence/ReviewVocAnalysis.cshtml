@@ -1,0 +1,23 @@
+﻿@*繫結物件集合要用IEnumerable<T>*@
+@model IEnumerable<Toeicking2021.Models.VA>
+
+@{
+    int k = 1;
+}
+
+@*用IEnumerable<T>*@
+@foreach (var item in Model)
+{
+    string vocAnalysisContentId = "vocAnalysis" + k.ToString();
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                <label for="@vocAnalysisContentId" class="control-label">字彙解析<span class="modal_vocAnalysis_id">@item.AnalysisId</span></label>
+                <textarea class="form-control modal_vocAnalysis" rows="3" id="@vocAnalysisContentId">@item.Analysis</textarea>
+            </div>
+        </div>
+    </div>
+    <hr />
+    k++;
+
+}

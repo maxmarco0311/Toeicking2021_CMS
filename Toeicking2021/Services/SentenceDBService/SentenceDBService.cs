@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -137,8 +138,21 @@ namespace Toeicking2021.Services.SentenceDBService
         #endregion
 
 
+        public async Task<List<GA>> GetGrammarsBySentenceId(int sentenceId)
+        {
+            return await _context.GAs.Where(g => g.SentenceId == sentenceId).ToListAsync();
+            //var test = _context.GAs.Where(g => g.SentenceId == sentenceId && g.Sentence.HasAudio==true).ToList();
+        }
 
+        public async Task<List<VA>> GetVocAnalysesBySentenceId(int sentenceId)
+        {
+            return await _context.VAs.Where(va => va.SentenceId == sentenceId).ToListAsync();
+        }
 
+        public async Task<List<Vocabulary>> GetVocabularyBySentenceId(int sentenceId)
+        {
+            return await _context.Vocabularies.Where(v => v.SentenceId == sentenceId).ToListAsync();
+        }
     }
 
 

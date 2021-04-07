@@ -9,6 +9,9 @@
     <link href="~/lib/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css" rel="stylesheet" />
     <link href="~/lib/plugins/multiselect/css/multi-select.css" rel="stylesheet" />
     <link href="~/lib/plugins/select2/select2.css" rel="stylesheet" />
+    @*overlay spinner的css檔*@
+    @*<link href="~/css/mySpinner.css" rel="stylesheet" />*@
+
 }
 
 @section bottomCSS{
@@ -207,8 +210,10 @@
     @*查詢按鈕*@
     <div class="row">
         <div class="col-lg-12">
-            <a id="sendFormData" class="btn btn--lg btn-block btn-primary waves-light mt-3" style="color:white; letter-spacing:1.5px;">
-                送出查詢
+            @*按鈕spinner要加入：1.button-loader這個class name 2. data-loading-text屬性*@
+            <a id="sendFormData" class="btn btn--lg btn-block btn-primary waves-light mt-3 button-loader"
+               data-loading-text="<i class='fa fa-spinner fa-spin'></i> 搜尋中‧‧‧" style="color:white; letter-spacing:2px;">
+                查詢資料
             </a>
         </div>
     </div>
@@ -216,6 +221,8 @@
 
 @*資料表呈現處，被表格replace with的div(id要一樣)*@
 <div id="change"></div>
+@*spinner overlay*@
+@*<div id="loader" class="lds-dual-ring hidden overlay"></div>*@
 
 @*footable檔案需在topScripts位置*@
 @section topScripts{
@@ -232,6 +239,8 @@
 }
 
 @section bottomScripts{
+    @*按鈕spinner的js檔*@
+    <script src="~/js/button-inline-loader.js"></script>
     <script>
         $(function () {
             // 初載入時設定checkbox不能按
@@ -311,19 +320,25 @@
                         url: "@Url.Content("~/Sentence/RetrieveData")",
                         data: formData,
                         async: true,
-                        conentType: "application/x-www-form-urlencoded",
+                        //conentType: "application/x-www-form-urlencoded",
+                        // spinner開始
+                        beforeSend: function () {
+                            // 按鈕
+                            $('.button-loader').button('loading');
+                            //// overlay
+                            //$('#loader').removeClass('hidden');
+                        },
+                        // spinner結束
+                        complete: function () {
+                            $('.button-loader').button('reset');
+                            //$('#loader').addClass('hidden');
+                        },
                     }).done(function (response) {
                         // response是動作方法回傳的PartialView，要用replaceWith()去置換空的<div id="change">置換才會顯示
                         $("#change").replaceWith(response);
                         // 移到表格處
                         $('html,body').animate({ scrollTop: 300 }, 100);
                     });
-                    @*$.get("@Url.Content("~/Sentence/RetrieveData")", formData, function (response) {
-                        // response是動作方法回傳的PartialView，要用replaceWith()去置換空的<div id="change">置換才會顯示
-                        $("#change").replaceWith(response);
-                        $('html,body').animate({ scrollTop: 300 }, 100);
-
-                    });*@
 
                 }
 
