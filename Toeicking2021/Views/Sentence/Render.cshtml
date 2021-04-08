@@ -142,27 +142,6 @@
                             </td>
                         </tr>
 
-                        <!--<div class="form-group row">
-                        <div class="col-6">-->
-                        @*句子修改的按鈕，用.sentenceUpdate選取*@
-                        @*<button type="button" class="btn btn-success btn-block waves-effect waves-light sentenceUpdate" data-toggle="tooltip" data-placement="top" title="Tooltip on top">句子修改</button>*@
-                        <!--</div>
-                        <div class="col-6">-->
-                        @*用法檢視的按鈕，用.usageReview選取*@
-                        <!--<button type="button" id="triggerUsage" class="btn btn-block btn-warning waves-effect waves-light usageReview" data-target="#usage">用法檢視</button>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-6">-->
-                        @*用法檢視的按鈕，用.vocReveiw選取*@
-                        <!--<button type="button" id="triggerVoc" class="btn btn-block btn-danger waves-effect waves-light vocReveiw" data-target="#voc">字彙檢視</button>
-                        </div>
-                        <div class="col-6">-->
-                        @*移除整列的按鈕，用.remove選取*@
-                        <!--<button type="button" class="btn btn-secondary btn-block waves-effect waves-light remove">移除整列</button>
-                            </div>
-                        </div>-->
-
                     }
                 </tbody>
                 <!--表尾分頁-->
@@ -618,6 +597,159 @@
 
     // 5. 更新文法解析
     $(".save-grammar").on("click", function () {
+        //先把按鈕存起來
+        var thisBtn = $(this);
+        swal({
+            title: '注意',
+            text: "確定要修改文法解析嗎？",
+            type: 'warning',
+            showCancelButton: true,
+
+            //***swal按ok後ajax存入資料庫***
+        }).then((result) => {
+            if (result) {
+                //是否要執行Ajax的變數，預設true
+                var executeAjax = true;
+                //先將控制項選取成集合(陣列)，放進變數中
+                var grammarIds = $(this).parent().siblings().find(".modal_grammar_id");                
+                var grammars = $(this).parent().siblings().find(".modal_grammar");               
+                //再宣告要放進個控制項值的陣列
+                var arrayGrammarIds = [];
+                var arrayGrammars = [];
+                //宣告空陣列裝要用ajax傳送的物件陣列
+                var grammarData = [];
+                //物件建構式
+                function grammarObj(grammarId, grammar) {
+                    //左邊AnalysisId是屬性，必須跟GA.cs的屬性名稱完全一樣，右邊是屬性值，為傳入的參數(名稱可自訂)。
+                    this.AnalysisId = grammarId;
+                    this.Analysis = grammar;
+                }
+                //檢查兩個集合數量是否相同
+                if (grammarIds.length == grammars.length) {
+                    //自設迴圈計數器
+                    var i = 0;
+                    //遍覽每個元素，準備給值
+                    grammarIds.each(function () {
+                        //檢查是否為空值
+                        if ($(this).text() != "") {                          
+                            //不是才放進集合中
+                            arrayGrammarIds[i] = $(this).text();
+                        }
+                        else
+                        {
+                            swal(
+                                {
+                                    title: '糟糕',
+                                    text: '字彙解析編號是空值',
+                                    type: 'error'
+                                }
+                            );
+                            //不執行ajax
+                            executeAjax = false;
+                        }
+                        //不要忘記計數器要加1
+                        i++;
+                    });
+
+                    var k = 0;
+                    grammars.each(function () {
+                        if ($(this).val() != "") {  
+                            arrayGrammars[k] = $(this).val();
+                        }
+                        else
+                        {
+                            swal(
+                                {
+                                    title: '糟糕',
+                                    text: '有用法內容是空值',
+                                    type: 'error'
+                                }
+                            );
+                            executeAjax = false;
+                        }
+                        k++;
+                    });
+
+                    //判斷是否要執行ajax
+                    if (executeAjax == true) {
+                        for (var i = 0; i < grammarIds.length; i++) {  
+                            //新增物件給值並裝進陣列，準備回傳
+                            grammarData[i] = new grammarObj(arrayGrammarIds[i], arrayGrammars[i]);
+                        }
+                        //ajax回傳資料
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Content("~/Sentence/UpdateGrammarPackage")',
+                            dataType: 'json',
+                            // JSON.stringify()的參數只要物件或物件集合就好，不要再加個key(屬性)去對應，這樣現有的類別即可轉換
+                            // 否則C#序列化會出錯(除非再寫一個新類別去序列化)
+                            data: JSON.stringify(grammarData),
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (response) {
+                                //response.d為webservice回傳的值
+                                var swal_judge = response;
+                                if (swal_judge == "1") {
+                                    swal(
+                                        {
+                                            title: '完成',
+                                            text: '更新資料成功！',
+                                            type: 'success'
+                                        }
+
+                                    ).then((result) => {
+                                        if (result) {
+                                            //找到x按鈕，執行按鈕動作，關掉modal
+                                            $(thisBtn).parent().siblings().find(".close").click();
+                                        }
+
+                                    });
+
+                                }
+                                else if (swal_judge == "0")
+                                {
+                                    swal(
+                                        {
+                                            title: '糟糕',
+                                            text: '更新資料失敗！',
+                                            type: 'error'
+                                        }
+                                    );
+
+                                }
+
+                            },
+                            error: function (error) {
+                                swal(
+                                    {
+                                        title: '糟糕',
+                                        text: 'Ajax傳送出現錯誤！',
+                                        type: 'error'
+                                    }
+                                );
+
+                            }
+
+                        });
+
+                    }
+
+                }
+                else
+                {
+                    swal(
+                        {
+                            title: '糟糕',
+                            text: '控制項值的數量彼此不一致！',
+                            type: 'error'
+                        }
+                    );
+                    executeAjax = false;
+
+                }
+
+            }
+
+        });
 
     });
 

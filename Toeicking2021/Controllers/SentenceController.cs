@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Toeicking2021.Data;
 using Toeicking2021.Models;
 using Toeicking2021.Services;
@@ -296,6 +298,14 @@ namespace Toeicking2021.Controllers
             return PartialView(result);
         }
         #endregion
+
+        public async Task<IActionResult> UpdateGrammarPackage()
+        {
+
+            List<GA> response = await JsonParser.FromStream<List<GA>>(Request.Body);
+            return Content(response[0].Analysis);
+
+        }
 
 
 
