@@ -27,7 +27,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group no-margin">
+                @*modal_grammar_id是前端撈資料用的class name*@
                 <label for="@grammarContentId" class="control-label">文法解析<span class="modal_grammar_id">@item.AnalysisId</span></label>
+                @*modal_grammar是前端撈資料用的class name*@
                 <textarea class="form-control modal_grammar" rows="3" id="@grammarContentId">@item.Analysis</textarea>
             </div>
         </div>

@@ -207,6 +207,8 @@
         </div>
     </div>
     @*第二列結束*@
+    @*用來存放每一次查詢後檢查次數加1的筆數*@
+    <input type="hidden" id="skip-offset" />
     @*查詢按鈕*@
     <div class="row">
         <div class="col-lg-12">
@@ -243,24 +245,28 @@
     <script src="~/js/button-inline-loader.js"></script>
     <script>
         $(function () {
+            // 初載入時設定skipOffset為0筆
+            $("#skip-offset").val("0");
+
             // 初載入時設定checkbox不能按
             if ($("#BoolConditions").val() === "disabled") {
                 $("input[type='checkbox']").prop("disabled",true);
             }
+
             // 下拉選單改變事件
             $("#BoolConditions").on("change", function () {
                 // 選到停用就讓checkbox不能按
-                if ($(this).val()==="disabled") {
+                if ($(this).val() === "disabled") {
                     $("input[type='checkbox']").prop("disabled", true);
                     // 原本勾選的取消
                     $("input[type='checkbox']").prop("checked", false);
                 }
                 // 選到其它的checkbox就可以按
-                else
-                {
+                else {
                     $("input[type='checkbox']").prop("disabled", false);
                 }
-            })
+            });
+
             // 表單按鈕點擊事件
             $("#sendFormData").on("click", function () {
                 // 處理multi-select的值
@@ -297,6 +303,7 @@
                     PageSize: $("#PageSize").val(),
                     BoolConditions: $("#BoolConditions").val(),
                     Context: $("#Context").val(),
+                    SkipOffset: $("#skip-offset").val(),
                     GrammarCategories: selectedGrammarCategories,
                     Part: selectedPartCategories,
                     HasWordOrigin: hasWordOrigin,
@@ -338,6 +345,8 @@
                         $("#change").replaceWith(response);
                         // 移到表格處
                         $('html,body').animate({ scrollTop: 300 }, 100);
+                        // 重新查詢資料(按下SUBMIT)後skipOffset要再設為0筆，不然會累加
+                        $("#skip-offset").val("0");
                     });
 
                 }

@@ -213,7 +213,8 @@ namespace Toeicking2021.Controllers
                 FormData.CheckedTimes,
                 FormData.PageSize,
                 // 繫結類別有加新屬性，要記得來route value加進去，不然表格處理的傳入參數新屬性永遠是null
-                FormData.BoolConditions
+                FormData.BoolConditions,
+                FormData.SkipOffset
             });
 
         }
@@ -236,6 +237,7 @@ namespace Toeicking2021.Controllers
             ViewBag.HasSynonym = FormData.HasSynonym;
             ViewBag.HasAudio = FormData.HasAudio;
             ViewBag.BoolConditions = FormData.BoolConditions;
+            ViewBag.SkipOffset = FormData.SkipOffset;
             // 將要查詢資料表物件AsQueryable()
             var source = _sentenceDBService.TableAsQueryable();
             // 將表單資料處理成動態where條件式
@@ -255,23 +257,13 @@ namespace Toeicking2021.Controllers
             }
             // 呼叫分頁方法，接收回傳值的型別必須是PaginatedList<T>，不可以是List<T>，否則取不到物件的另外四個屬性
             // FormData.Page?? 是因為撈第一頁的話，FormData.Page可以不用有值
-            PaginatedList<Sentence> data = await PaginatedList<Sentence>.Create(source, FormData.Page ?? 1, FormData.PageSize);
+            PaginatedList<Sentence> data = await PaginatedList<Sentence>.Create(source, FormData.Page ?? 1, FormData.SkipOffset?? 0, FormData.PageSize);
             if (data.Count == 0)
             {
                 ViewBag.result = "查無資料";
             }
             return PartialView(data);
 
-        }
-        #endregion
-
-        #region 儲存句子修改
-        // 若只是要回傳字串，回傳值型別也可用string
-        [HttpPost]
-        public IActionResult UpdateSentence(int sentenceId, string sentence, string chinese)
-        {
-            int test = sentenceId;
-            return Content("1");
         }
         #endregion
 
@@ -299,16 +291,50 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
+        #region 更新句子
+        // 若只是要回傳字串，回傳值型別也可用string
+        [HttpPost]
+        public async Task<IActionResult> UpdateSentence(int sentenceId, string sentence, string chinese)
+        {
+            string result = await _sentenceDBService.UpdateSentence(sentenceId, sentence, chinese);
+            return Content(result);
+        }
+        #endregion
+
+        #region 更新文法解析(集合)
         public async Task<IActionResult> UpdateGrammarPackage()
         {
-
-            List<GA> response = await JsonParser.FromStream<List<GA>>(Request.Body);
-            return Content(response[0].Analysis);
-
+            List<GA> response = await JsonParser.FromRequestBody<List<GA>>(Request.Body);
+            string result = await _sentenceDBService.UpdateGrammars(response);
+            return Content(result);
         }
+        #endregion
 
+        #region 更新字彙解析(集合)
+        public async Task<IActionResult> UpdateVocAnalysisPackage()
+        {
+            List<VA> response = await JsonParser.FromRequestBody<List<VA>>(Request.Body);
+            string result = await _sentenceDBService.UpdateVocAnalysis(response);
+            return Content(result);
+        }
+        #endregion
 
+        #region 更新字彙(集合)
+        public async Task<IActionResult> UpdateVocabularyPackage()
+        {
+            List<Vocabulary> response = await JsonParser.FromRequestBody<List<Vocabulary>>(Request.Body);
+            string result = await _sentenceDBService.UpdateVoc(response);
+            return Content(result);
+        }
+        #endregion
 
+        #region 檢查次數加1
+        public async Task<IActionResult> AddCheckTime(int sentenceId) 
+        {
+            string result = await _sentenceDBService.AddCheckTime(sentenceId);
+            return Content(result);
+        }
+        #endregion
 
 
     }

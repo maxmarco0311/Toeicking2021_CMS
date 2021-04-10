@@ -100,7 +100,7 @@ namespace Toeicking2021.Services.SentenceDBService
                 }
                 catch (Exception ex)
                 {
-                    // 出現資料庫，資料庫回復之前的狀況
+                    // 出現錯誤，資料庫回復之前的狀況
                     transaction.Rollback();
                     errorMesssage = ex.Message;
                 }
@@ -137,22 +137,203 @@ namespace Toeicking2021.Services.SentenceDBService
         }
         #endregion
 
-
+        #region 依句子編號取出文法解析
         public async Task<List<GA>> GetGrammarsBySentenceId(int sentenceId)
         {
             return await _context.GAs.Where(g => g.SentenceId == sentenceId).ToListAsync();
             //var test = _context.GAs.Where(g => g.SentenceId == sentenceId && g.Sentence.HasAudio==true).ToList();
         }
+        #endregion
 
+        #region 依句子編號取出字彙解析
         public async Task<List<VA>> GetVocAnalysesBySentenceId(int sentenceId)
         {
             return await _context.VAs.Where(va => va.SentenceId == sentenceId).ToListAsync();
         }
+        #endregion
 
+        #region 依句子編號取出字彙
         public async Task<List<Vocabulary>> GetVocabularyBySentenceId(int sentenceId)
         {
             return await _context.Vocabularies.Where(v => v.SentenceId == sentenceId).ToListAsync();
         }
+        #endregion
+
+        #region 更新句子
+        public async Task<string> UpdateSentence(int sentenceId, string sen, string chinese)
+        {
+            string result = "";
+            Sentence sentence = _context.Sentences.FirstOrDefault(s => s.SentenceId == sentenceId);
+            if (sen!=null)
+            {
+                try
+                {
+                    sentence.Sen = sen;
+                    sentence.Chinesese = chinese;
+                    _context.Sentences.Update(sentence);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    result = ex.Message;
+                }
+                result = "1";
+            }
+            else
+            {
+                result = "0";
+            }
+            return result;
+        }
+        #endregion
+
+        #region 更新文法解析
+        public async Task<string> UpdateGrammars(List<GA> grammars)
+        {
+            string result = "";
+            using (var transaction = _context.Database.BeginTransaction()) 
+            {
+                try
+                {
+                    foreach (var item in grammars)
+                    {
+                        GA grammar = _context.GAs.FirstOrDefault(ga => ga.AnalysisId == item.AnalysisId);
+                        if (grammar != null)
+                        {
+                            grammar.Analysis = item.Analysis;
+                            _context.GAs.Update(grammar);
+                            await _context.SaveChangesAsync(); 
+                        }
+                        else
+                        {
+                            result = "0";
+                        }
+
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    result = ex.Message;
+                }
+                
+            }     
+            result = "1";
+            return result;
+
+        }
+        #endregion
+
+        #region 更新字彙解析
+        public async Task<string> UpdateVocAnalysis(List<VA> vocAnalyses)
+        {
+            string result = "";
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var item in vocAnalyses)
+                    {
+                        VA vocAnalysis = _context.VAs.FirstOrDefault(va => va.AnalysisId == item.AnalysisId);
+                        if (vocAnalysis != null)
+                        {
+                            vocAnalysis.Analysis = item.Analysis;
+                            _context.VAs.Update(vocAnalysis);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            result = "0";
+                        }
+
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    result = ex.Message;
+                }
+
+            }
+            result = "1";
+            return result;
+
+        }
+        #endregion
+
+        #region 更新字彙
+        public async Task<string> UpdateVoc(List<Vocabulary> vocabularies)
+        {
+            string result = "";
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var item in vocabularies)
+                    {
+                        Vocabulary vocabulary = _context.Vocabularies.FirstOrDefault(v => v.VocabularyId == item.VocabularyId);
+                        if (vocabulary != null)
+                        {
+                            vocabulary.Voc = item.Voc;
+                            vocabulary.Category = item.Category;
+                            vocabulary.Chinese = item.Chinese;
+                            _context.Vocabularies.Update(vocabulary);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            result = "0";
+                        }
+
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    result = ex.Message;
+                }
+
+            }
+            result = "1";
+            return result;
+
+        }
+        #endregion
+
+        #region 檢查次數加1
+        public async Task<string> AddCheckTime(int sentenceId)
+        {
+            string result;
+            try
+            {
+                Sentence sentence = await _context.Sentences.FindAsync(sentenceId);
+                if (sentence!=null)
+                {
+                    sentence.CheckedTimes++;
+                    _context.Sentences.Update(sentence);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    result = "0";
+                }
+                result = "1";
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+            }
+            return result;
+        }
+        #endregion
+
+
+
+
+
     }
 
 

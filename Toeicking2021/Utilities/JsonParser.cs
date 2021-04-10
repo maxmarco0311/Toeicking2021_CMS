@@ -11,7 +11,7 @@ namespace Toeicking2021.Utilities
     public class JsonParser
     {
         // 想要轉成甚麼型別的物件，就傳該型別的泛型到方法中
-        public static async Task<T> FromStream<T>(Stream stream) where T : new()
+        public static async Task<T> FromRequestBody<T>(Stream stream) where T : new()
         {
             // T就是要回轉的C#物件(集合)型別
             T response = new T();

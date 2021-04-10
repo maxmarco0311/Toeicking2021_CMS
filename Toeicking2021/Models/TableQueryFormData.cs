@@ -36,5 +36,8 @@ namespace Toeicking2021.Models
         public int? CheckedTimes { get; set; }
         // 每頁幾筆
         public int PageSize { get; set; }
+        // 判斷如果啟用檢查次數條件式後又checktime+1的筆數，分頁按鈕送出查詢時要在skip()裡加回來的筆數
+        public int? SkipOffset { get; set; }
+
     }
 }

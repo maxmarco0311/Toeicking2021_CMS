@@ -49,14 +49,19 @@ namespace Toeicking2021.Utilities
         // source(IQueryable<T>)--> EF Core查詢物件，在方法裡執行資料庫查詢(可以是where條件式篩選過的IQueryable<T>，T型別不會變)
         // pageIndex--> 目前頁數
         // pageSize--> 每頁顯示幾筆
-        public static async Task<PaginatedList<T>> Create(IQueryable<T> source, int pageIndex, int pageSize)
+        // skipOffset--> 判斷如果啟用檢查次數條件式後又在DB裡checktime+1的筆數，分頁按鈕送出查詢時要在skip()裡加回來的筆數(預設為0)
+        public static async Task<PaginatedList<T>> Create(IQueryable<T> source, int pageIndex, int skipOffset, int pageSize)
         {
             // 計算資料總筆數
             var count = await source.CountAsync();
-            //var count = source.Count();
             // 查出目前頁數的資料物件集合
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            //var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            // 如果是查回第一頁，則不會skip任何筆
+            if (pageIndex == 1)
+            {
+                //就不需要加任何筆回去，SkipOffset為0
+                skipOffset = 0;
+            }
+            var items = await source.Skip(((pageIndex - 1) * pageSize) + skipOffset).Take(pageSize).ToListAsync();
             // 實體化此類別物件並回傳(給View)
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
