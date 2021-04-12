@@ -9,8 +9,6 @@
     <link href="~/lib/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css" rel="stylesheet" />
     <link href="~/lib/plugins/multiselect/css/multi-select.css" rel="stylesheet" />
     <link href="~/lib/plugins/select2/select2.css" rel="stylesheet" />
-    @*overlay spinner的css檔*@
-    @*<link href="~/css/mySpinner.css" rel="stylesheet" />*@
 
 }
 
@@ -295,8 +293,8 @@
                 }
                 // 抓表單值要寫在click事件內，否則是網頁初載入時的空值
                 var formData = {
-                    SenNum: $("#SenNum").val(),
-                    Keyword: $("#Keyword").val(),
+                    SenNum: $.trim($("#SenNum").val()),
+                    Keyword: $.trim($("#Keyword").val()),
                     AddedDate: $("#AddedDate").val(),
                     CountDesc: $("#CountDesc").val(),
                     CheckedTimes: $("#CheckedTimes").val(),
@@ -332,13 +330,10 @@
                         beforeSend: function () {
                             // 按鈕
                             $('.button-loader').button('loading');
-                            //// overlay
-                            //$('#loader').removeClass('hidden');
                         },
                         // spinner結束
                         complete: function () {
                             $('.button-loader').button('reset');
-                            //$('#loader').addClass('hidden');
                         },
                     }).done(function (response) {
                         // response是動作方法回傳的PartialView，要用replaceWith()去置換空的<div id="change">置換才會顯示

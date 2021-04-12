@@ -9,11 +9,11 @@
         font-size: 1.5em;
     }
 
-    .col-4 i:hover {
-        color: #3ddcf7;
-        transform: scale(1.5);
-        transition: 0.3s;
-    }
+        .col-4 i:hover {
+            color: #3ddcf7;
+            transform: scale(1.5);
+            transition: 0.3s;
+        }
 
     /*.form-group.row.no-gutters {
         padding-top: 15px;
@@ -99,7 +99,7 @@
                                 <textarea id="@item.SentenceId" name="" class="form-control chinese" rows="4" style='width: 100%;'>@item.Chinesese</textarea>
                             </td>
                             <td>
-                                <div class="form-group row no-gutters">
+                                <div class="form-group row no-gutters d-flex align-items-center" style="margin-bottom:20px; margin-top:15px;">
                                     <div class="col-4">
                                         @*同時有tooltip及開啟modal的data-toggle寫法*@
                                         <span @*data-toggle="modal" data-target="#sentence"*@>
@@ -123,7 +123,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="form-group row no-gutters">
+                                <div class="form-group row no-gutters d-flex align-items-center"  >
                                     <div class="col-4">
                                         <span data-toggle="modal" data-target="#vocAnalysis">
                                             <a class="vocAnalysisUpdate" data-toggle="tooltip" data-placement="top" title="字彙解析檢視">
@@ -349,22 +349,22 @@
             </div>
             <div class="modal-body">
                 <h4>美國腔(男)</h4>
-                <audio controls src="~/voice_test/en-US-Wavenet-J.mp3"></audio>
+                <audio controls src="~/voice_test/en-US-Wavenet-J.mp3" style="width:450px;"></audio>
                 <hr>
                 <h4>美國腔(女)</h4>
-                <audio controls src="~/voice_test/en-US-Wavenet-E.mp3"></audio>
+                <audio controls src="~/voice_test/en-US-Wavenet-E.mp3" style="width:450px;"></audio>
                 <hr>
                 <h4>英國腔(男)</h4>
-                <audio controls src="~/voice_test/en-GB-Wavenet-B.mp3"></audio>
+                <audio controls src="~/voice_test/en-GB-Wavenet-B.mp3" style="width:450px;"></audio>
                 <hr>
                 <h4>英國腔(女)</h4>
-                <audio controls src="~/voice_test/en-GB-Wavenet-C.mp3"></audio>
+                <audio controls src="~/voice_test/en-GB-Wavenet-C.mp3" style="width:450px;"></audio>
                 <hr>
                 <h4>澳洲腔(男)</h4>
-                <audio controls src="~/voice_test/en-AU-Wavenet-B.mp3"></audio>
+                <audio controls src="~/voice_test/en-AU-Wavenet-B.mp3" style="width:450px;"></audio>
                 <hr>
                 <h4>澳洲腔(女)</h4>
-                <audio controls src="~/voice_test/en-AU-Wavenet-C.mp3"></audio>
+                <audio controls src="~/voice_test/en-AU-Wavenet-C.mp3" style="width:450px;"></audio>
                 <hr>
             </div>
             <div class="modal-footer">
@@ -502,7 +502,7 @@
                 var sentence = $(this).parent().parent().parent().parent().siblings().find(".sentence").val();
                 var chinese = $(this).parent().parent().parent().parent().siblings().find(".chinese").val();
                 // formData(沒有特別建一個型別)
-                var formData = { sentenceId: sentenceId, sentence: sentence, chinese: chinese };
+                var formData = { sentenceId: $.trim(sentenceId), sentence: $.trim(sentence), chinese: $.trim(chinese) };
                 //ajax回傳資料
                 $.ajax({
                     type: "POST",
@@ -632,8 +632,8 @@
 
                     var k = 0;
                     grammars.each(function () {
-                        if ($(this).val() != "") {
-                            arrayGrammars[k] = $(this).val();
+                        if ($.trim($(this).val()) != "") {
+                            arrayGrammars[k] = $.trim($(this).val());
                         }
                         else
                         {
@@ -789,8 +789,8 @@
                     });
                     var k = 0;
                     vocAnalyses.each(function () {
-                        if ($(this).val() != "") {
-                            arrayVocAnalyses[k] = $(this).val();
+                        if ($.trim($(this).val()) != "") {
+                            arrayVocAnalyses[k] = $.trim($(this).val());
                         }
                         else
                         {
@@ -949,9 +949,9 @@
                     //遍覽每個元素，準備給值
                     vocs.each(function () {
                         //檢查是否為空值
-                        if ($(this).val() != "") {
+                        if ($.trim($(this).val()) != "") {
                             //不是才放進集合中
-                            arrayVocs[p] = $(this).val();
+                            arrayVocs[p] = $.trim($(this).val());
                         }
                         else
                         {
@@ -997,9 +997,9 @@
                     //遍覽每個元素，準備給值
                     chinese.each(function () {
                         //檢查是否為空值
-                        if ($(this).val() != "") {
+                        if ($.trim($(this).val()) != "") {
                             //不是才放進集合中
-                            arrayChinese[t] = $(this).val();
+                            arrayChinese[t] = $.trim($(this).val());
 
                         }
                         else
