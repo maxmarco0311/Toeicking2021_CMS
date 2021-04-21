@@ -103,9 +103,12 @@ namespace Toeicking2021.Controllers
                 administrator.ResetPasswordCode = _mailService.GetValidateCode(6);
                 #region 寄信流程
                 // 取得專案根目錄路徑
-                string ContentRoot = _env.ContentRootPath;
+                //string ContentRoot = _env.ContentRootPath;
+                // 取得wwwroot根目錄路徑
+                string WebRoot = _env.WebRootPath;
+                string path = Path.Combine(WebRoot, "templates", "RegisterEmailTemplate.html");
                 // 讀取驗證信範本的html字串
-                string TempMail = System.IO.File.ReadAllText(ContentRoot + @"/Views/Shared/RegisterEmailTemplate.html");
+                string TempMail = System.IO.File.ReadAllText(path);
                 // 獲得post進來的request url(也就是Get的url)(套件Microsoft.AspNetCore.Http.Extensions)
                 var url = UriHelper.GetEncodedUrl(_httpContextAccessor.HttpContext.Request);
                 // 宣告Email驗證用的Url物件(可製造帶參數導向動作方法的url物件)
@@ -143,9 +146,9 @@ namespace Toeicking2021.Controllers
                     return RedirectToAction(nameof(RegisterResult),
                         new { result = EncryptionHelper.UrlEncodeThenEncrypt(key, "sad error") });
                 }
-                // 註冊成功，寄出驗證信
+                //註冊成功，寄出驗證信
                 await _mailService.SendEmailAsync(mailRequest);
-                // 導向註冊結果頁
+                //導向註冊結果頁
                 return RedirectToAction(nameof(RegisterResult)
                     , new
                     {
@@ -161,6 +164,7 @@ namespace Toeicking2021.Controllers
                 // 將兩個密碼文字框清空(賦值null)後，將傳入參數的整個物件回傳給view
                 administrator.PassWord = null;
                 return View(administrator);
+
             }
 
         }
@@ -388,9 +392,12 @@ namespace Toeicking2021.Controllers
                 // 寄重設密碼驗證信
                 #region 寄信流程
                 // 取得專案根目錄路徑
-                string ContentRoot = _env.ContentRootPath;
+                //string ContentRoot = _env.ContentRootPath;
+                // 取得wwwroot根目錄路徑
+                string WebRoot = _env.WebRootPath;
+                string path = Path.Combine(WebRoot, "templates", "RegisterEmailTemplate.html");
                 // 讀取驗證信範本的html字串
-                string TempMail = System.IO.File.ReadAllText(ContentRoot + @"/Views/Shared/ForgotPasswordEmailTemplate.html");
+                string TempMail = System.IO.File.ReadAllText(path);
                 // 獲得post進來的request url(也就是Get的url)(套件Microsoft.AspNetCore.Http.Extensions)
                 var url = UriHelper.GetEncodedUrl(_httpContextAccessor.HttpContext.Request);
                 // 宣告Email驗證用的Url物件(可製造帶參數導向動作方法的url物件)
@@ -472,7 +479,7 @@ namespace Toeicking2021.Controllers
         #region 密碼重設(Get)
         public IActionResult ResetPassword(string e)
         {
-            if (e!=null)
+            if (e != null)
             {
                 // 檢查如果e包含"@"代表已登入要重設密碼(從Layout傳過來)，反之是從email驗證過來的
                 if (e.Contains("@"))

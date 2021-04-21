@@ -1,5 +1,6 @@
-﻿@*綁定繫結的型別*@
+﻿
 @model Toeicking2021.Models.Administrator
+
 @{
     Layout = null;
 }
@@ -50,7 +51,7 @@
             <a href="index.html" class="logo-lg"><i class="mdi mdi-radar"></i> <span>註冊</span> </a>
         </div>
         @*from標籤使用TagHelper會自動產生權杖，但action端還是要加[ValidateAntiForgeryToken]搭配*@
-        <form class="form-horizontal m-t-20" method="post">
+        <form class="form-horizontal m-t-20" asp-action="Register" method="post">
 
             <div class="form-group row">
                 <div class="col-12">
@@ -100,7 +101,7 @@
             <div class="form-group text-right m-t-20">
                 <div class="col-xs-12">
                     @*若按鈕標籤有奇怪，把waves-effects拿掉*@
-                    <input id="register" asp-action="Register" class="btn btn-primary btn-custom waves-light w-md" type="submit" value="註冊">
+                    <input id="register" class="btn btn-primary btn-custom waves-light w-md" type="submit" value="註冊">
                 </div>
             </div>
 
@@ -109,11 +110,9 @@
                     <a asp-action="Login" class="text-muted">已經註冊了？</a>
                 </div>
             </div>
-
+        <input type="hidden" value="測試路徑"/>
         </form>
     </div>
-    @*spinner overlay*@
-    <div id="loader" class="lds-dual-ring hidden overlay"></div>
 
     <script>
         var resizefunc = [];

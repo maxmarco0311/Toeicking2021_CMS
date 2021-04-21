@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>f7a6f216-e7ab-4d34-b154-4ff245a1a393</UserSecretsId>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\templates\RegisterEmailTemplate.html" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
@@ -24,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\templates\RegisterEmailTemplate.html" />
     <None Include="wwwroot\voice_test\en-AU-Wavenet-C.mp3" />
     <None Include="wwwroot\voice_test\en-US-Wavenet-J.mp3" />
   </ItemGroup>

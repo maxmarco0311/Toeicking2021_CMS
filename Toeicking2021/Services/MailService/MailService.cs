@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using MailKit.Security;
 using MailKit.Net.Smtp;
-
+using System.Net;
 
 namespace Toeicking2021.Services.MailService
 {

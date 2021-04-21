@@ -98,7 +98,7 @@
                     <li class="list-inline-item dropdown notification-list">
                         <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
                            aria-haspopup="false" aria-expanded="false">
-                            <img src="~/images/myphoto.JPG" alt="user" class="rounded-circle">
+                            <img src="~/images/myphoto.jpg" alt="user" class="rounded-circle">
                         </a>
                         <!--<div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">-->
                         <!-- item-->
@@ -184,7 +184,8 @@
                                 <i class="ti-light-bulb"></i><span><b>其它</b></span><span class="menu-arrow"></span>
                             </a>
                             <ul class="list-unstyled">
-                                <li><a asp-controller="Home" asp-action="ResetPassword" asp-route-e="@userEmail">重設密碼</a></li>
+                                @*asp-route-e="@userEmail"*@
+                                <li><a asp-controller="Home" asp-action="ResetPassword">重設密碼</a></li>
                                 <li><a asp-controller="Home" asp-action="Logout">登出</a></li>
                             </ul>
                         </li>
