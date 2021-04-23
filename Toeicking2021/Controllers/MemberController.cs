@@ -121,7 +121,10 @@ namespace Toeicking2021.Controllers
                                 // 參數值先編碼再加密
                                 e = EncryptionHelper.UrlEncodeThenEncrypt(key, administrator.Email),
                                 c = EncryptionHelper.UrlEncodeThenEncrypt(key, administrator.Authcode)
-                            })
+                            }),
+                    // 將url轉為https
+                    Scheme = "https",
+                    Port = 443
 
                 };
                 // 轉成url字串(處理編碼的部份)
@@ -164,6 +167,7 @@ namespace Toeicking2021.Controllers
                 // 將兩個密碼文字框清空(賦值null)後，將傳入參數的整個物件回傳給view
                 administrator.PassWord = null;
                 return View(administrator);
+
 
             }
 
@@ -381,7 +385,7 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
-        #region 忘記密碼(Post)
+        #region 忘記密碼(Post)(寄信)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(string Email)
@@ -395,7 +399,7 @@ namespace Toeicking2021.Controllers
                 //string ContentRoot = _env.ContentRootPath;
                 // 取得wwwroot根目錄路徑
                 string WebRoot = _env.WebRootPath;
-                string path = Path.Combine(WebRoot, "templates", "RegisterEmailTemplate.html");
+                string path = Path.Combine(WebRoot, "templates", "ForgotPasswordEmailTemplate.html");
                 // 讀取驗證信範本的html字串
                 string TempMail = System.IO.File.ReadAllText(path);
                 // 獲得post進來的request url(也就是Get的url)(套件Microsoft.AspNetCore.Http.Extensions)
@@ -410,7 +414,10 @@ namespace Toeicking2021.Controllers
                                 // 參數值先編碼再加密
                                 e = EncryptionHelper.UrlEncodeThenEncrypt(key, administrator.Email),
                                 c = EncryptionHelper.UrlEncodeThenEncrypt(key, administrator.ResetPasswordCode)
-                            })
+                            }),
+                    // 將url轉為https
+                    Scheme = "https",
+                    Port = 443
 
                 };
                 // 轉成url字串(處理編碼的部份)

@@ -35,12 +35,17 @@
                             <option value="1.5">1.5</option>
                         </select>
                     </div>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control" id="senNum" name="senNum" placeholder="金句編號" />
+                    </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-12">
                         <textarea id="text" name="text" class="form-control sentence" rows="4" style='width: 100%;'></textarea>
                     </div>
                 </div>
+                @*隱藏欄位*@
+                <input type="hidden" id="result" value="@ViewBag.result"/>
             </div>
         </div>
         <div class="row">
@@ -50,4 +55,36 @@
         </div>
     </form>
 </div>
+
+@section bottomScripts{
+    <script>
+        $(function () {
+            if ($("#result").val()!="") {
+                if ($("#result").val() === "success") {
+                    swal(
+                        {
+                            title: '成功',
+                            text: '音檔新增成功',
+                            type: 'success'
+                        }
+
+                    );
+                } else {
+                    swal(
+                        {
+                            title: '音檔新增失敗',
+                            text: $("#result").val(),
+                            type: 'error'
+                        }
+                    );
+                }
+            }
+            
+
+        });
+
+
+    </script>
+}
+
 
