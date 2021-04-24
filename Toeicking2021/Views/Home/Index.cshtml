@@ -2,10 +2,19 @@
     ViewData["Title"] = "多益金後台管理系統";
 }
 
-<div class="text-center" style="margin-top: auto; margin-bottom: auto;">
-    <h1 class="display-4" >歡迎進入多益金後台管理系統</h1>
-
+@*<h1 style="text-align:center;font-weight:bold; font-size:300%;" class="title"></h1>
+    <br />*@
+<h1 style="text-align:center;font-weight:bold;font-size:80px;">多益金後台管理系統</h1>
+<br />
+@*<h4 style="font-style:italic;text-align:center; ">created by Max Ching</h4>
+    <br />*@
+<h1 style="text-align:center;font-weight:bold; font-size:300%;" class="title"></h1>
+<br />
+<div style="text-align: center; ">
+    <img src="~/images/bigdata.jfif" style="height: 300px; width: 500px;" />
 </div>
+
+
 <input type="hidden" id="AlertHint" value=@ViewBag.AlertHint />
 <input type="hidden" id="HintMessage" value=@ViewBag.HintMessage />
 
@@ -26,7 +35,7 @@
             }
 
         });
-        
+
 
     </script>
 }

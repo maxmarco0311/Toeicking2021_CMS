@@ -10,16 +10,17 @@ namespace Toeicking2021.Utilities
 {
     public class GoogleTTS
     {
-        // 檔名腔調轉換
+        #region 檔名腔調轉換
         public static Dictionary<string, string> AccentMapper { get; } = new Dictionary<string, string>
         {
             { "en-US-Wavenet-J","USM"},
-            { "en-US-Wavenet-E","USF"},
+            { "en-US-Wavenet-F","USF"},
             { "en-GB-Wavenet-B","GBM"},
-            { "en-GB-Wavenet-C","GBF"},
+            { "en-GB-Wavenet-F","GBF"},
             { "en-AU-Wavenet-B","AUM"},
             { "en-AU-Wavenet-C","AUF"}
         };
+        #endregion
 
         #region 生語音檔
         public static string GenerateVoice(string text, string accent, string rate, string senNum, string webdir) 
@@ -142,13 +143,17 @@ namespace Toeicking2021.Utilities
 
         }
         #endregion
+
+        #region 建立檔案的基底路徑(網站資料夾路徑)
         public static string GenerateBaseDirectory(string webdir) 
         {
             // wwwroot資料夾下的vouce資料夾手動建，更改wwwroot資料夾權限後，其權限也一起更改
             // 但程式裡面也要寫進voice
             return "/var/www/" + webdir + "/wwwroot/voice";
         }
+        #endregion
 
+        #region 拼出自訂檔名路徑字串
         public static string FilePathHelper(string FilePath, string senNum, string accent, string rate, string BaseDirectory)
         {
             // 檢查語速資料夾是否建立
@@ -156,15 +161,19 @@ namespace Toeicking2021.Utilities
             {
                 Directory.CreateDirectory(FilePath);
             }
+            // 判斷國家
+            string nation = AccentMapper[accent].Substring(0, 2);
+            // 判斷男女腔調
+            string gender = AccentMapper[accent].Contains("M") ? "M" : "F";
             // 拼接檔名字串
-            string FileName = senNum + "_" + rate + "_" + AccentMapper[accent] + ".mp3";
+            string FileName = senNum + "_" + rate + "_" + nation + "_" + gender+ ".mp3";
             // 將檔名字串加入，生出最終完整檔案路徑
             FilePath = Path.Combine(BaseDirectory, senNum, rate, FileName);
-            // 回傳路徑為: /var/www/voice.toeicking.com/wwwroot/voice/1/0.75/1_0.75_AUM.mp3
+            // 回傳路徑為: /var/www/voice.toeicking.com/wwwroot/voice/1/0.75/1_0.75_AU_M.mp3
             return FilePath;
 
         }
-
+        #endregion
 
 
     }
