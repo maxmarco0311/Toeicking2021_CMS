@@ -22,7 +22,7 @@ namespace Toeicking2021.Utilities
         };
         #endregion
 
-        #region 生語音檔
+        #region 生單一語音檔
         public static string GenerateVoice(string text, string accent, string rate, string senNum, string webdir) 
         {
             string result = "initial";
@@ -83,6 +83,34 @@ namespace Toeicking2021.Utilities
             return result;
 
 
+        }
+        #endregion
+
+        #region 迴圈生語音檔
+        public static string GenerateVoiceSet(string text, string senNum, string webdir)
+        {
+            string result;
+            try
+            {
+                // 語速陣列
+                string[] rates = new string[] { "0.75", "1.0", "1.25" };
+                // 語速迴圈
+                foreach (var rate in rates)
+                {
+                    // 腔調迴圈
+                    foreach (var item in AccentMapper)
+                    {
+                        GenerateVoice(text, item.Key, rate, senNum, webdir);
+                    }
+                }
+                result = "success";
+
+            }
+            catch (Exception ex)
+            {
+                result = ex.InnerException.ToString() + "\n" + ex.Message;
+            }
+            return result;
         }
         #endregion
 

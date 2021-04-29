@@ -24,11 +24,12 @@ namespace Toeicking2021.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GenerateVoice(string text, string accent, string rate, string senNum)
+        public IActionResult GenerateVoice(string text, string senNum)
         {
             // 存放音檔的網站資料夾名稱
             string webdir = "voice.toeicking.com";
-            string result = GoogleTTS.GenerateVoice(text, accent, rate, senNum, webdir);
+            //string result = GoogleTTS.GenerateVoice(text, accent, rate, senNum, webdir);
+            string result = GoogleTTS.GenerateVoiceSet(text, senNum, webdir);
             ViewBag.result = result;
             return View();
         }

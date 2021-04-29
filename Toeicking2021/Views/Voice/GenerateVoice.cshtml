@@ -1,22 +1,22 @@
 ﻿
 @{
-    ViewData["Title"] = "Google TTS Test";
+    ViewData["Title"] = "語音生成";
 }
 
 <div class="card-box">
     <div class="row">
         <div class="col-md-12 col-sm-12">
-            <label><b>Google TTS Test</b></label>
+            <label><b>語音生成</b></label>
         </div>
     </div>
     <form asp-action="GenerateVoice" method="post">
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group row">
-                    <div class="col-lg-2">
-                        <select id="accent" name="accent" class="form-control">
+                    <!--<div class="col-lg-2">
+                        <select id="accent" name="accent" class="form-control">-->
                             @*沒有寫value值，value值會等於text值*@
-                            <option value="">腔調-請選擇</option>
+                            <!--<option value="">腔調-請選擇</option>
                             <option value="en-US-Wavenet-J">美國腔(男)</option>
                             <option value="en-US-Wavenet-F">美國腔(女)</option>
                             <option value="en-GB-Wavenet-B">英國腔(男)</option>
@@ -34,7 +34,7 @@
                             <option value="1.25">1.25</option>
                             <option value="1.5">1.5</option>
                         </select>
-                    </div>
+                    </div>-->
                     <div class="col-lg-2">
                         <input type="text" class="form-control" id="senNum" name="senNum" placeholder="金句編號" />
                     </div>

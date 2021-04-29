@@ -221,8 +221,6 @@
 
 @*資料表呈現處，被表格replace with的div(id要一樣)*@
 <div id="change"></div>
-@*spinner overlay*@
-@*<div id="loader" class="lds-dual-ring hidden overlay"></div>*@
 
 @*footable檔案需在topScripts位置*@
 @section topScripts{
@@ -233,14 +231,15 @@
     <script src="~/lib/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
 
     @*footable的js檔*@
-    @*<script src="~/lib/plugins/footable/js/footable.all.min.js"></script>
-        <script src="~/lib/assets/pages/jquery.footable.js"></script>*@
+    <script src="~/lib/plugins/footable/js/footable.all.min.js"></script>
+    <script src="~/lib/assets/pages/jquery.footable.js"></script>
     <script src="~/lib/assets/pages/jquery.form-advanced.init.js"></script>
 }
 
 @section bottomScripts{
     @*按鈕spinner的js檔*@
     <script src="~/js/button-inline-loader.js"></script>
+
     <script>
         $(function () {
             // 初載入時設定skipOffset為0筆
