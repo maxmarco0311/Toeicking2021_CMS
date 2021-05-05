@@ -20,7 +20,8 @@ namespace Toeicking2021.Services.SentenceDBService
         Task<string> UpdateVocAnalysis(List<VA> vocAnalyses);
         Task<string> UpdateVoc(List<Vocabulary> vocabularies);
         Task<string> AddCheckTime(int sentenceId);
-
+        IQueryable<Sentence> GetSentencesWithoutVoice();
+        Task<string> UpdateHasAudio(int sentenceId);
 
 
     }

@@ -330,6 +330,39 @@ namespace Toeicking2021.Services.SentenceDBService
         }
         #endregion
 
+        #region 查出沒有音檔的句子
+        public IQueryable<Sentence> GetSentencesWithoutVoice()
+        {
+            IQueryable<Sentence> sentences = _context.Sentences.Where(s => s.HasAudio == false);
+            return sentences;
+        }
+        #endregion
+
+        public async Task<string> UpdateHasAudio(int sentenceId)
+        {
+            string result;
+            try
+            {
+                Sentence sentence = await _context.Sentences.FindAsync(sentenceId);
+                if (sentence!=null)
+                {
+                    sentence.HasAudio = true;
+                    _context.Sentences.Update(sentence);
+                    await _context.SaveChangesAsync();
+                    result = "1";
+                }
+                else
+                {
+                    result = "找不到此金句！";
+                }
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+            }
+            return result;
+
+        }
 
 
 

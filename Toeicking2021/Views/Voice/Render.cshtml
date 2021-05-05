@@ -1,0 +1,220 @@
+﻿@model Toeicking2021.Utilities.PaginatedList<Sentence>
+
+<div id="change" class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <!--footable套用-->
+            <table id="demo-foo-filtering" class="table table-responsive table-bordered table-hover toggle-circle m-b-0">
+                <!--表頭-->
+                <thead>
+                    <tr>
+                        <!--泛型類別無法使用Html.DisplayNameFor()，因為點不出資料物件成員-->
+                        <th data-toggle="true">編號</th>
+                        <th>多益必考金句</th>
+                        <th>中文翻譯</th>
+                        <th>功能</th>
+                        <!--data-hide="phone, tablet"在手機、平板會隱藏，data-hide="all"在所有裝置都會隱藏-->
+                    </tr>
+                </thead>
+
+                <!--資料列-->
+                <tbody id="table">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <label id="@item.SentenceId" name="" class="sentence_id">@item.SentenceId</label>
+                            </td>
+                            <td>
+                                <textarea id="@item.SentenceId" name="" class="form-control sentence" rows="4" style='width: 100%;'>@item.Sen</textarea>
+                            </td>
+                            <td>
+                                <textarea id="@item.SentenceId" name="" class="form-control chinese" rows="4" style='width: 100%;'>@item.Chinesese</textarea>
+                            </td>
+                            @*資料格內容置中*@
+                            @*spinner所需的class及屬性值動態生*@
+                            <td style="vertical-align: middle;">
+                                <button class="generateVoice btn btn-primary btn-block waves-light" data-loading-text="">建立音檔</button>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+                <!--表尾分頁-->
+                <tfoot>
+                    <tr class="active">
+                        <!--colspan的屬性值是表格的欄位數-->
+                        <td colspan="4">
+                            <div class="text-right">
+                                <!--會固定存在與生成的標籤就不要放在foreach內(如ul和所有非頁碼的li)-->
+                                <!--ul標籤中pagination拿掉才不會自動產生li，往右浮動style="float: right;-->
+                                <ul class="pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
+                                    @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按第一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1) ? "" : "disabled")">
+                                        <!--第一頁標籤-->
+                                        @*新版obtrusive語法要寫成data-ajax-mode="replace-with"*@
+                                        <a class="skipOffset" data-page="first" asp-action="Render" asp-route-Page="1"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with"
+                                           data-ajax-update="#change">
+                                            首頁
+                                        </a>
+                                    </li>
+                                    @*(Model.PageIndex > 1)為false代表現在為第一頁，加上disabled這個class，不能按上一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex > 1) ? "" : "disabled")">
+                                        <!--上一頁標籤-->
+                                        <a class="skipOffset" data-page="prev" asp-action="Render" asp-route-Page="@(Model.PageIndex - 1)"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with"
+                                           data-ajax-update="#change">
+                                            上一頁
+                                        </a>
+                                    </li>
+                                    <!--這裡的for迴圈要生的是數字頁碼<li>(目前頁及其前後N頁，)，需跟Model繫結。
+                                        注意迴圈數字是目前頁前"減N"後"加N+1"-->
+                                    @for (var i = (Model.PageIndex - 5); i < (Model.PageIndex + 6); i++)
+                                    {
+                                        //在第一頁到最後一頁的範圍
+                                        if ((i > 0) && (i <= Model.TotalPages))
+                                        {
+                                            // 生目前頁
+                                            if (i == Model.PageIndex)
+                                            {
+                                                <li class="footable-page active">
+                                                    <!--目前頁標籤(有active)-->
+                                                    @*版型預設data-page屬性值比實際頁碼多1*@
+                                                    <a data-page="@(i + 1)" href="#">@i</a>
+                                                </li>
+                                            }
+                                            // 生非目前頁
+                                            else
+                                            {
+                                                <li class="footable-page">
+                                                    <!--不是目前頁的某一頁標籤-->
+                                                    <a class="skipOffset" data-page="@(i + 1)" asp-action="Render" asp-route-Page="@i"
+                                                       asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete"
+                                                       data-ajax-mode="replace-with" data-ajax-update="#change">
+                                                        @i
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                    @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按下一頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages) ? "" : "disabled")">
+                                        <!--下一頁標籤-->
+                                        <a class="skipOffset" data-page="next" asp-action="Render" asp-route-Page="@(Model.PageIndex + 1)"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with"
+                                           data-ajax-update="#change">
+                                            下一頁
+                                        </a>
+                                    </li>
+                                    @*(Model.PageIndex < Model.TotalPages)為false代表現在是最後一頁，不能按最末頁*@
+                                    <li class="footable-page-arrow @((Model.PageIndex < Model.TotalPages) ? "" : "disabled")">
+                                        <!--最末頁標籤-->
+                                        <a class="skipOffset" data-page="last" asp-action="Render" asp-route-Page="@Model.TotalPages"
+                                           asp-route-PageSize="@ViewBag.PageSize" data-ajax="true" data-ajax-complete="onComplete" data-ajax-mode="replace-with"
+                                           data-ajax-update="#change">
+                                            末頁
+                                            @*data-ajax-begin="onBegin" onclick="onBegin"*@
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@*顯示查詢結果*@
+<input type="hidden" id="result" name="result" value="@ViewBag.result">
+
+<script>
+    // 若是PartialView裡的unobtrusive ajax需要呼叫的函式，就要寫在PartialView裡，寫在ParentView裡呼叫不到
+    function onComplete() {
+        $('html,body').animate({ scrollTop: 0 }, 500);
+    }
+    // 生音檔
+    $(".generateVoice").on("click", function () {
+        //先把按鈕存起來
+        var thisBtn = $(this);
+        swal({
+            title: '注意',
+            text: '確定要產生音檔嗎？',
+            type: 'warning',
+            showCancelButton: true,
+        }).then((result) => {
+            if (result) {
+                // 生spinner所需的class及屬性值
+                $(thisBtn).addClass("button-loader");
+                // 要用attr()
+                $(thisBtn).attr("data-loading-text", "<i class='fa fa-spinner fa-spin'></i> 建立中‧‧‧");
+                //取值
+                var text = $.trim($(this).parent().siblings().find(".sentence").val());
+                var senNum = $.trim($(this).parent().siblings().find(".sentence_id").text());
+                $.ajax({
+                    url: '@Url.Content("~/Voice/GenerateAudioFiles")',
+                    data: { text: text, senNum: senNum },
+                    async: true,
+                    beforeSend: function () {
+                        // 按鈕spinner開始
+                        $('.button-loader').button('loading');
+                    },
+                    complete: function () {
+                        // 按鈕spinner結束
+                        $('.button-loader').button('reset');
+                    },
+                    success: function (response) {
+                        var swal_judge = response;
+                        if (swal_judge == "1") {
+                            swal(
+                                {
+                                    title: '完成',
+                                    text: '音檔建立成功！',
+                                    type: 'success'
+                                }
+
+                            ).then((result) => {
+                                if (result) {
+                                    // 將按鈕隱藏
+                                    $(thisBtn).hide();
+                                }
+
+                            });
+
+                        }
+                        else{
+                            swal(
+                                {
+                                    title: '糟糕',
+                                    text: swal_judge.toString(),
+                                    type: 'error'
+                                }
+                            );
+
+                        }
+
+                    },
+                    error: function (error) {
+                        swal(
+                            {
+                                title: '糟糕',
+                                text: swal_judge.toString(),
+                                type: 'error'
+                            }
+                        );
+
+                    }
+
+                });
+
+
+            }
+
+        });
+
+
+    });
+
+</script>

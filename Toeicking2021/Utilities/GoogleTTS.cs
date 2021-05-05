@@ -103,7 +103,7 @@ namespace Toeicking2021.Utilities
                         GenerateVoice(text, item.Key, rate, senNum, webdir);
                     }
                 }
-                result = "success";
+                result = "1";
 
             }
             catch (Exception ex)

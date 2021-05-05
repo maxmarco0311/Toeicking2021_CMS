@@ -2,7 +2,30 @@
 @{
     ViewData["Title"] = "語音生成";
 }
+@section bottomCSS{
+    <style type="text/css">
+        /*關鍵字框寬度*/
+        .a.form-control.mr-4 {
+            width: 80px;
+        }
+        /*目前頁highlight*/
+        /*">"是選直接子元素，"(空一格)"是選所有後代元素*/
+        .footable-page.active > a {
+            background-color: #3bafda;
+            border-color: #3bafda;
+        }
+        /*不能點按的按鈕*/
+        .footable-page-arrow.disabled > a {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        /*ul靠右*/
+        tfoot ul {
+            float: right;
+        }
+    </style>
 
+}
 <div class="card-box">
     <div class="row">
         <div class="col-md-12 col-sm-12">
@@ -13,53 +36,59 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group row">
-                    <!--<div class="col-lg-2">
-                        <select id="accent" name="accent" class="form-control">-->
-                            @*沒有寫value值，value值會等於text值*@
-                            <!--<option value="">腔調-請選擇</option>
-                            <option value="en-US-Wavenet-J">美國腔(男)</option>
-                            <option value="en-US-Wavenet-F">美國腔(女)</option>
-                            <option value="en-GB-Wavenet-B">英國腔(男)</option>
-                            <option value="en-GB-Wavenet-F">英國腔(女)</option>
-                            <option value="en-AU-Wavenet-B">澳洲腔(男)</option>
-                            <option value="en-AU-Wavenet-C">澳洲腔(女)</option>
-                        </select>
-                    </div>
                     <div class="col-lg-2">
-                        <select id="rate" name="rate" class="form-control">
-                            <option value="">語速-請選擇</option>
-                            <option value="0.5">0.5</option>
-                            <option value="0.75">0.75</option>
-                            <option value="1.0">1.0</option>
-                            <option value="1.25">1.25</option>
-                            <option value="1.5">1.5</option>
+                        <select id="PageSize" name="PageSize" class="form-control">
+                            <option value="5">每頁5筆</option>
+                            <option value="15">每頁15筆</option>
+                            <option value="20">每頁20筆</option>
+                            <option value="25">每頁25筆</option>
+                            <option value="30">每頁30筆</option>
                         </select>
-                    </div>-->
-                    <div class="col-lg-2">
-                        <input type="text" class="form-control" id="senNum" name="senNum" placeholder="金句編號" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-lg-12">
-                        <textarea id="text" name="text" class="form-control sentence" rows="4" style='width: 100%;'></textarea>
                     </div>
                 </div>
                 @*隱藏欄位*@
-                <input type="hidden" id="result" value="@ViewBag.result"/>
+                <input type="hidden" id="result" value="@ViewBag.result" />
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <input type="submit" value="取得音檔" class="btn btn--lg btn-block btn-primary waves-light mt-3" style="color:white; letter-spacing:1.5px;" />
+                <buttton id="retrieve" class="btn btn--lg btn-block btn-primary waves-light mt-3" style="color:white; letter-spacing:1.5px;">查詢資料</buttton>
             </div>
         </div>
     </form>
 </div>
+@*資料表呈現處，被表格replace with的div(id要一樣)*@
+<div id="change"></div>
+
 
 @section bottomScripts{
+    @*按鈕spinner的js檔*@
+    <script src="~/js/button-inline-loader.js"></script>
     <script>
         $(function () {
-            if ($("#result").val()!="") {
+            $("#retrieve").on("click", function () {
+                // 用此完整的寫法，使用async屬性和done()強調非同步請求，若是查無資料後，再繼續查可以正常顯示
+                    $.ajax({
+                        url: "@Url.Content("~/Voice/GenerateVoice")",
+                        data: { PageSize: $("#PageSize").val()},
+                        async: true,
+                        // spinner開始
+                        beforeSend: function () {
+                            // 按鈕
+                            $('.button-loader').button('loading');
+                        },
+                        // spinner結束
+                        complete: function () {
+                            $('.button-loader').button('reset');
+                        },
+                    }).done(function (response) {
+                        // response是動作方法回傳的PartialView，要用replaceWith()去置換空的<div id="change">置換才會顯示
+                        $("#change").replaceWith(response);
+                        // 移到表格處
+                        $('html,body').animate({ scrollTop: 300 }, 100);
+                    });
+            });
+            if ($("#result").val() != "") {
                 if ($("#result").val() === "success") {
                     swal(
                         {
@@ -79,7 +108,7 @@
                     );
                 }
             }
-            
+
 
         });
 
