@@ -15,6 +15,7 @@ namespace Toeicking2021.Services.SentenceDBService
         Task<List<GA>> GetGrammarsBySentenceId(int sentenceId);
         Task<List<VA>> GetVocAnalysesBySentenceId(int sentenceId);
         Task<List<Vocabulary>> GetVocabularyBySentenceId(int sentenceId);
+        Task<List<Vocabulary>> GetAllVocabularies();
         Task<string> UpdateSentence(int sentenceId, string sentence, string chinese);
         Task<string> UpdateGrammars(List<GA> grammars);
         Task<string> UpdateVocAnalysis(List<VA> vocAnalyses);

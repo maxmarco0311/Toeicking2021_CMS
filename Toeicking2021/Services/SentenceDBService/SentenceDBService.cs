@@ -159,6 +159,13 @@ namespace Toeicking2021.Services.SentenceDBService
         }
         #endregion
 
+        #region 取出所有字彙
+        public async Task<List<Vocabulary>> GetAllVocabularies()
+        {
+            return await _context.Vocabularies.ToListAsync();
+        }
+        #endregion
+
         #region 更新句子
         public async Task<string> UpdateSentence(int sentenceId, string sen, string chinese)
         {
@@ -338,6 +345,7 @@ namespace Toeicking2021.Services.SentenceDBService
         }
         #endregion
 
+        #region 建立音檔(改為True)
         public async Task<string> UpdateHasAudio(int sentenceId)
         {
             string result;
@@ -363,7 +371,7 @@ namespace Toeicking2021.Services.SentenceDBService
             return result;
 
         }
-
+        #endregion
 
 
 

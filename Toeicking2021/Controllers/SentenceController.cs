@@ -271,7 +271,28 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
+        [HttpPost]
+        public async Task<IActionResult> CheckRepetitiveWords()
+        {
+            List<CheckVoc> formData = await JsonParser.FromRequestBody<List<CheckVoc>>(Request.Body);
+            List<Vocabulary> vocabularies = await _sentenceDBService.GetAllVocabularies();
+            string repetitveWords = "";
+            foreach (var item in formData)
+            {
+                foreach (var vocabulary in vocabularies)
+                {
+                    if (vocabulary.Voc==item.Voc && vocabulary.Category==item.Category)
+                    {
+                        repetitveWords = repetitveWords + $"{vocabulary.Voc} ({vocabulary.Category}.),";
+                    }
+                }
+            }
+            string response = repetitveWords != "" ? repetitveWords.TrimEnd(',') : "0";
+            return Json(response);
 
+        }
+
+       
     }
 
 }

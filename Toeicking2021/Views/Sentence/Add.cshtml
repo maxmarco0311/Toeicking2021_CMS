@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group">
                     <label for="context" class="h4"><b>情境：</b></label>
-                    <select asp-for="@Model.Sentence.Context" asp-items="ViewBag.ContextCategories" id="context" class="word-form form-control">
+                    <select asp-for="@Model.Sentence.Context" asp-items="ViewBag.ContextCategories" id="context" class="form-control">
                     </select>
                 </div>
                 <div class="form-group" id="grammar-category">
@@ -84,45 +84,52 @@
                             <option value="11">未來完成式</option>
                             <option value="12">未來完成進行式</option>
                         </optgroup>
+                        <optgroup label="語態">
+                            <option value="13">被動語態</option>
+                        </optgroup>
                         <optgroup label="名詞子句">
-                            <option value="13">that開頭</option>
-                            <option value="14">if/whether開頭</option>
-                            <option value="15">wh-疑問詞開頭</option>
+                            <option value="14">that開頭</option>
+                            <option value="15">if/whether開頭</option>
+                            <option value="16">wh-疑問詞開頭</option>
                         </optgroup>
                         <optgroup label="形容詞子句">
-                            <option value="16">修飾"人"</option>
-                            <option value="17">修飾"事物"</option>
-                            <option value="18">修飾"時間"</option>
-                            <option value="19">修飾"地點"</option>
-                            <option value="20">whose</option>
+                            <option value="17">修飾"人"</option>
+                            <option value="18">修飾"事物"</option>
+                            <option value="19">修飾"時間"</option>
+                            <option value="20">修飾"地點"</option>
+                            <option value="21">whose</option>
                         </optgroup>
                         <optgroup label="副詞子句">
-                            <option value="21">描述"時間"</option>
-                            <option value="22">描述"原因"</option>
-                            <option value="23">描述"對比"</option>
-                            <option value="24">描述"條件"</option>
-                            <option value="25">描述"目的"</option>
-                            <option value="26">假設語氣</option>
-                            <option value="27">其它副詞子句</option>
+                            <option value="22">描述"時間"</option>
+                            <option value="23">描述"原因"</option>
+                            <option value="24">描述"對比"</option>
+                            <option value="25">描述"條件"</option>
+                            <option value="26">描述"目的"</option>
+                            <option value="27">假設語氣</option>
+                            <option value="28">其它副詞子句</option>
                         </optgroup>
                         <optgroup label="子句減化">
-                            <option value="28">名詞子句減化</option>
-                            <option value="29">形容詞子句減化</option>
-                            <option value="30">副詞子句減化</option>
-                            <option value="31">接續發展</option>
-                            <option value="32">背景說明</option>
+                            <option value="29">名詞子句減化</option>
+                            <option value="30">形容詞子句減化</option>
+                            <option value="31">副詞子句減化</option>
+                            <option value="32">接續發展</option>
+                            <option value="33">背景說明</option>
                         </optgroup>
                         <optgroup label="介詞片語">
-                            <option value="33">單個介片</option>
-                            <option value="34">多個介片</option>
+                            <option value="34">單個介片</option>
+                            <option value="35">多個介片</option>
                         </optgroup>
                         <optgroup label="動狀詞">
-                            <option value="35">受詞為動名詞</option>
-                            <option value="36">受詞為不定詞</option>
+                            <option value="36">動名詞</option>
+                            <option value="37">不定詞</option>
                         </optgroup>
                         <optgroup label="問句">
-                            <option value="37">Yes/No問句</option>
-                            <option value="38">Wh-疑問句</option>
+                            <option value="38">Yes/No問句</option>
+                            <option value="39">Wh-疑問句</option>
+                        </optgroup>
+                        <optgroup label="對等連接">
+                            <option value="40">轉折詞</option>
+                            <option value="41">對等連接詞</option>
                         </optgroup>
                     </select>
                 </div>
@@ -183,7 +190,7 @@
                                 </select>
                             </div>
                             <div class="col-5">
-                                <input type="text" asp-for="@Model.Vocs[i-1].Chinese" id="@defId" class=" def form-control" placeholder="中文釋義" />
+                                <input type="text" asp-for="@Model.Vocs[i-1].Chinese" id="@defId" class="def form-control" placeholder="中文釋義" />
                             </div>
                         </div>
                     }
@@ -216,8 +223,8 @@
     <div class="card-box">
         <div class="row">
             <div class="col-6">
-                @*前端按鈕要加OnClientClick="return false"，modal按鈕要加屬性data-toggle="modal" data-target="#con-close-modal"，如果要用js控制就不用加*@
-                <button id="checkRepetition" class="btn btn-block btn--lg btn-outline-warning waves-light">檢查字彙重複</button>
+                @*button標籤要指定type為button，不然會submit*@
+                <button type="button" id="CheckRepetitiveWords" class="btn btn-block btn--lg btn-outline-warning waves-light">檢查字彙重複</button>
             </div>
             <div class="col-6">
                 @*表單送出的按鈕，要先將multi-select值從前端抓給隱藏欄位繫結回後端*@
@@ -473,6 +480,116 @@
                     );
                 }
             }
+
+            // 檢查字彙重複
+            $("#CheckRepetitiveWords").on("click", function () {
+                var vocs = $(".voc");
+                var categories = $(".word-form");
+                var defs = $(".def");
+                var arrayVocs = [];
+                var arrayCategories = [];
+                var arrayChinese = [];
+                var vocData = [];
+                function vocObj(voc, category, chinese) {
+                    //左邊voc_id是屬性，必須跟webservice裡類別的屬性名稱完全一樣，右邊是屬性值，為傳入的參數(名稱可自訂)。
+                    this.Voc = voc;
+                    this.Category = category;
+                    this.Chinese = chinese;
+                }
+                //自設迴圈計數器
+                var p = 0;
+                //遍覽每個元素，準備給值
+                vocs.each(function () {
+                    //檢查是否為空值
+                    if ($.trim($(this).val()) !== "") {
+                        //不是才放進集合中
+                        arrayVocs[p] = $.trim($(this).val());
+                    }
+                    //不要忘記計數器要加1
+                    p++;
+                });
+                //自設迴圈計數器
+                var k = 0;
+                //遍覽每個元素，準備給值
+                categories.each(function () {
+                    //檢查是否為空值
+                    if ($(this).val() !== "") {
+                        //不是才放進集合中
+                        arrayCategories[k] = $(this).val();
+                    }
+                    //不要忘記計數器要加1
+                    k++;
+                });
+                //自設迴圈計數器
+                var t = 0;
+                //遍覽每個元素，準備給值
+                defs.each(function () {
+                    //檢查是否為空值
+                    if ($.trim($(this).val()) !== "") {
+                        //不是才放進集合中
+                        arrayChinese[t] = $.trim($(this).val());
+                    }
+                    //不要忘記計數器要加1
+                    t++;
+                });
+                // 每個陣列的數量一樣才執行ajax
+                if (arrayVocs.length === arrayCategories.length && arrayCategories.length === arrayChinese.length) {
+                    for (var i = 0; i < arrayVocs.length; i++) {
+                        //新增物件給值並裝進陣列，準備回傳
+                        vocData[i] = new vocObj(arrayVocs[i], arrayCategories[i], arrayChinese[i]);
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Content("~/Sentence/CheckRepetitiveWords")',
+                        dataType: 'json',
+                        data: JSON.stringify(vocData),
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            alert(response);
+                            if (response === "0")
+                            {
+                                swal(
+                                    {
+                                        title: '檢查完成',
+                                        text: '沒有任何字彙與資料庫重複！',
+                                        type: 'success'
+                                    }
+
+                                );
+
+                            } else {
+                                alert("進來了");
+                                swal(
+                                    {
+                                        title: '以下字彙與資料庫重複：',
+                                        text: response,
+                                        type: 'error'
+                                    }
+                                );
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(xhr.readyState);
+                            alert(xhr.responseText);
+                        }
+
+
+                    });
+
+
+                } else {
+                    swal(
+                        {
+                            title: '錯誤',
+                            text: '三個控制項有值的數量不同！',
+                            type: 'error'
+                        }
+                    );
+                }
+
+
+            });
 
 
 

@@ -19,12 +19,12 @@ namespace Toeicking2021.Utilities
         {
             // 建立predicate變數，也就是where()的Lambda參數，New<T>的泛型是要查出的資料物件型別
             // 有可能只會回傳其中一個predicate，所以全部predicate變數都是宣告全域
-            // 最外層的predicate，可能會合併其他predicate
+            // 篩選順序1：最外層的predicate，可能會合併其他predicate
             var OuterPredicate = PredicateBuilder.New<Sentence>();
-            // 巢狀的predicate，通常內部條件是Or，然後再用And的方式併入OuterPredicate，也有可能不會合併(OuterPredicate沒有加入條件)
+            // 篩選順序2：巢狀的predicate，通常內部條件是Or，然後再用And的方式併入OuterPredicate，也有可能不會合併(OuterPredicate沒有加入條件)
             var InnerPredicate_Grammar = PredicateBuilder.New<Sentence>();
             var InnerPredicate_Part = PredicateBuilder.New<Sentence>();
-            // 處理布林值的predicate
+            // 篩選順序3：處理布林值的predicate
             var InnerPredicate_Booleans = PredicateBuilder.New<Sentence>();
             // 1. 篩選編號
             if (FormData.SenNum != null)
