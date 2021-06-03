@@ -24,7 +24,7 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
-        #region 生成語音(資料搜尋頁)
+        #region 生成語音資料搜尋頁
         public IActionResult GenerateVoice(string PageSize)
         {
             // 判斷是否為ajax get
@@ -53,7 +53,7 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
-        #region 生成語音(GET)
+        #region 生成語音檔(GET)
         public async Task<IActionResult> GenerateAudioFiles(string text, string senNum)
         {
             // 存放音檔的網站資料夾名稱

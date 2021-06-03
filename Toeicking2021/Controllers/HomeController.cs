@@ -11,6 +11,8 @@ namespace Toeicking2021.Controllers
 {
     public class HomeController : Controller
     {
+
+        #region 網站首頁
         [Authorize]
         public IActionResult Index()
         {
@@ -29,6 +31,8 @@ namespace Toeicking2021.Controllers
             }
             return View();
         }
+        #endregion
+
         #region 登出
         public async Task<IActionResult> Logout()
         {
@@ -40,11 +44,6 @@ namespace Toeicking2021.Controllers
         #endregion
 
 
-
-
-
-
-
-
     }
+
 }

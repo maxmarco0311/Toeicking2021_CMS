@@ -7,7 +7,10 @@ namespace Toeicking2021.Utilities
 {
     public class MultiSelectHelper
     {
+        // 多選前端只能取出text值，所以需要到後端進行處理才能取出value值
+        // 設定多選的Dictionary<text, value>，才能轉換
         // dictionary型別的靜態物件屬性，直接初始設定
+        #region 文法分類Dic
         public static Dictionary<string, string> GrammaryCategoriesDic { get; } = new Dictionary<string, string>
         {
             { "現在簡單式","1"}, { "現在進行式","2"}, { "現在完成式","3"}, { "現在完成進行式","4"}, { "過去簡單式","5"},
@@ -19,42 +22,50 @@ namespace Toeicking2021.Utilities
             { "副詞子句減化","31"}, { "接續發展","32"}, { "背景說明","33"}, { "單個介片","34"}, { "多個介片","35"},{ "動名詞","36"},
             { "不定詞","37"}, { "Yes/No問句","38"},{ "Wh-疑問句","39"}, { "轉折詞","40"}, { "對等連接詞","41"}
         };
+        #endregion
+
+        #region 大題分類Dic
         public static Dictionary<string, string> PartCategoriesDic { get; } = new Dictionary<string, string>
         {
             { "Part 1","1"}, { "Part 2","2"}, { "Part 3","3"}, { "Part 4","4"}, { "Part 5","5"},
             { "Part 6","6"}, { "Part 7","7"}
         };
+        #endregion
 
-        // 文法分類
+        #region 文法分類取value
         public static string TransferGrammarCategories(string keys)
         {
             // 靜態屬性可直接用
             return TransferToValueFromDic(keys, GrammaryCategoriesDic);
         }
+        #endregion
 
-        // 大題分類
+        #region 大題分類取value
         public static string TransferPartCategories(string keys)
         {
             return TransferToValueFromDic(keys, PartCategoriesDic);
         }
+        #endregion
 
-        // 基礎共用方法：將text字串(傳入參數)換成value字串回傳
+        # region 基礎共用方法：將以逗號連接各個text的字串(傳入參數)換成value字串回傳
         public static string TransferToValueFromDic(string keys, Dictionary<string, string> dic)
         {
+            // 組成text字串陣列
             string[] temp = keys.Split(",");
             string result = "";
             foreach (var item in temp)
             {
-
+                // 將每個text去配對Dic的key(也就是text)
                 if (dic.ContainsKey(item))
                 {
+                    // 利用dic[item]取出value
                     result += dic[item] + ",";
                 }
 
             }
             return result.TrimEnd(',');
         }
-
+        #endregion
 
 
     }

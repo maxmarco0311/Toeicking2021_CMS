@@ -104,7 +104,5 @@ namespace Toeicking2021.Services.MailService
         #endregion
 
 
-
-
     }
 }

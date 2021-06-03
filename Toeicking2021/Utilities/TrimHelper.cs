@@ -26,7 +26,6 @@ namespace Toeicking2021.Utilities
             {
                 item.Analysis = item.Analysis.Trim();    
             }
-
             return data;
         }
     }

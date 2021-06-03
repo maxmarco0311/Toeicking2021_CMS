@@ -10,6 +10,7 @@ namespace Toeicking2021.Utilities
 {
     public class JsonParser
     {
+        #region 解析ajax傳來的Json，轉成C#物件
         // 想要轉成甚麼型別的物件，就傳該型別的泛型到方法中
         public static async Task<T> FromRequestBody<T>(Stream stream) where T : new()
         {
@@ -26,8 +27,7 @@ namespace Toeicking2021.Utilities
             }
             return response;
         }
-
-
+        #endregion
 
 
     }

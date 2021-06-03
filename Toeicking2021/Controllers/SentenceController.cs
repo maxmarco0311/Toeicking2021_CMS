@@ -271,16 +271,20 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
+        #region 檢查字彙重複
         [HttpPost]
         public async Task<IActionResult> CheckRepetitiveWords()
         {
             List<CheckVoc> formData = await JsonParser.FromRequestBody<List<CheckVoc>>(Request.Body);
             List<Vocabulary> vocabularies = await _sentenceDBService.GetAllVocabularies();
             string repetitveWords = "";
+            // 將表單字彙跑迴圈
             foreach (var item in formData)
             {
+                // 資料庫字彙跑迴圈
                 foreach (var vocabulary in vocabularies)
                 {
+                    // 若兩者字彙及其詞性有重複，放進字串變數中，要送到前端
                     if (vocabulary.Voc==item.Voc && vocabulary.Category==item.Category)
                     {
                         repetitveWords = repetitveWords + $"{vocabulary.Voc} ({vocabulary.Category}.),";
@@ -288,11 +292,13 @@ namespace Toeicking2021.Controllers
                 }
             }
             string response = repetitveWords != "" ? repetitveWords.TrimEnd(',') : "0";
+            // 回傳ajax資料用return Json(response)，return Content(response)只在回傳一個字元時有效
             return Json(response);
-
         }
+        #endregion
 
-       
+
+
     }
 
 }
