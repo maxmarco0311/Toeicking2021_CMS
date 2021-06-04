@@ -57,56 +57,22 @@ namespace Toeicking2021.Utilities
                 }  
                 
             }
-            // 3. 篩選日期
+            // 3. 篩選幾天前存入
             if (FormData.AddedDate != null)
             {
-                int dateSpan = Convert.ToInt16(FormData.AddedDate);
-                // 查當天存入
-                if (dateSpan==0)
+                // 轉型成int，因為要算幾天前到今天，所以要變成負數(*-1)
+                int dateSpan = (Convert.ToInt16(FormData.AddedDate))*-1;
+                if (OuterPredicate.IsStarted == false)
                 {
-                    if (OuterPredicate.IsStarted == false)
-                    {
-                        // 查詢時間一定要有"區間"，"當天"是"DateTime.Now.AddDays(-1)"到"DateTime.Now"
-                        // 時間區間的開頭(就是DateTime.Now.AddDays()的參數)應為N天前的值-1，也就是N-1(通常是負數)
-                        OuterPredicate = OuterPredicate.Start(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan - 1)
-                                               && t.AddedDate <= DateTime.Now);
-                    }
-                    else
-                    {
-                        OuterPredicate = OuterPredicate.And(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan - 1)
-                                               && t.AddedDate <= DateTime.Now);
-                    }
-                    
+                    // 查詢時間一定要有"區間"，"當天"是"DateTime.Now.AddDays(-1)"到"DateTime.Now"
+                    // 時間區間的開頭(就是DateTime.Now.AddDays()的參數)應為N天前的值-1，也就是N-1(通常是負數)
+                    OuterPredicate = OuterPredicate.Start(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan)
+                                           && t.AddedDate <= DateTime.Now);
                 }
-                // 前3天存入
-                else if (dateSpan==-3)
-                {
-                    if (OuterPredicate.IsStarted == false)
-                    {
-                        OuterPredicate = OuterPredicate.Start(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan - 1)
-                                               && t.AddedDate <= DateTime.Now.AddDays(dateSpan));
-                    }
-                    else
-                    {
-                        OuterPredicate = OuterPredicate.And(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan - 1)
-                                                                       && t.AddedDate <= DateTime.Now.AddDays(dateSpan));
-                    }
-                    
-                }
-                // 幾天前存入
                 else
                 {
-                    if (OuterPredicate.IsStarted == false)
-                    {
-                        OuterPredicate = OuterPredicate.Start(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan)
-                                               && t.AddedDate <= DateTime.Now);
-                    }
-                    else
-                    {
-                        OuterPredicate = OuterPredicate.And(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan)
-                                                                       && t.AddedDate <= DateTime.Now);
-                    }
-                    
+                    OuterPredicate = OuterPredicate.And(t => t.AddedDate >= DateTime.Now.AddDays(dateSpan)
+                                           && t.AddedDate <= DateTime.Now);
                 }
                 
             }
