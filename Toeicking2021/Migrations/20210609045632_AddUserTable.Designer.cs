@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Toeicking2021.Data;
 
 namespace Toeicking2021.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210609045632_AddUserTable")]
+    partial class AddUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,11 +130,11 @@ namespace Toeicking2021.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
+                    b.Property<byte>("Level")
+                        .HasColumnType("tinyint");
+
                     b.Property<bool>("Valid")
                         .HasColumnType("bit");
-
-                    b.Property<string>("rating")
-                        .HasColumnType("varchar(2)");
 
                     b.HasKey("UserId");
 

@@ -22,6 +22,7 @@ namespace Toeicking2021.Data
         public DbSet<Vocabulary> Vocabularies { get; set; }
         public DbSet<GA> GAs { get; set; }
         public DbSet<VA> VAs { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
