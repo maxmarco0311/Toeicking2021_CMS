@@ -19,7 +19,7 @@ namespace Toeicking2021.Models
         public bool Valid { get; set; }
 
         [Column(TypeName = "varchar(2)")]
-        public string rating { get; set; }
+        public string Rating { get; set; }
 
     }
 }
