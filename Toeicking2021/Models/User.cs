@@ -21,5 +21,7 @@ namespace Toeicking2021.Models
         [Column(TypeName = "varchar(2)")]
         public string Rating { get; set; }
 
+        [Column(TypeName = "varchar(max)")]
+        public string WordList { get; set; }
     }
 }
