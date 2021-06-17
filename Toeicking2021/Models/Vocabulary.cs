@@ -29,8 +29,5 @@ namespace Toeicking2021.Models
         public string Chinese { get; set; }
 
 
-
-
-
     }
 }

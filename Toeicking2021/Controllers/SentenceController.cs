@@ -55,9 +55,10 @@ namespace Toeicking2021.Controllers
         #region 生儲存資料表單頁面
         public IActionResult Add(string result)
         {
-            // 檢查是否從post導回來
+            // 檢查是否從post導回來(看result是否為空)
             if (!string.IsNullOrEmpty(result))
             {
+                // 從post導回
                 result = EncryptionHelper.DecryptThenUrlDecode(key, result);
                 // 把存DB的結果給ViewBag
                 ViewBag.result = result;
