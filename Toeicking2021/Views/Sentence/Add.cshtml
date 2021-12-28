@@ -366,7 +366,7 @@
             // 1.全域變數記住focus的控制項id
             var focusedInputId;
             // 2.文字框focus事件中，取到該文字框的id(因為開啟modal會使focus消失)，存在focusedInputId(一個頁面只會有一個focus)
-            // 事件有要給ajax產生的元素用，一定要按照下面方式寫，寫.focus()只對原本就有的元素有效
+            // ***事件有要給ajax產生的元素用(新增的文字框)，一定要按照下面方式寫，寫.focus()只對原本就有的元素有效(初載入時的文字框)***
             $("body").on("focus",".vocsupplement,.usage", function () {
                 focusedInputId = $(this).attr("id");
             });

@@ -1,4 +1,5 @@
-﻿@using System.Security.Claims
+﻿@*使用者登入後獲得使用者的email*@
+@using System.Security.Claims
 @{
    string userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 }
@@ -182,7 +183,7 @@
                                 <i class="ti-light-bulb"></i><span><b>其它</b></span><span class="menu-arrow"></span>
                             </a>
                             <ul class="list-unstyled">
-                                @*asp-route-e="@userEmail"*@
+                                @*asp-route-e="@userEmail"這個要放在重設密碼的<a>裡面，登入後重設密碼時就可以自動填入email欄位*@
                                 <li><a asp-controller="Home" asp-action="ResetPassword">重設密碼</a></li>
                                 <li><a asp-controller="Home" asp-action="Logout">登出</a></li>
                             </ul>

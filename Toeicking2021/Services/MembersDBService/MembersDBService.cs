@@ -40,6 +40,8 @@ namespace Toeicking2021.Services.MembersDBService
         #region 密碼加密
         public string HashPassword(string Password)
         {
+            //// 一般類別使用cookie
+            //_httpContextAccessor.HttpContext.Response.Cookies.Append("username", "Grace");
 
             //宣告Hash時所添加的無意義亂數值
             string saltkey = "3g2w3e4r5t8p7u1ue9o0po1tyz";

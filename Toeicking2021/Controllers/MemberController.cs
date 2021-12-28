@@ -408,6 +408,7 @@ namespace Toeicking2021.Controllers
                 UriBuilder ValidateUrl = new UriBuilder(url)
                 {
 
+                    // 信件url點按後要導向ForgotPasswordEmailValidate動作方法
                     Path = Url.Action("ForgotPasswordEmailValidate", "Member"
                             , new
                             {
@@ -463,6 +464,7 @@ namespace Toeicking2021.Controllers
             string ValidateStr = await _membersDBService.ResetPasswordEmailValidate(decryptedEmail, decryptedResetPasswordCode);
             switch (ValidateStr)
             {
+                // 驗證通過，導到ResetPassword動作方法去重設密碼
                 case "ok":
                     return RedirectToAction(nameof(ResetPassword),
                         new { e = EncryptionHelper.UrlEncodeThenEncrypt(key, decryptedEmail) });
@@ -520,7 +522,7 @@ namespace Toeicking2021.Controllers
                 // 表單驗證通過，更新DB
                 bool result = await _membersDBService.ChangePassword(administrator.Email.Trim().ToLower()
                     , administrator.NewPassWord);
-                // 傳遞訊息到不同動作方法，用在sweetalert
+                // 傳遞資料到不同動作方法(Home/Index)，用在sweetalert
                 TempData["AlertHint"] = "successfully reset";
                 // 已登入的重設密碼
                 if (userType == "logged in")
