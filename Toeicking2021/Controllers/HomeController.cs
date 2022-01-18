@@ -33,6 +33,11 @@ namespace Toeicking2021.Controllers
         }
         #endregion
 
+        public IActionResult Promote() 
+        {
+            return View();
+        }
+
         #region 登出
         public async Task<IActionResult> Logout()
         {

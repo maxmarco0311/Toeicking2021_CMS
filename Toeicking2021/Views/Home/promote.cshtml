@@ -1,0 +1,287 @@
+﻿@*不套用Layout的方式，或用return PartialView()*@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>多益金-首創運用AI人工智慧的多益備考機器人</title>
+    <!-- Meta -->
+    @*<meta charset="utf-8" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="~/landing_page/image/logo.png" />
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css' />
+    <!-- FontAwesome-->
+    @*<script src="https://kit.fontawesome.com/77a004320c.js" crossorigin="anonymous"></script>*@
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css' rel='stylesheet' type='text/css' />
+    <link href="~/lib/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/landing_page/css/flexslider.css" rel="stylesheet" />
+    @*<link href="official_assets/css/flexslider.css" rel="stylesheet" />*@
+    @*<link href="official_assets/css/animate.css" rel="stylesheet" />*@
+    <link href="~/landing_page/css/animate.css" rel="stylesheet" />
+    @*<link href="official_assets/css/style.css" rel="stylesheet" />*@
+    <link href="~/landing_page/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <!--nav-->
+        <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light change-color appear" style="opacity: 0;">
+            <div class="container">
+                <a class="navbar-brand logo" href="#header">
+                    <img src="~/landing_page/image/newlogo_2.svg" />
+                </a>
+                <button class="navbar-toggler mr-4 px-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item link1"><a class="nav-link link1" href="#features">多益金的特色</a></li>
+                        <li class="nav-item link2"><a class="nav-link" href="#developer">關於開發者</a></li>
+                        <li class="nav-item link3"><a class="nav-link" href="#qrcode">加入多益金</a></li>
+                        <li class="nav-item link4"><a class="nav-link" href="#faq">常見問題</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--end nav-->
+        <!--header-->
+        <header id="header">
+            @*<div class="home-wrap">
+            <div class="home-inner">
+            *@
+            <div class="container">
+                <img class="max fadeInDown" src="~/landing_page/image/figure.png" />
+                <div class="header-wrapper">
+                    <h2 class="normal-color"></h2>
+                    <h1 class="theme-color max fadeInLeft">多益金</h1>
+                    <p class="subtitle max fadeInRight">首創運用AI人工智慧多益備考機器人</p>
+                    <i class="fas fa-angle-down"></i>
+                    <a href="#features">認識多益金</a>
+                </div>
+            </div>
+            @*
+                </div>
+            </div>*@
+        </header>
+        <!--end header-->
+        <!--features-->
+        <section id="features">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>多益金的特色</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="features-left col-lg-4 max fadeInLeft" data-wow-delay="0.5s" data-wow-duration="1.5s">
+                        <div class="feature-single  row">
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                        </div>
+                        <div class="feature-single row">
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                        </div>
+                        <div class="feature-single row">
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                        </div>
+                        <div class="feature-single row">
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 max bounceIn" data-wow-duration="1s">
+                        <div class="iphone-holder phone-holder white">
+                            <div class="iphone-holder-inner">
+                                <div class="slider flexslider">
+                                    <ul class="slides">
+                                        <li>
+                                            <img src="~/landing_page/image/iphone-slide-1.png" />
+                                        </li>
+                                        <li>
+                                            <img src="~/landing_page/image/iphone-slide-2.png" />
+                                        </li>
+                                        <li>
+                                            <img src="~/landing_page/image/iphone-slide-3.png" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="features-right col-lg-4 max fadeInRight" data-wow-delay="0.5s" data-wow-duration="1.5s">
+                        <div class="feature-single row">
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                        </div>
+                        <div class="feature-single row">
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                        </div>
+                        <div class="feature-single row">
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                        </div>
+                        <div class="feature-single row">
+                            <div class="feature-icon col-3"><span><i class="fas fa-home"></i></span></div>
+                            <div class="feature-info col-9">
+                                <h3>特色</h3>
+                                <p>聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練聽力訓練</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--end features-->
+        <!--developer-->
+        <section id="developer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>關於開發者</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="mypicture max fadeInUp">
+                            <img src="~/landing_page/image/1.png" />
+                        </div>
+                        <h3 class="name">金老師(Max)</h3>
+                        <div class="social-icon text-center">
+                            <a href=""><i class="fab fa-facebook-square"></i></a>
+                            <a href=""><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <ul class="intro">
+                            <li class="max fadeInUp shadow">執教多益(TOEIC)、文法、寫作、字彙等課程十餘年。</li>
+                            <li class="max fadeInUp shadow">二十年前以獨特英文自學方法，徹底擺脫菜英文的痛苦，從此體會英文的簡單與美好，並致力與學生分享。</li>
+                            <li class="max fadeInUp shadow">兩年前踏入全端網頁程式學習與開發領域。</li>
+                            <li class="max fadeInUp shadow">以英語教學者角度，積極探索全端網頁程式如何協助解決英語學習的痛點。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--end developer-->
+        <!--qrcode-->
+        <section id="qrcode">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>加入多益金</h1>
+                        <div class="wraper">
+                            <p>掃描或點擊下方QR Code加入多益金</p>
+                            <a href="http://nav.cx/AHUYaf7">
+                                <img class="max fadeInDown" src="https://qr-official.line.me/sid/L/380xarcd.png" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--end qrcode-->
+        <!--faq-->
+        <section id="faq">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>常見問題</h1>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="accordion" id="accordionLeft">
+                            <div class="card">
+                                <div class="card-header" id="headingLeftOne">
+                                    <div class="h2 mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseLeftOne" aria-expanded="true" aria-controls="collapseLeftOne">第一項</button>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="collapseLeftOne" aria-labelledby="headingLeftOne" data-parent="#accordionLeft">
+                                    <div class="card-body">內容內容內容</div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingLeftTwo">
+                                    <div class="h2 mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseLeftTwo" aria-expanded="true" aria-controls="collapseLeftTwo">第二項</button>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="collapseLeftTwo" aria-labelledby="headingLeftTwo" data-parent="#accordionLeft">
+                                    <div class="card-body">內容內容內容</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="accordion" id="accordionRight">
+                            <div class="card">
+                                <div class="card-header" id="headingRightOne">
+                                    <div class="h2 mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">第一項</button>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="collapseOne" aria-labelledby="headingRightOne" data-parent="#accordionRight">
+                                    <div class="card-body">內容內容內容</div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingRightTwo">
+                                    <div class="h2 mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">第二項</button>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="collapseTwo" aria-labelledby="headingRightTwo" data-parent="#accordionRight">
+                                    <div class="card-body">內容內容內容</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--end faq-->
+        <script src="~/lib/assets/js/jquery.min.js"></script>
+        <script src="~/lib/assets/js/bootstrap.min.js"></script>
+        @*<script src="official_assets/js/jquery-3.3.1.min.js"></script>
+        <script src="official_assets/js/bootstrap.min.js"></script>*@
+        <script src="~/landing_page/js/jquery.flexslider.js"></script>
+        @*<script src="official_assets/js/jquery.flexslider.js"></script>*@
+        <script src="~/lib/assets/js/wow.min.js"></script>
+        @*<script src="official_assets/js/wow.min.js"></script>*@
+        @*<script src="official_assets/js/app.js"></script>*@
+        <script src="~/landing_page/js/app.js"></script>
+    </div>
+</body>
+</html>

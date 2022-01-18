@@ -221,8 +221,7 @@ namespace Toeicking2021.Services.MembersDBService
                         new Claim(ClaimTypes.Role, "1")
                     };
             // 建立ClaimsIdentity物件，參數1為Claim物件集合，參數2為CookieAuthentication scheme的列舉值
-            var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             claimsIdentity.GetHashCode();
             // 建立AuthenticationProperties物件，設置cookie的屬性
             var authProperties = new AuthenticationProperties
@@ -237,7 +236,8 @@ namespace Toeicking2021.Services.MembersDBService
             // 至此，Controller和View可用User物件取得已成功登入的使用者資料(一般類別要用IHttepContextAccessor)
             // SignInAsync()寫在一般類別(非controller)時，要用_httpContextAccessor.HttpContext.SignInAsync()
             // 直接寫HttpContext.SignInAsync()會報錯
-            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+            await _httpContextAccessor.HttpContext.SignInAsync(
+                                    CookieAuthenticationDefaults.AuthenticationScheme,
                                     new ClaimsPrincipal(claimsIdentity),
                                     authProperties);
 

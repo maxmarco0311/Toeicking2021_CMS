@@ -30,6 +30,9 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\landing_page\css\" />
+    <Folder Include="wwwroot\landing_page\js\" />
+    <Folder Include="wwwroot\landing_page\image\" />
   </ItemGroup>
 
   <ItemGroup>

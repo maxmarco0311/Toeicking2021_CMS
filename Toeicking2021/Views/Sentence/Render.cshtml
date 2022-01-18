@@ -1143,15 +1143,15 @@
 
     // <a>設click事件，動態置換asp-route-SkipOffset的值
     $(".skipOffset").on("click", function (e) {
-        alert("進來了")
+        // alert("進來了")
         // 停止預設行為，參數e要記得在function地方傳入
         e.preventDefault();
         // 取得url字串
         var url = $(this).attr("href");
-        alert($("#skip-offset").val());
+        // alert($("#skip-offset").val());
         //將原本取得url字串中的dummy換成隱藏欄位的值
         url = url.replace("000", $("#skip-offset").val());
-        alert(url);
+        // alert(url);
         // ajax按鈕不要寫下面那行，否則不會執行
         // window.location.href = url;
     });
