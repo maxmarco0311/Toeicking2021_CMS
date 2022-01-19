@@ -27,8 +27,9 @@ namespace Toeicking2021.Services.SentenceDBService
             {
                 try
                 {                    
-                    // SentenceId(現有rows加1)要存在一個變數，與其它資料表共用(FK也是要填值存進DB)
-                    int SentenceId = _context.Sentences.Count() + 1;
+                    // SentenceId(最後一個row加1)要存在一個變數，與其它資料表共用(FK也是要填值存進DB)
+                    int lastSentenceId = _context.Sentences.OrderByDescending(s => s.SentenceId).Take(1).Select(s => s.SentenceId).FirstOrDefault();
+                    int SentenceId = lastSentenceId + 1;
                     // 1.先存Sentence
                     // 計算SentenceId
                     data.Sentence.SentenceId = SentenceId;
@@ -51,7 +52,8 @@ namespace Toeicking2021.Services.SentenceDBService
                             // 將SentenceId存進每筆
                             data.Vocs[i].SentenceId = SentenceId;
                             // 自身資料表的PK也要生出來存
-                            data.Vocs[i].VocabularyId = _context.Vocabularies.Count() + 1;
+                            int lastVocabularyId = _context.Vocabularies.OrderByDescending(v => v.VocabularyId).Take(1).Select(v=>v.VocabularyId).FirstOrDefault();
+                            data.Vocs[i].VocabularyId = lastVocabularyId + 1;
                             await _context.Vocabularies.AddAsync(data.Vocs[i]);
                             await _context.SaveChangesAsync();
                         }
@@ -68,7 +70,8 @@ namespace Toeicking2021.Services.SentenceDBService
                         for (int i = 0; i < GACount; i++)
                         {
                             data.GAs[i].SentenceId = SentenceId;
-                            data.GAs[i].AnalysisId = _context.GAs.Count() + 1;
+                            int lastGAId = _context.GAs.OrderByDescending(ga => ga.AnalysisId).Take(1).Select(ga => ga.AnalysisId).FirstOrDefault();
+                            data.GAs[i].AnalysisId = lastGAId + 1;
                             await _context.GAs.AddAsync(data.GAs[i]);
                             await _context.SaveChangesAsync();
                         }
@@ -84,7 +87,8 @@ namespace Toeicking2021.Services.SentenceDBService
                         for (int i = 0; i < VACount; i++)
                         {
                             data.VAs[i].SentenceId = SentenceId;
-                            data.VAs[i].AnalysisId = _context.VAs.Count() + 1;
+                            int lastVAId = _context.VAs.OrderByDescending(va => va.AnalysisId).Take(1).Select(va => va.AnalysisId).FirstOrDefault();
+                            data.VAs[i].AnalysisId = lastVAId + 1;
                             await _context.VAs.AddAsync(data.VAs[i]);
                             await _context.SaveChangesAsync();
                         }
